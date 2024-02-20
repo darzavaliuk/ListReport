@@ -1,0 +1,156 @@
+<mvc:View
+        controllerName="darya.zavaliuk.controller.ProductsOverview"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:f="sap.f"
+        xmlns:fb="sap.ui.comp.filterbar"
+        xmlns:core="sap.ui.core"
+        xmlns:form="sap.ui.layout.form"
+        height="100%">
+
+    <f:DynamicPage id="dynamicPageId"
+                   showFooter="true"
+                   class="sapUiNoContentPadding">
+
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>productsOverviewTitle}"/>
+                </f:heading>
+                <f:breadcrumbs>
+                    <Breadcrumbs>
+                        <Link text="{i18n>productsOverviewBreadcrumb}"/>
+                    </Breadcrumbs>
+                </f:breadcrumbs>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:header>
+            <f:DynamicPageHeader>
+                <f:content>
+                    <form:SimpleForm id="SimpleFormChange480_12120Dual"
+                                     editable="true"
+                                     layout="ResponsiveGridLayout"
+                                     labelSpanXL="12"
+                                     labelSpanL="12"
+                                     labelSpanM="12"
+                                     labelSpanS="12"
+                                     adjustLabelSpan="false"
+                                     emptySpanXL="0"
+                                     emptySpanL="0"
+                                     emptySpanM="0"
+                                     emptySpanS="0"
+                                     columnsXL="1"
+                                     columnsL="2"
+                                     singleContainerFullSize="false">
+                        <form:content>
+                            <MultiComboBox
+                                    id="Category"
+                                    name="Category"
+                                    placeholder="{i18n>storesOverviewCategory}"
+                                    items="{
+                                        path: 'categories>/categoryNames',
+                                        templateShareable: true
+									}"
+                            >
+                                <core:Item key="{key}" text="{categories>}"/>
+                            </MultiComboBox>
+
+                            <SearchField width="100%"
+                                         id="searchField"
+                                         search="onSearchStores"
+                                         placeholder="{i18n>storesOverviewSearchPlaceholder}"/>
+
+                            <Input id="productsInput"
+                                   placeholder="{i18n>productsOverviewInputProduct}"
+                                   showSuggestion="true"
+                                   showValueHelp="true"
+                                   valueHelpRequest="onValueHelpRequest"
+                                   suggestionItems="{/Products}">
+                                <suggestionItems>
+                                    <core:Item text="{Name}"/>
+                                </suggestionItems>
+                            </Input>
+                            <Button text="{i18n>productsOverviewButtonStart}" press="onPressConfirmFilters"/>
+                        </form:content>
+                    </form:SimpleForm>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <Table
+                    id="table"
+                    class="sapUiResponsiveMargin"
+                    width="auto"
+                    mode="MultiSelect"
+                    items="{
+                        path: '/Products',
+                        sorter: {
+                            path: 'ID'
+                        }
+		    	    }"
+            >
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="{i18n>productListTitle}"/>
+                        <ToolbarSpacer/>
+                        <Button
+                                type="Reject"
+                                text="{i18n>delete}"
+                                press="onPressDeleteProducts"
+                        />
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="{i18n>columnName}"/>
+                    </Column>
+                    <Column minScreenWidth="Small"
+                            demandPopin="true">
+                        <Text text="{i18n>columnCategory}"/>
+                    </Column>
+                    <Column minScreenWidth="Tablet"
+                            demandPopin="false">
+                        <Text text="{i18n>columnSupplier}"/>
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>columnPrice}"/>
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>columnRating}"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem
+                            key="{ID}"
+                            type="Navigation"
+                            press="onPressListItem">
+                        <cells>
+                            <ObjectIdentifier title="{Name}"/>
+                            <Text text="{Category/Name}"/>
+                            <Text text="{Supplier/Name}"/>
+                            <ObjectNumber
+                                    number="{
+                                        parts: [{path: 'Price'}, {path: 'i18n>currency'}],
+                                        type: 'sap.ui.model.type.Currency',
+                                        formatOptions: {
+                                            showMeasure: false
+                                        }
+						            }" unit="{i18n>currency}"/>
+                            <RatingIndicator value="{Rating}" maxValue="5" editable="false"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+
+        <f:footer>
+            <OverflowToolbar>
+                <ToolbarSpacer/>
+                <Button text="{i18n>create}" press="onPressCreateProduct" icon="sap-icon://add"/>
+            </OverflowToolbar>
+        </f:footer>
+
+    </f:DynamicPage>
+</mvc:View>

@@ -1,0 +1,16 @@
+{
+  "name": "lx-course-dec23-zavaliuk-darya-ui5",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Component.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ui5 serve --open index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@sap/ux-ui5-tooling": "^1.12.0",
+    "@ui5/cli": "^3.8.0"
+  }
+}
