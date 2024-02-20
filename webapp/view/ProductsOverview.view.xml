@@ -51,7 +51,7 @@
                                     items="{
                                         path: 'categories>/categoryNames',
                                         templateShareable: true
-									}"
+                                    }"
                             >
                                 <core:Item key="{key}" text="{categories>}"/>
                             </MultiComboBox>
