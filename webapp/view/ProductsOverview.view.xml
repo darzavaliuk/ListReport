@@ -134,8 +134,8 @@
                                         type: 'sap.ui.model.type.Currency',
                                         formatOptions: {
                                             showMeasure: false
-                                        }
-						            }" unit="{i18n>currency}"/>
+                                            }
+                                        }" unit="{i18n>currency}"/>
                             <RatingIndicator value="{Rating}" maxValue="5" editable="false"/>
                         </cells>
                     </ColumnListItem>
