@@ -86,10 +86,8 @@
                     mode="MultiSelect"
                     items="{
                         path: '/Products',
-                        sorter: {
-                            path: 'ID'
-                        }
-		    	    }"
+                        sorter: {path: 'ID'}
+                    }"
             >
                 <headerToolbar>
                     <Toolbar>
