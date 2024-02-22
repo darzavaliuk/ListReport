@@ -1,114 +1,94 @@
 {
-  "_version": "1.1.0",
-  "sap.app": {
     "_version": "1.1.0",
-    "id": "darya.zavaliuk",
-    "type": "application",
-    "i18n": {
-      "bundleUrl": "i18n/i18n.properties",
-      "supportedLocales": ["en", "ru"]
+    "sap.app": {
+        "_version": "1.1.0",
+        "id": "darya.zavaliuk",
+        "type": "application",
+        "i18n": {
+            "bundleUrl": "i18n/i18n.properties",
+            "supportedLocales": ["en", "ru"]
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "applicationVersion": {
+            "version": "1.0.0"
+        },
+        "dataSources": {
+            "products": {
+                "uri": "./model/data.json",
+                "type": "JSON"
+            }
+        }
     },
-    "title": "{{appTitle}}",
-    "description": "{{appDescription}}",
-    "applicationVersion": {
-      "version": "1.0.0"
+    "sap.ui": {
+        "_version": "1.1.0",
+        "technology": "UI5",
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        },
+        "supportedThemes": ["sap_horizon"]
     },
-    "dataSources": {
-      "products": {
-        "uri": "./model/data.json",
-        "type": "JSON"
-      }
+    "sap.ui5": {
+        "_version": "1.1.0",
+        "rootView": "darya.zavaliuk.view.App",
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "viewPath": "darya.zavaliuk.view",
+                "controlId": "RootApp",
+                "controlAggregation": "pages",
+                "bypassed": {
+                    "target": ["notFound"]
+                },
+                "async": true
+            },
+            "routes": [
+                {
+                    "pattern": "",
+                    "name": "ProductsOverview",
+                    "target": ["productsOverview"]
+                }
+            ],
+            "targets": {
+                "productsOverview": {
+                    "viewName": "ProductsOverview",
+                    "viewId": "ProductsOverview",
+                    "viewLevel": 1
+                },
+                "productDetails": {
+                    "viewName": "ProductDetails",
+                    "viewId": "productDetails",
+                    "viewLevel": 2
+                },
+                "notFound": {
+                    "viewName": "NotFound",
+                    "viewId": "notFound"
+                }
+            }
+        },
+        "dependencies": {
+            "minUI5Version": "1.71.61",
+            "libs": {
+                "sap.m": {}
+            }
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleUrl": "i18n/i18n.properties",
+                    "supportedLocales": ["en", "ru"]
+                }
+            },
+            "": {
+                "dataSource": "products",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                }
+            }
+        }
     }
-  },
-  "sap.ui": {
-    "_version": "1.1.0",
-    "technology": "UI5",
-    "deviceTypes": {
-      "desktop": true,
-      "tablet": true,
-      "phone": true
-    },
-    "supportedThemes": [
-      "sap_horizon"
-    ]
-  },
-  "sap.ui5": {
-    "_version": "1.1.0",
-    "rootView": "darya.zavaliuk.view.App",
-    "routing": {
-      "config": {
-        "routerClass": "sap.m.routing.Router",
-        "viewType": "XML",
-        "viewPath": "darya.zavaliuk.view",
-        "controlId": "RootApp",
-        "controlAggregation": "pages",
-        "bypassed": {
-          "target": [
-            "notFound"
-          ]
-        },
-        "async": true
-      },
-      "routes": [
-        {
-          "pattern": "",
-          "name": "ProductsOverview",
-          "target": [
-            "productsOverview"
-          ]
-        },
-        {
-          "pattern": "Products/New",
-          "name": "ProductDetailsNew",
-          "target": [
-            "productDetails"
-          ]
-        },
-        {
-          "pattern": "Products/{id}",
-          "name": "ProductDetails",
-          "target": [
-            "productDetails"
-          ]
-        }
-      ],
-      "targets": {
-        "productsOverview": {
-          "viewName": "ProductsOverview",
-          "viewId": "ProductsOverview",
-          "viewLevel": 1
-        },
-        "productDetails": {
-          "viewName": "ProductDetails",
-          "viewId": "productDetails",
-          "viewLevel": 2
-        },
-        "notFound": {
-          "viewName": "NotFound",
-          "viewId": "notFound"
-        }
-      }
-    },
-    "dependencies": {
-      "minUI5Version": "1.71.61",
-      "libs": {
-        "sap.m": {}
-      }
-    },
-    "models": {
-      "i18n": {
-        "type": "sap.ui.model.resource.ResourceModel",
-        "settings": {
-          "bundleUrl": "i18n/i18n.properties",
-          "supportedLocales": ["en", "ru"]
-        }
-      },
-      "": {
-        "dataSource": "products",
-        "settings": {
-          "defaultBindingMode": "TwoWay"
-        }
-      }
-    }
-  }
 }

@@ -1,9 +1,66 @@
 <core:FragmentDefinition
-        xmlns="sap.m"
-        xmlns:core="sap.ui.core">
-    <SelectDialog id="selectDialog" title="Products" items="{/Products}" search="onValueHelpSearch"
-                  confirm="onValueHelpClose" cancel="onValueHelpClose">
-        <StandardListItem iconDensityAware="false" iconInset="false" title="{Name}"
-                          description="{Description}"/>
-    </SelectDialog>
+    xmlns="sap.ui.comp.valuehelpdialog"
+    xmlns:m="sap.m"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:mvc="sap.ui.core.mvc"
+>
+    <ValueHelpDialog
+        title="Product"
+        ok="onWhitespaceOkPress"
+        cancel="onWhitespaceCancelPress"
+        afterClose="onWhitespaceAfterClose"
+        supportRanges="true"
+        key="Price"
+        descriptionKey="ProductName"
+    >
+        <filterBar>
+            <fb:FilterBar
+                advancedMode="true"
+                search="onFilterBarWhitespacesSearch"
+                isRunningInValueHelpDialog="true"
+            >
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem
+                        groupName="__$INTERNAL$"
+                        name="Price"
+                        label="{i18n>labelFilterBarPrice}"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <m:Input
+                                name="Price"
+                                showSuggestion="true"
+                                showValueHelp="false"
+                                suggestionItems="{ path: '/Products', sorter: { path: 'Price' } }"
+                            >
+                                <core:Item
+                                    key="{Price}"
+                                    text="{ path: 'Price', formatter : '.replaceDoubleWhitespaceWithUnicodeSpace' }"
+                                />
+                            </m:Input>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem
+                        groupName="__$INTERNAL$"
+                        name="Name"
+                        label="{i18n>labelFilterBarName}"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <m:Input
+                                name="Name"
+                                showSuggestion="true"
+                                showValueHelp="false"
+                                suggestionItems="{ path: '/Products', sorter: { path: 'Name' } }"
+                            >
+                                <core:Item key="{Name}" text="{Name}" />
+                            </m:Input>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                </fb:filterGroupItems>
+            </fb:FilterBar>
+        </filterBar>
+    </ValueHelpDialog>
 </core:FragmentDefinition>
