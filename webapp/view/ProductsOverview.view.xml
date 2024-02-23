@@ -57,7 +57,7 @@
                                         id="searchField"
                                         change="onSelectionChange"
                                         search="onSearchStores"
-                                        placeholder="{i18n>storesOverviewSearchPlaceholder}"
+                                        placeholder="{i18n>productsOverviewSearchPlaceholder}"
                                     />
                                 </fb:control>
                             </fb:FilterGroupItem>
@@ -73,7 +73,7 @@
                                         id="Category"
                                         name="Category"
                                         selectionChange="onSelectionChange"
-                                        placeholder="{i18n>storesOverviewCategory}"
+                                        placeholder="{i18n>productsOverviewCategory}"
                                         items="{
                                             path: '/Categories',
                                             templateShareable: true
@@ -95,7 +95,7 @@
                                         id="Supplier"
                                         name="Supplier"
                                         selectionChange="onSelectionChange"
-                                        placeholder="{i18n>storesOverviewSupplier}"
+                                        placeholder="{i18n>productsOverviewSupplier}"
                                         items="{
                                             path: '/Suppliers',
                                             templateShareable: true
@@ -117,7 +117,7 @@
                                         id="Status"
                                         name="Status"
                                         selectionChange="onSelectionChange"
-                                        placeholder="{i18n>storesOverviewStatus}"
+                                        placeholder="{i18n>productsOverviewStatus}"
                                         items="{
                                             path: '/Statuses',
                                             templateShareable: true
@@ -202,25 +202,25 @@
                 </headerToolbar>
                 <columns>
                     <Column>
-                        <Text text="{i18n>columnName}" />
+                        <Text text="{i18n>productsOverviewColumnName}" />
                     </Column>
                     <Column hAlign="End">
-                        <Text text="{i18n>columnPrice}" />
+                        <Text text="{i18n>productsOverviewColumnPrice}" />
                     </Column>
                     <Column minScreenWidth="Small" demandPopin="true">
-                        <Text text="{i18n>columnCategory}" />
+                        <Text text="{i18n>productsOverviewColumnCategory}" />
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="false">
-                        <Text text="{i18n>columnSupplier}" />
+                        <Text text="{i18n>productsOverviewColumnSupplier}" />
                     </Column>
                     <Column>
-                        <Text text="{i18n>columnDate}" />
+                        <Text text="{i18n>productsOverviewColumnDate}" />
                     </Column>
                     <Column>
-                        <Text text="{i18n>columnRating}" />
+                        <Text text="{i18n>productsOverviewColumnRating}" />
                     </Column>
                     <Column>
-                        <Text text="{i18n>columnState}" />
+                        <Text text="{i18n>productsOverviewColumnState}" />
                     </Column>
                 </columns>
                 <items>

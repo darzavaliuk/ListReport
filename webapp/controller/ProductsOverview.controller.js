@@ -50,7 +50,7 @@ sap.ui.define(
             SUPPLIER: "Supplier/Name",
             PRICE: "Price",
             RATING: "Rating",
-            PRODUCTS: "/Products"
+            PRODUCTS: "/Products",
         };
 
         const MULTICOMBOBOX = {
@@ -127,8 +127,7 @@ sap.ui.define(
                     );
 
                     this._oSmartVariantManagement.initialise(
-                        function () {
-                        },
+                        function () {},
                         this._oFilterBar,
                     );
                 },
@@ -537,7 +536,9 @@ sap.ui.define(
 
                     oWhitespaceDialog.setRangeKeyFields([
                         {
-                            label: "Price",
+                            label: this._getTextFromI18n(
+                                "productsOverviewInputPrice",
+                            ),
                             key: "Price",
                             type: "string",
                             typeInstance: new TypeString(
@@ -590,8 +591,8 @@ sap.ui.define(
                                     path: PRODUCT_FIELDS_BINDING.PRODUCTS,
                                     template: new ColumnListItem({
                                         cells: [
-                                            new Label({text: "{Price}"}),
-                                            new Label({text: "{Name}"}),
+                                            new Label({ text: "{Price}" }),
+                                            new Label({ text: "{Name}" }),
                                         ],
                                     }),
                                     events: {
@@ -615,22 +616,30 @@ sap.ui.define(
                  */
                 _configureUIColumnsForTable: function (oTable) {
                     const oColumnPrice = new UIColumn({
-                        label: new Label({text: "Price"}),
+                        label: new Label({
+                            text: this._getTextFromI18n(
+                                "productsOverviewColumnPrice",
+                            ),
+                        }),
                         template: new Text({
                             wrapping: false,
                             text: "{Price}",
                         }),
                     });
 
-                    oColumnPrice.data({fieldName: "Price"});
+                    oColumnPrice.data({ fieldName: "Price" });
                     oTable.addColumn(oColumnPrice);
 
                     const oColumnName = new UIColumn({
-                        label: new Label({text: "Name"}),
-                        template: new Text({wrapping: false, text: "{Name}"}),
+                        label: new Label({
+                            text: this._getTextFromI18n(
+                                "productsOverviewInputName",
+                            ),
+                        }),
+                        template: new Text({ wrapping: false, text: "{Name}" }),
                     });
 
-                    oColumnName.data({fieldName: "Name"});
+                    oColumnName.data({ fieldName: "Name" });
                     oTable.addColumn(oColumnName);
                 },
 
@@ -642,10 +651,22 @@ sap.ui.define(
                  */
                 _configureMColumnsForTable: function (oTable) {
                     oTable.addColumn(
-                        new MColumn({header: new Label({text: "Price"})}),
+                        new MColumn({
+                            header: new Label({
+                                text: this._getTextFromI18n(
+                                    "productsOverviewInputPrice",
+                                ),
+                            }),
+                        }),
                     );
                     oTable.addColumn(
-                        new MColumn({header: new Label({text: "Name"})}),
+                        new MColumn({
+                            header: new Label({
+                                text: this._getTextFromI18n(
+                                    "productsOverviewInputName",
+                                ),
+                            }),
+                        }),
                     );
                 },
 
@@ -733,10 +754,14 @@ sap.ui.define(
                             if (
                                 iIndex >= 0 &&
                                 iIndex <
-                                oBinding.getProperty(PRODUCT_FIELDS_BINDING.PRODUCTS).length
+                                    oBinding.getProperty(
+                                        PRODUCT_FIELDS_BINDING.PRODUCTS,
+                                    ).length
                             ) {
                                 oBinding
-                                    .getProperty(PRODUCT_FIELDS_BINDING.PRODUCTS)
+                                    .getProperty(
+                                        PRODUCT_FIELDS_BINDING.PRODUCTS,
+                                    )
                                     .splice(iIndex, 1);
                             }
                         });
@@ -873,9 +898,9 @@ sap.ui.define(
                     const aItemsWithoutOperator = [];
 
                     aSelectedTokens.forEach((oToken) => {
-                        const value =
-                            oToken.mAggregations.customData[0].mProperties
-                                .value;
+                        const value = oToken
+                            .getCustomData()[0]
+                            .getProperty("value");
                         if (value.operation !== undefined) {
                             aItemsWithOperator.push(value);
                         } else {
@@ -890,25 +915,31 @@ sap.ui.define(
                         return;
                     }
 
-                    const aFiltersForItemsWithOperator = aItemsWithOperator.map((sSelectedItem) => {
-                        return new Filter(
-                            PRODUCT_FIELDS_BINDING.PRICE,
-                            FilterOperator[sSelectedItem.operation],
-                            Number(sSelectedItem.value1),
-                            Number(sSelectedItem.value2),
-                        );
-                    });
+                    const aFiltersForItemsWithOperator = aItemsWithOperator.map(
+                        (sSelectedItem) => {
+                            return new Filter(
+                                PRODUCT_FIELDS_BINDING.PRICE,
+                                FilterOperator[sSelectedItem.operation],
+                                Number(sSelectedItem.value1),
+                                Number(sSelectedItem.value2),
+                            );
+                        },
+                    );
 
-                    const aFiltersForItemsWithoutOperator = aItemsWithoutOperator.map((sOtherItem) => {
-                        return new Filter(
-                            PRODUCT_FIELDS_BINDING.PRICE,
-                            FilterOperator.EQ,
-                            Number(sOtherItem),
-                        );
-                    });
+                    const aFiltersForItemsWithoutOperator =
+                        aItemsWithoutOperator.map((sOtherItem) => {
+                            return new Filter(
+                                PRODUCT_FIELDS_BINDING.PRICE,
+                                FilterOperator.EQ,
+                                Number(sOtherItem),
+                            );
+                        });
 
                     return new Filter({
-                        filters: [...aFiltersForItemsWithOperator, ...aFiltersForItemsWithoutOperator],
+                        filters: [
+                            ...aFiltersForItemsWithOperator,
+                            ...aFiltersForItemsWithoutOperator,
+                        ],
                         and: false,
                     });
                 },
