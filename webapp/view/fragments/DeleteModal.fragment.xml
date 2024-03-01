@@ -1,0 +1,26 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:core="sap.ui.core"
+>
+    <Dialog
+            id="deleteDialog"
+            title="{ii18n>deleteTitle}"
+            type="Message"
+            state="Warning"
+    >
+        <content>
+            <Text text="{modalMessage>/text}" />
+        </content>
+        <beginButton>
+            <Button
+                    type="Emphasized"
+                    text="{i18n>deleteText}"
+                    press="onPressDialogDelete"/>
+        </beginButton>
+        <endButton>
+            <Button
+                    text="{i18n>closeText}"
+                    press="onPressDialogClose"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

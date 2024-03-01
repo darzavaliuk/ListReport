@@ -8,9 +8,9 @@ sap.ui.define([], function () {
     };
 
     const PRODUCT_STATUS_ICON = {
-        "Product Damaged": "error",
-        "Product Shipped": "sys-enter-2",
-        "Product Missing": "alert",
+        "Product Damaged": "sap-icon://error",
+        "Product Shipped": "sap-icon://sys-enter-2",
+        "Product Missing": "sap-icon://alert",
     };
 
     return {

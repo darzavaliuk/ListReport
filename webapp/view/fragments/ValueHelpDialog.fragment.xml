@@ -1,21 +1,19 @@
 <core:FragmentDefinition
-    xmlns="sap.ui.comp.valuehelpdialog"
-    xmlns:m="sap.m"
+    xmlns="sap.m"
+    xmlns:vh="sap.ui.comp.valuehelpdialog"
     xmlns:fb="sap.ui.comp.filterbar"
     xmlns:core="sap.ui.core"
-    xmlns:f="sap.ui.layout.form"
-    xmlns:mvc="sap.ui.core.mvc"
 >
-    <ValueHelpDialog
-        title="Product"
-        ok="onWhitespaceOkPress"
+    <vh:ValueHelpDialog
+        title="{i18n>labelFilterBarProduct}"
+        ok="onDialogOkPress"
         cancel="onWhitespaceCancelPress"
         afterClose="onWhitespaceAfterClose"
         supportRanges="true"
         key="Price"
         descriptionKey="ProductName"
     >
-        <filterBar>
+        <vh:filterBar>
             <fb:FilterBar
                 advancedMode="true"
                 search="onFilterBarWhitespacesSearch"
@@ -29,7 +27,7 @@
                         visibleInFilterBar="true"
                     >
                         <fb:control>
-                            <m:Input
+                            <Input
                                 name="Price"
                                 showSuggestion="true"
                                 showValueHelp="false"
@@ -39,7 +37,7 @@
                                     key="{Price}"
                                     text="{ path: 'Price', formatter : '.replaceDoubleWhitespaceWithUnicodeSpace' }"
                                 />
-                            </m:Input>
+                            </Input>
                         </fb:control>
                     </fb:FilterGroupItem>
                     <fb:FilterGroupItem
@@ -49,18 +47,18 @@
                         visibleInFilterBar="true"
                     >
                         <fb:control>
-                            <m:Input
+                            <Input
                                 name="Name"
                                 showSuggestion="true"
                                 showValueHelp="false"
                                 suggestionItems="{ path: '/Products', sorter: { path: 'Name' } }"
                             >
                                 <core:Item key="{Name}" text="{Name}" />
-                            </m:Input>
+                            </Input>
                         </fb:control>
                     </fb:FilterGroupItem>
                 </fb:filterGroupItems>
             </fb:FilterBar>
-        </filterBar>
-    </ValueHelpDialog>
+        </vh:filterBar>
+    </vh:ValueHelpDialog>
 </core:FragmentDefinition>
