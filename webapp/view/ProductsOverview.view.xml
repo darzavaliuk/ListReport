@@ -23,7 +23,7 @@
                     <Label text="{path: 'appView>/filterItems', formatter: '.formatter.filterItemsToText'}"/>
                 </f:expandedContent>
                 <f:snappedContent>
-                    <Label text="{appView>/filterItems}"/>
+                    <Label text="{path: 'appView>/filterItems', formatter: '.formatter.filterItemsToText'}"/>
                 </f:snappedContent>
             </f:DynamicPageTitle>
         </f:title>
