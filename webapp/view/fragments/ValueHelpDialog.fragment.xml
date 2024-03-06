@@ -35,7 +35,7 @@
                             >
                                 <core:Item
                                     key="{Price}"
-                                    text="{ path: 'Price', formatter : '.replaceDoubleWhitespaceWithUnicodeSpace' }"
+                                    text="{ path: 'Price', formatter : '.formatter.replaceDoubleWhitespaceWithUnicodeSpace' }"
                                 />
                             </Input>
                         </fb:control>

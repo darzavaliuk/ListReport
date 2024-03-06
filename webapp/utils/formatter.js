@@ -4,22 +4,59 @@ sap.ui.define([], function () {
     const PRODUCT_STATUS = {
         "Product Damaged": "Error",
         "Product Shipped": "Success",
-        "Product Missing": "Warning",
+        "Product Missing": "Warning"
     };
 
     const PRODUCT_STATUS_ICON = {
         "Product Damaged": "sap-icon://error",
         "Product Shipped": "sap-icon://sys-enter-2",
-        "Product Missing": "sap-icon://alert",
+        "Product Missing": "sap-icon://alert"
     };
 
     return {
+        /**
+         * Formatter function for displaying human-readable status labels based on a given product status.
+         * @param {string} sStatusProduct - The product status code.
+         * @returns {string} The human-readable status label.
+         *
+         * @public
+         */
         statusFormatter: function (sStatusProduct) {
             return PRODUCT_STATUS[sStatusProduct];
         },
 
+        /**
+         * Formatter function for retrieving status icons based on a given product status.
+         * @param {string} sStatusProduct - The product status code.
+         * @returns {string} The URL or class of the status icon.
+         *
+         * @public
+         */
         statusIconFormatter: function (sStatusProduct) {
             return PRODUCT_STATUS_ICON[sStatusProduct];
+        },
+
+        /**
+         * Replaces occurrences of double whitespace in the original text with a Unicode whitespace character.
+         * @param {string} sOriginalText - The original text to perform the replacement on.
+         * @returns {string} - The text with double whitespace replaced with a Unicode whitespace character.
+         *
+         * @public
+         */
+        replaceDoubleWhitespaceWithUnicodeSpace: function (
+            sOriginalText
+        ) {
+            const sWhitespace = " ",
+                sUnicodeWhitespaceCharacter = "\u00A0";
+
+            if (typeof sOriginalText !== "string") {
+                return sOriginalText;
+            }
+
+            return sOriginalText.replaceAll(
+                sWhitespace + sWhitespace,
+                sWhitespace + sUnicodeWhitespaceCharacter
+            );
         },
     };
 });

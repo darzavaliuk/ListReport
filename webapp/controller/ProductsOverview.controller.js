@@ -1,45 +1,37 @@
 sap.ui.define(
     [
-        "sap/m/MessageBox",
         "sap/ui/model/Filter",
         "sap/ui/model/FilterOperator",
-        "sap/ui/core/Fragment",
         "./BaseController",
         "sap/ui/model/json/JSONModel",
-        "sap/ui/comp/smartvariants/PersonalizableInfo",
         "sap/m/SearchField",
         "sap/ui/model/type/String",
         "sap/m/Column",
         "sap/m/Label",
         "sap/m/ColumnListItem",
-        "sap/ui/comp/library",
-        "sap/m/Token",
         "sap/ui/table/Column",
         "sap/m/Text",
         "sap/m/MultiInput",
         "sap/m/MultiComboBox",
-        "../utils/formatter"
+        "../utils/formatter",
+        "sap/m/MessageBox"
     ],
     function (
-        MessageBox,
         Filter,
         FilterOperator,
-        Fragment,
         BaseController,
         JSONModel,
-        PersonalizableInfo,
         SearchField,
         TypeString,
         MColumn,
         Label,
         ColumnListItem,
-        compLibrary,
-        Token,
         UIColumn,
         Text,
         MultiInput,
         MultiComboBox,
-        formatter
+        formatter,
+        MessageBox
     ) {
         "use strict";
 
@@ -71,133 +63,42 @@ sap.ui.define(
                  * @public
                  */
                 onInit: function () {
-                    this._oSmartVariantManagement = this.getView().byId(
-                        "smartVariantProduct"
-                    );
-                    this._oFilterBar = this.getView().byId("filterbar");
+                    this._oFilterBar = this.getView().byId("filterBarProductOverview");
                     this._oTable = this.getView().byId("productsTable");
                     this._oWhiteSpacesInput = this.byId("productsInput");
-                    this._oVM = this.getView().byId("vm");
-                    this.getView().setModel(new JSONModel({"deleteButton": false}), "state");
 
-                    this._oFilterBar.registerApplyData(
-                        this._applyData.bind(this)
-                    );
                     this._oFilterBar.registerGetFiltersWithValues(
                         this._getFiltersWithValues.bind(this)
                     );
-
-                    this._initializeFilterPersonalization();
-                    this._hideLabelForFilterItem();
-                },
-
-                _hideLabelForFilterItem: function () {
-                    this.getView().byId("productId").getLabelControl().removeStyleClass("sapUiCompFilterLabel");
                 },
 
                 /**
-                 * Initializes filter personalization functionality.
-                 * Sets up personalization for the filter bar using SmartVariantManagement.
+                 * Event handler for the onAfterRendering event of the view.
+                 * Sets the model for the appView and initializes its properties.
                  *
-                 * @private
+                 * @public
                  */
-                _initializeFilterPersonalization: function () {
-                    const oPersonalInfo = new PersonalizableInfo({
-                        type: "filterBar",
-                        keyName: "persistencyKey",
-                        dataSource: "",
-                        control: this._oFilterBar
-                    });
-
-                    this._oSmartVariantManagement.addPersonalizableControl(
-                        oPersonalInfo
-                    );
-
-                    this._oSmartVariantManagement.initialise(
-                        function () {
-                        },
-                        this._oFilterBar
-                    );
+                onAfterRendering: function () {
+                    this.getView().setModel(new JSONModel({
+                        "numberOfItemsToDelete": 0,
+                        "filterText": this._getTextFromI18n("zeroFilters"),
+                        "isVisibleOverlay": false
+                    }), "appView");
                 },
 
+                /**
+                 * Handles the selection change event of the table.
+                 * Updates the state model to enable or disable the delete button based on the selected items.
+                 * @param {sap.ui.base.Event} oControlEvent - The event object.
+                 *
+                 * @public
+                 */
                 onSelectionChangeTable: function (oControlEvent) {
-                    const oStateModel = this.getView().getModel("state");
+                    const oStateModel = this.getView().getModel("appView");
 
                     oStateModel.setProperty(
-                        "/deleteButton", oControlEvent.getSource().getSelectedItems().length > 0
+                        "/numberOfItemsToDelete", oControlEvent.getSource().getSelectedItems().length
                     );
-                },
-
-                _checkCurrentVariant: function () {
-                    const sSelectedKey = this._oVM.getSelectedKey();
-                    const oItem = this._oVM.getItemByKey(sSelectedKey);
-                    if (!oItem) {
-                        var sKey = this._oVM.getStandardVariantKey();
-                        if (sKey) {
-                            this._oVM.setSelectedKey(sKey);
-                        }
-                    }
-                },
-                _updateItems: function (mParams) {
-                    if (mParams.deleted) {
-                        mParams.deleted.forEach(function (sKey) {
-                            const oItem = this._oVM.getItemByKey(sKey);
-                            if (oItem) {
-                                this._oVM.removeItem(oItem);
-                                oItem.destroy();
-                            }
-                        }.bind(this));
-                    }
-
-                    if (mParams.hasOwnProperty("def")) {
-                        this._oVM.setDefaultKey(mParams.def);
-                    }
-
-                    this._checkCurrentVariant();
-                },
-                _createNewItem: function (mParams) {
-                    const sKey = "key_" + Date.now();
-
-                    const oItem = new VariantItem({
-                        key: sKey,
-                        title: mParams.name,
-                        executeOnSelect: mParams.execute,
-                        author: "sample",
-                        changeable: true,
-                        remove: true
-                    });
-
-                    if (mParams.hasOwnProperty("public")) {
-                        oItem.setSharing(mParams.public);
-                    }
-                    if (mParams.def) {
-                        this._oVM.setDefaultKey(sKey);
-                    }
-
-                    this._oVM.addItem(oItem);
-
-                },
-
-                onPress: function (event) {
-                    this._oVM.setModified(!this._oVM.getModified());
-                },
-
-                onManage: function (event) {
-                    const params = event.getParameters();
-                    this._updateItems(params);
-                },
-
-                onSelect: function () {
-                    this._oVM.setModified(false);
-                },
-
-                onSave: function (event) {
-                    const params = event.getParameters();
-                    if (!params.overwrite) {
-                        this._createNewItem(params);
-                    }
-
-                    this._oVM.setModified(false);
                 },
 
                 /**
@@ -214,7 +115,7 @@ sap.ui.define(
                     aTokens.forEach(
                         function (oToken) {
                             oToken.setText(
-                                this.replaceDoubleWhitespaceWithUnicodeSpace(
+                                this.formatter.replaceDoubleWhitespaceWithUnicodeSpace(
                                     oToken.getText()
                                 )
                             );
@@ -223,47 +124,17 @@ sap.ui.define(
 
                     this._oWhiteSpacesInput.setTokens(aTokens);
                     this.oWhitespaceDialog.close();
-                },
-
-                /**
-                 * Applies filter data to the SmartFilterBar.
-                 * Sets the selected keys for the corresponding filter items based on the provided data.
-                 * @param {object[]} aData - Array of filter items with group name, field name, and selected keys.
-                 *
-                 * @private
-                 */
-                _applyData: function (aData) {
-                    aData.forEach(function (oDataObject) {
-                        const oControl = this.oFilterBar.determineControlByName(
-                            oDataObject.fieldName,
-                            oDataObject.groupName
-                        );
-                        oControl.setSelectedKeys(oDataObject.fieldData);
-                    }, this);
-                },
-
-                /**
-                 * Event handler for the filter change event.
-                 * Updates labels and table based on the filter changes.
-                 *
-                 * @public
-                 */
-                onFilterChange: function () {
                     this._updateLabelsAndTable();
                 },
 
                 /**
                  * Event handler for the selection change event.
                  * Sets the current variant as modified in VariantManagement and fires the filter change event of the FilterBar.
-                 * @param {sap.ui.base.Event} oEvent - The event object.
                  *
                  * @public
                  */
-                onSelectionChange: function (oEvent) {
-                    this._oSmartVariantManagement.currentVariantSetModified(
-                        true
-                    );
-                    this.onFilterChange(oEvent);
+                onSelectionChange: function () {
+                    this._updateLabelsAndTable();
                 },
 
                 /**
@@ -284,13 +155,8 @@ sap.ui.define(
                  * @private
                  */
                 _updateLabelsAndTable: function () {
-                    this.getView()
-                        .byId("expandedLabel")
-                        .setText(this._getFormattedSummaryText());
-                    this.getView()
-                        .byId("snappedLabel")
-                        .setText(this._getFormattedSummaryText());
-                    this._oTable.setShowOverlay(true);
+                    this.getView().getModel("appView").setProperty("/filterText", this._getFormattedSummaryText());
+                    this.getView().getModel("appView").setProperty("/isVisibleOverlay", true);
                 },
 
                 /**
@@ -392,46 +258,6 @@ sap.ui.define(
                             aFiltersWithValues.length
                         ]) + aFiltersWithValues.join(", ")
                     );
-                },
-
-                /**
-                 * Retrieves the expanded formatted summary text based on the active filters.
-                 * Returns the expanded formatted summary text indicating the number of active filters,
-                 * the number of hidden filters, and their names.
-                 * @returns {string} - The expanded formatted summary text.
-                 *
-                 * @private
-                 */
-                _getFormattedSummaryTextExpanded: function () {
-                    const aFiltersWithValues =
-                        this._oFilterBar.retrieveFiltersWithValues();
-
-                    if (aFiltersWithValues.length === 0) {
-                        return this._getTextFromI18n("zeroFilters");
-                    }
-
-                    let sText = this._getTextFromI18n("multiFiltersActive", [
-                            aFiltersWithValues.length
-                        ]),
-                        aNonVisibleFiltersWithValues =
-                            this._oFilterBar.retrieveNonVisibleFiltersWithValues();
-
-                    if (aFiltersWithValues.length === 1) {
-                        sText = this._getTextFromI18n("oneFilterActive", [
-                            aFiltersWithValues.length
-                        ]);
-                    }
-
-                    if (
-                        aNonVisibleFiltersWithValues &&
-                        aNonVisibleFiltersWithValues.length > 0
-                    ) {
-                        sText += this._getTextFromI18n("filtersHidden", [
-                            aNonVisibleFiltersWithValues.length
-                        ]);
-                    }
-
-                    return sText;
                 },
 
                 /**
@@ -608,8 +434,8 @@ sap.ui.define(
                                     path: PRODUCT_FIELDS_BINDING.PRODUCTS,
                                     template: new ColumnListItem({
                                         cells: [
-                                            new Label({text: "{Price}"}),
-                                            new Label({text: "{Name}"})
+                                            new Label({ text: "{Price}" }),
+                                            new Label({ text: "{Name}" })
                                         ]
                                     }),
                                     events: {
@@ -644,7 +470,7 @@ sap.ui.define(
                         })
                     });
 
-                    oColumnPrice.data({fieldName: "Price"});
+                    oColumnPrice.data({ fieldName: "Price" });
                     oTable.addColumn(oColumnPrice);
 
                     const oColumnName = new UIColumn({
@@ -653,10 +479,10 @@ sap.ui.define(
                                 "productsOverviewInputName"
                             )
                         }),
-                        template: new Text({wrapping: false, text: "{Name}"})
+                        template: new Text({ wrapping: false, text: "{Name}" })
                     });
 
-                    oColumnName.data({fieldName: "Name"});
+                    oColumnName.data({ fieldName: "Name" });
                     oTable.addColumn(oColumnName);
                 },
 
@@ -695,29 +521,6 @@ sap.ui.define(
                  */
                 onWhitespaceCancelPress: function () {
                     this.oWhitespaceDialog.close();
-                },
-
-                /**
-                 * Replaces occurrences of double whitespace in the original text with a Unicode whitespace character.
-                 * @param {string} sOriginalText - The original text to perform the replacement on.
-                 * @returns {string} - The text with double whitespace replaced with a Unicode whitespace character.
-                 *
-                 * @private
-                 */
-                replaceDoubleWhitespaceWithUnicodeSpace: function (
-                    sOriginalText
-                ) {
-                    const sWhitespace = " ",
-                        sUnicodeWhitespaceCharacter = "\u00A0";
-
-                    if (typeof sOriginalText !== "string") {
-                        return sOriginalText;
-                    }
-
-                    return sOriginalText.replaceAll(
-                        sWhitespace + sWhitespace,
-                        sWhitespace + sUnicodeWhitespaceCharacter
-                    );
                 },
 
                 /**
@@ -767,7 +570,7 @@ sap.ui.define(
                                 .pop()
                         );
 
-                        oSelectedIndices.forEach((iIndex) => {
+                        oSelectedIndices.forEach((iIndex, i) => {
                             if (
                                 iIndex >= 0 &&
                                 iIndex <
@@ -779,7 +582,7 @@ sap.ui.define(
                                     .getProperty(
                                         PRODUCT_FIELDS_BINDING.PRODUCTS
                                     )
-                                    .splice(iIndex, 1);
+                                    .splice(iIndex - i, 1);
                             }
                         });
 
@@ -795,56 +598,57 @@ sap.ui.define(
                  * @public
                  */
                 onPressDeleteProducts: function () {
-                    const selectedItems = this._oTable.getSelectedItems();
-                    const itemsNumber = selectedItems.length;
-                    const sConfirmMessage = this._buildConfirmationText(selectedItems, itemsNumber);
+                    const oSelectedItems = this._oTable.getSelectedItems();
+                    const iItemsNumber = oSelectedItems.length;
+                    const sConfirmMessage = this._buildConfirmationText(oSelectedItems, iItemsNumber);
 
-                    if (!this.pDialog) {
-                        this.pDialog = this.loadFragment({
-                            name: "darya.zavaliuk.view.fragments.DeleteModal"
-                        });
-                    }
-                    let view = this.getView();
-
-                    this.pDialog.then(function (oDialog) {
-                        view.setModel(new JSONModel({"text": sConfirmMessage}), "modalMessage");
-                        view.addDependent(oDialog);
-                        oDialog.open();
+                    const oThat = this;
+                    MessageBox.error(sConfirmMessage, {
+                        title: "Error",
+                        actions: [MessageBox.Action.DELETE, MessageBox.Action.CLOSE],
+                        emphasizedAction: MessageBox.Action.DELETE,
+                        onClose: function (action) {
+                            if (action === MessageBox.Action.DELETE) {
+                                oThat._onPressDialogDelete();
+                            }
+                        }
                     });
+
                 },
 
-                onPressDialogClose: function () {
-                    this.byId("deleteDialog").close();
-                },
-
-                onPressDialogDelete: function () {
+                /**
+                 * Event handler for the onPress event of the delete button in the dialog.
+                 * Calls the _deleteSelectedProducts function to delete the selected products.
+                 *
+                 * @private
+                 */
+                _onPressDialogDelete: function () {
                     this._deleteSelectedProducts();
-                    this.byId("deleteDialog").close();
                 },
 
                 /**
                  * Constructs the confirmation text based on the selected items and the number of items.
-                 * @param {Array} selectedItems - The array of selected items.
-                 * @param {number} itemsNumber - The number of selected items.
+                 * @param {Array} oSelectedItems - The array of selected items.
+                 * @param {number} iItemsNumber - The number of selected items.
                  * @returns {string} The confirmation text.
                  *
                  * @private
                  */
-                _buildConfirmationText: function (selectedItems, itemsNumber) {
-                    const singleDeleteText = this._getTextFromI18n(
+                _buildConfirmationText: function (oSelectedItems, iItemsNumber) {
+                    const sSingleDeleteText = this._getTextFromI18n(
                         "deleteProductConfirmMessage",
                         [
-                            selectedItems[0]
+                            oSelectedItems[0]
                                 .getBindingContext()
                                 .getProperty("Name")
                         ]
                     );
-                    const multiDeleteText = this._getTextFromI18n(
+                    const sMultiDeleteText = this._getTextFromI18n(
                         "deleteProductsConfirmMessage",
-                        [itemsNumber]
+                        [iItemsNumber]
                     );
 
-                    return itemsNumber === 1 ? singleDeleteText : multiDeleteText;
+                    return iItemsNumber === 1 ? sSingleDeleteText : sMultiDeleteText;
                 },
 
                 /**
@@ -877,8 +681,8 @@ sap.ui.define(
                         oSearchInputFilter,
                         oInputFilter
                     ]
-                        .filter((filter) => filter !== undefined)
-                        .map((filter) => new Filter(filter));
+                        .filter((oFilter) => oFilter !== undefined)
+                        .map((oFilter) => new Filter(oFilter));
 
                     const oBinding = this._oTable.getBinding("items");
 
@@ -889,7 +693,8 @@ sap.ui.define(
                         })
                     );
 
-                    this._oTable.setShowOverlay(false);
+                    this._updateLabelsAndTable();
+                    this.getView().getModel("appView").setProperty("/isVisibleOverlay", false);
                 },
 
                 /**
@@ -912,11 +717,11 @@ sap.ui.define(
                     }
 
                     return aSelectedValues.map(
-                        (value) =>
+                        (sValue) =>
                             new Filter(
                                 sFieldBinding,
                                 FilterOperator.Contains,
-                                value
+                                sValue
                             )
                     );
                 },

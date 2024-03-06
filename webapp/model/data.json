@@ -10,6 +10,9 @@
       "Price": "2.5",
       "Date": "2024-02-02",
       "Status": "Product Missing",
+      "Contract": "10045876",
+      "Color": "White",
+      "Factory": "FL",
       "Category": {
         "ID": "0",
         "Name": "Food"
@@ -64,6 +67,9 @@
       "Status": "Product Damaged",
       "Rating": 3,
       "Price": "3.5",
+      "Contract": "98765432",
+      "Color": "Blue",
+      "Factory": "NY",
       "Category": {
         "ID": "1",
         "Name": "Beverages"
@@ -99,6 +105,9 @@
       "Date": "2024-01-01",
       "Status": "Product Shipped",
       "Price": "20.9",
+      "Contract": "98765432",
+      "Color": "Red",
+      "Factory": "CA",
       "Category": {
         "__metadata": {
           "uri": "https://services.odata.org/(S(gjkgiyjamral2agtqy4vero3))/V2/OData/OData.svc/Categories(1)",
@@ -153,6 +162,9 @@
       "DiscontinuedDate": "/Date(1159660800000)/",
       "Rating": 3,
       "Price": "19.9",
+      "Contract": "98765432",
+      "Color": "Green",
+      "Factory": "TX",
       "Category": {
         "__metadata": {
           "uri": "https://services.odata.org/(S(gjkgiyjamral2agtqy4vero3))/V2/OData/OData.svc/Categories(1)",
@@ -207,6 +219,9 @@
       "DiscontinuedDate": null,
       "Rating": 3,
       "Price": "22.99",
+      "Contract": "98765432",
+      "Color": "Yellow",
+      "Factory": "GA",
       "Category": {
         "__metadata": {
           "uri": "https://services.odata.org/(S(gjkgiyjamral2agtqy4vero3))/V2/OData/OData.svc/Categories(1)",
@@ -261,6 +276,9 @@
       "DiscontinuedDate": null,
       "Rating": 3,
       "Price": "22.8",
+      "Contract": "98765432",
+      "Color": "Purple",
+      "Factory": "IL",
       "Category": {
         "__metadata": {
           "uri": "https://services.odata.org/(S(gjkgiyjamral2agtqy4vero3))/V2/OData/OData.svc/Categories(1)",
@@ -315,6 +333,9 @@
       "DiscontinuedDate": null,
       "Rating": 3,
       "Price": "18.8",
+      "Contract": "98765432",
+      "Color": "Black",
+      "Factory": "WA",
       "Category": {
         "__metadata": {
           "uri": "https://services.odata.org/(S(gjkgiyjamral2agtqy4vero3))/V2/OData/OData.svc/Categories(1)",
@@ -369,6 +390,9 @@
       "DiscontinuedDate": null,
       "Rating": 3,
       "Price": "35.88",
+      "Contract": "98765432",
+      "Color": "Silver",
+      "Factory": "MI",
       "Category": {
         "__metadata": {
           "uri": "https://services.odata.org/(S(gjkgiyjamral2agtqy4vero3))/V2/OData/OData.svc/Categories(2)",
@@ -423,6 +447,9 @@
       "DiscontinuedDate": null,
       "Rating": 3,
       "Price": "1088.8",
+      "Contract": "98765432",
+      "Color": "Orange",
+      "Factory": "AZ",
       "Category": {
         "__metadata": {
           "uri": "https://services.odata.org/(S(gjkgiyjamral2agtqy4vero3))/V2/OData/OData.svc/Categories(2)",
@@ -488,6 +515,12 @@
       "Name": "Tokyo Traders"
     }
   ],
+  "Colors": [
+    {
+      "ID": "0",
+      "Name": "White"
+    }
+  ],
   "Statuses": [
     {
       "ID": "0",
@@ -500,6 +533,16 @@
     {
       "ID": "2",
       "Name": "Product Damaged"
+    }
+  ],
+  "Variants": [
+    {
+      "VariantName": "Default",
+      "VariantKey": "0"
+    },
+    {
+      "VariantName": "Not Default",
+      "VariantKey": "1"
     }
   ]
 }

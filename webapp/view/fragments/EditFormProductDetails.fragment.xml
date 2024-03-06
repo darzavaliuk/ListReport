@@ -1,0 +1,96 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+    <form:FormElement label="{i18n>IDTitle}">
+        <form:fields>
+            <Input name="ID" value="{
+                    path: 'product>/ID',
+                    type: 'sap.ui.model.type.Integer',
+                    constraints: {
+                        minimum: 0
+                }
+            }" editable="false" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>nameTitle}">
+        <form:fields>
+            <Input name="{i18n>nameTitle}" id="nameInput" value="{ path: 'product>/Name', type: 'sap.ui.model.type.String', constraints: { minLength: 3, maxLength: 100 } }" liveChange="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>descriptionTitle}">
+        <form:fields>
+            <Input name="{i18n>descriptionTitle}" id="descriptionInput" value="{ path: 'product>/Description', type: 'sap.ui.model.type.String', constraints: { minLength: 5, maxLength: 100 } }" liveChange="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>priceTitle}">
+        <form:fields>
+            <Input name="{i18n>priceTitle}" id="priceInput" value="{ path: 'product>/Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }" liveChange="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>ratingTitle}">
+        <form:fields>
+            <Input id="ratingInput" name="Rating" type="Number" value="{
+                        path: 'product>/Rating',
+                        type: 'sap.ui.model.type.Integer',
+                        constraints: {
+                            minimum: 1,
+                            maximum: 5
+                        }
+                    }" liveChange="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>categoryTitle}">
+        <form:fields>
+            <ComboBox id="categoryComboBox" value="{product>/Category/Name}" items="{
+						path: 'products>/categoryNames'
+					}" selectedKey="{product>/Category/Name}" change="onChangeComboBoxValue">
+                <core:Item key="{products>Name}" text="{products>Name}"/>
+            </ComboBox>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>supplierTitle}">
+        <form:fields>
+            <ComboBox name="SupplierName" id="supplierComboBox" selectionChange=".onSelectionChange" value="{product>/Supplier/Name}" selectedKey="{product>/Supplier/Name}" change="onChangeComboBoxValue" items="{
+						path: 'products>/supplierNames',
+						templateShareable: true
+					}">
+                <core:Item key="{products>Name}" text="{products>Name}"/>
+            </ComboBox>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>statusTitle}">
+        <form:fields>
+            <ComboBox name="StatusName" id="statusComboBox" value="{product>/Status}" change="onChangeComboBoxValue" selectedKey="{product>/Status}" items="{
+						path: 'products>/statusNames',
+						templateShareable: true
+					}">
+                <core:Item key="{products>Name}" text="{products>Name}"/>
+            </ComboBox>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>dateTitle}">
+        <form:fields>
+            <DatePicker id="datePicker" value="{path: 'product>/Date', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source: {pattern: 'yyyy-MM-dd'}}}" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>factoryTitle}">
+        <form:fields>
+            <Input name="{i18n>factoryTitle}" id="factoryInput" value="{ path: 'product>/Factory', type: 'sap.ui.model.type.String', constraints: { minLength: 2, maxLength: 2 } }" liveChange="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>contractTitle}">
+        <form:fields>
+            <Input id="contractInput" name="Contract" value="{ path: 'product>/Contract', type: 'sap.ui.model.type.String', constraints: { minLength: 8, maxLength: 10 } }" liveChange="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>colorTitle}">
+        <form:fields>
+            <ComboBox name="colorName" id="colorComboBox" value="{product>/Color}" change="onChangeComboBoxValue" selectedKey="{product>/Color}" items="{
+						path: 'products>/colorNames',
+						templateShareable: true
+					}">
+                <core:Item key="{products>Name}" text="{products>Name}"/>
+            </ComboBox>
+        </form:fields>
+    </form:FormElement>
+</core:FragmentDefinition>

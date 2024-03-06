@@ -5,48 +5,44 @@
         xmlns:f="sap.f"
         xmlns:fb="sap.ui.comp.filterbar"
         xmlns:core="sap.ui.core"
-        xmlns:svm="sap.ui.comp.smartvariants"
         height="100%"
 >
-
     <f:DynamicPage
-            id="dynamicPageId"
+            id="dynamicPageProductOverview"
             class="sapUiNoContentPadding"
     >
-
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <svm:SmartVariantManagement
-                            id="smartVariantProduct"
-                            showExecuteOnSelection="true"
-                    />
+                    <VariantManagement items="{/Variants}" selectedKey="0"
+                                       defaultKey="0" id="variantManagement">
+                        <VariantItem text="{VariantName}" key="{VariantKey}"/>
+                    </VariantManagement>
                 </f:heading>
                 <f:expandedContent>
-                    <Label id="expandedLabel" text="{i18n>zeroFilters}"/>
+                    <Label text="{appView>/filterText}"/>
                 </f:expandedContent>
                 <f:snappedContent>
-                    <Label id="snappedLabel" text="{i18n>zeroFilters}"/>
+                    <Label text="{appView>/filterText}"/>
                 </f:snappedContent>
             </f:DynamicPageTitle>
         </f:title>
-
         <f:header>
             <f:DynamicPageHeader>
                 <f:content>
                     <fb:FilterBar
-                            id="filterbar"
-                            persistencyKey="myPersKey"
+                            id="filterBarProductOverview"
+                            class="searchInputLabel"
                             useToolbar="false"
                             search="onPressConfirmFilters"
-                            filterChange="onFilterChange"
                             afterVariantLoad="onAfterVariantLoad"
                             afterVariantSave="onPressConfirmFilters"
                     >
                         <fb:filterGroupItems>
                             <fb:FilterGroupItem
                                     id="productId"
-                                    class="sapMLabelBold"
+                                    class="searchInputLabel"
+                                    label="{i18n>labelFilterBarSearch}"
                                     name="Product"
                                     groupName="Basic"
                                     visibleInFilterBar="true"
@@ -54,6 +50,7 @@
                                 <fb:control>
                                     <SearchField
                                             width="100%"
+                                            class="searchInputLabel"
                                             id="searchField"
                                             change="onSelectionChange"
                                             search="onSearchStores"
@@ -61,7 +58,6 @@
                                     />
                                 </fb:control>
                             </fb:FilterGroupItem>
-
                             <fb:FilterGroupItem
                                     name="Category"
                                     label="{i18n>labelFilterBarCategory}"
@@ -75,15 +71,14 @@
                                             selectionChange="onSelectionChange"
                                             placeholder="{i18n>productsOverviewCategory}"
                                             items="{
-                                            path: '/Categories',
-                                            templateShareable: true
-                                        }"
+                                                path: '/Categories',
+                                                templateShareable: true
+                                            }"
                                     >
                                         <core:Item key="{key}" text="{Name}"/>
                                     </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
-
                             <fb:FilterGroupItem
                                     name="Supplier"
                                     label="{i18n>labelFilterBarSupplier}"
@@ -105,7 +100,6 @@
                                     </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
-
                             <fb:FilterGroupItem
                                     name="Status"
                                     label="{i18n>labelFilterBarStatus}"
@@ -119,15 +113,14 @@
                                             selectionChange="onSelectionChange"
                                             placeholder="{i18n>productsOverviewStatus}"
                                             items="{
-                                            path: '/Statuses',
-                                            templateShareable: true
-                                        }"
+                                                path: '/Statuses',
+                                                templateShareable: true
+                                            }"
                                     >
                                         <core:Item key="{key}" text="{Name}"/>
                                     </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
-
                             <fb:FilterGroupItem
                                     name="Price"
                                     label="{i18n>labelFilterBarPrice}"
@@ -140,7 +133,7 @@
                                             placeholder="{i18n>productsOverviewInputPrice}"
                                             showSuggestion="true"
                                             showValueHelp="true"
-                                            tokenChange="onSelectionChange"
+                                            tokenUpdate="onSelectionChange"
                                             valueHelpRequest="onValueHelpRequest"
                                             suggestionItems="{/Products}"
                                     >
@@ -149,24 +142,22 @@
                                                     key="{Price}"
                                                     text="{
                                                     path: 'Price',
-                                                    formatter: '.replaceDoubleWhitespaceWithUnicodeSpace'
+                                                    formatter: '.formatter.replaceDoubleWhitespaceWithUnicodeSpace'
                                                 }"
                                                     additionalText="{
                                                     path: 'Name',
-                                                    formatter: '.replaceDoubleWhitespaceWithUnicodeSpace'
+                                                    formatter: '.formatter.replaceDoubleWhitespaceWithUnicodeSpace'
                                                 }"
                                             />
                                         </suggestionItems>
                                     </MultiInput>
                                 </fb:control>
                             </fb:FilterGroupItem>
-
                         </fb:filterGroupItems>
                     </fb:FilterBar>
                 </f:content>
             </f:DynamicPageHeader>
         </f:header>
-
         <f:content>
             <Table
                     id="productsTable"
@@ -178,6 +169,7 @@
                         path: '/Products',
                         sorter: {path: 'ID'}
                     }"
+                    showOverlay="{appView>/isVisibleOverlay}"
             >
                 <headerToolbar>
                     <Toolbar>
@@ -192,12 +184,14 @@
                         <Button
                                 icon="sap-icon://create"
                                 press="onPressCreateProduct"
+                                text="Create"
                         />
                         <Button
                                 id="deleteProduct"
-                                enabled="{state>/deleteButton}"
+                                enabled="{= ${appView>/numberOfItemsToDelete} > 0 ? true : false}"
                                 icon="sap-icon://delete"
                                 press="onPressDeleteProducts"
+                                text="Delete"
                         />
                     </Toolbar>
                 </headerToolbar>
@@ -261,6 +255,5 @@
                 </items>
             </Table>
         </f:content>
-
     </f:DynamicPage>
 </mvc:View>

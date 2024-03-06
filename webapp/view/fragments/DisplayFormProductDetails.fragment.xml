@@ -1,0 +1,61 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:form="sap.ui.layout.form"
+        xmlns:core="sap.ui.core">
+    <form:FormElement label="{i18n>IDTitle}">
+        <form:fields>
+            <Text text="{product>/ID}"/>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>nameTitle}">
+        <form:fields>
+            <Text text="{product>/Name}"
+            />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>priceTitle}">
+        <form:fields>
+            <Text text="{ path: 'product>/Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }"/>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>ratingTitle}">
+        <form:fields>
+            <Text text="{product>/Rating}" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>categoryTitle}">
+        <form:fields>
+            <Text text="{product>/Category/Name}"/>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>supplierTitle}">
+        <form:fields>
+            <Text text="{product>/Supplier/Name}"/>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>statusTitle}">
+        <form:fields>
+            <Text text="{product>/Status}"/>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>dateTitle}">
+        <form:fields>
+            <Text text="{path: 'product>/Date', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source: {pattern: 'yyyy-MM-dd'}}}"/>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>factoryTitle}">
+        <form:fields>
+            <Text text="{product>/Factory}"/>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>contractTitle}">
+        <form:fields>
+            <Text text="{product>/Contract}"/>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>colorTitle}">
+        <form:fields>
+            <Text text="{product>/Color}"/>
+        </form:fields>
+    </form:FormElement>
+</core:FragmentDefinition>

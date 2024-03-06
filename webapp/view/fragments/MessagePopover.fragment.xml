@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-    <MessagePopover items="{messages>/}" initiallyExpanded="true" activeTitlePress="onPressItem">
+    <MessagePopover items="{messages>/}" initiallyExpanded="true" activeTitlePress="onPressItemMessageItem">
         <items>
             <MessagePopoverItem
                     type="{messages>type}"

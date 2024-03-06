@@ -2,24 +2,18 @@
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.m"
         xmlns:f="sap.f"
-        xmlns:layout="sap.ui.layout"
         height="100%"
-        xmlns:custom="darya.zavaliuk.control"
         xmlns:form="sap.ui.layout.form"
-        xmlns:core="sap.ui.core"
         controllerName="darya.zavaliuk.controller.ProductDetails"
 >
-
-    <f:DynamicPage id="dynamicPage"
-                   showFooter="true"
+    <f:DynamicPage id="dynamicPageProductDetails"
+                   showFooter="{=!!${state>/isEditPage}}"
                    class="sapUiNoContentPadding">
-
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
                     <Title text="{product>/Name}"/>
                 </f:heading>
-
                 <f:expandedContent>
                     <Label text="{product>/Description}"/>
                 </f:expandedContent>
@@ -29,241 +23,98 @@
                 <f:snappedTitleOnMobile>
                     <Title text="{product>/Description}"/>
                 </f:snappedTitleOnMobile>
-
                 <f:actions>
                     <Button
-                            text="Edit"
-                            visible="{=!${state>/isCreatePage}}"
+                            text="{i18n>editButton}"
+                            visible="{=!${state>/isEditPage}}"
                             type="Emphasized"
                             press="onPressEditProduct"/>
                     <Button
-                            text="Delete"
-                            visible="{=!${state>/isCreatePage}}"
+                            text="{i18n>deleteButton}"
+                            visible="{=!${state>/isEditPage}}"
                             type="Transparent"
                             press="onPressDeleteProduct"/>
                 </f:actions>
             </f:DynamicPageTitle>
         </f:title>
-
         <f:header>
             <f:DynamicPageHeader>
-                <form:Form id="FormChangeColumn_twoGroups234"
-                           editable="true">
-                    <form:layout>
-                        <form:ColumnLayout columnsM="2"/>
-                    </form:layout>
-                    <form:formContainers>
-                        <form:FormContainer id="table">
-                            <form:formElements>
-                                <form:FormElement label="{i18n>IDTitle}">
-                                    <form:fields>
-                                        <Input
-                                                name="ID"
-                                                value="{
-                                                    path: 'product>/ID',
-                                                    type: 'sap.ui.model.type.Integer',
-                                                    constraints: {
-                                                    minimum: 0
-                                                    }
-                                                }"
-                                                editable="false"
-                                        />
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>nameTitle}">
-                                    <form:fields>
-                                        <Input name="{i18n>nameTitle}"
-                                               id="nameTitle"
-                                               value="{ path: 'product>/Name', type: 'sap.ui.model.type.String', constraints: { minLength: 3, maxLength: 100 } }"
-                                               change=".onInputChange"
-                                               editable="{state>/isCreatePage}"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>priceTitle}">
-                                    <form:fields>
-                                        <Input name="{i18n>priceTitle}"
-                                               id="priceTitle"
-                                               value="{ path: 'product>/Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }"
-                                               change=".onInputChange"
-                                               editable="{state>/isCreatePage}"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>ratingTitle}">
-                                    <form:fields>
-                                        <Input id="rating"
-                                                name="Rating"
-                                                type="Number"
-                                                value="{
-                                                    path: 'product>/Rating',
-                                                    type: 'sap.ui.model.type.Integer',
-                                                    constraints: {
-                                                    minimum: 1,
-                                                    maximum: 5
-                                                    }
-                                                }"
-                                                change=".onInputChange"
-                                                editable="{state>/isCreatePage}"
-                                        />
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>categoryTitle}">
-                                    <form:fields>
-                                        <ComboBox
-                                                name="CategoryName"
-                                                id="CategoryName"
-                                                selectionChange=".onSelectionChange"
-                                                value="{product>/Category/Name}"
-                                                change="handleChange"
-                                                editable="{state>/isCreatePage}"
-                                                items="{
-												path: 'products>/categoryNames',
-												templateShareable: true
-											}"
-                                        >
-                                            <core:Item key="{products>Name}" text="{products>Name}"/>
-                                        </ComboBox>
-                                    </form:fields>
-                                </form:FormElement>
-
-                                <form:FormElement label="{i18n>supplierTitle}">
-                                    <form:fields>
-                                        <ComboBox
-                                                name="SupplierName"
-                                                id="SupplierName"
-                                                selectionChange=".onSelectionChange"
-                                                editable="{state>/isCreatePage}"
-                                                value="{product>/Supplier/Name}"
-                                                change="handleChange"
-                                                items="{
-												path: 'products>/supplierNames',
-												templateShareable: true
-											}"
-                                        >
-                                            <core:Item key="{products>Name}" text="{products>Name}"/>
-                                        </ComboBox>
-                                    </form:fields>
-                                </form:FormElement>
-
-                                <form:FormElement label="{i18n>statusTitle}">
-                                    <form:fields>
-                                        <ComboBox
-                                                name="StatusName"
-                                                id="StatusName"
-                                                selectionChange=".onSelectionChange"
-                                                editable="{state>/isCreatePage}"
-                                                value="{product>/Status}"
-                                                change="handleChange"
-                                                items="{
-												path: 'products>/statusNames',
-												templateShareable: false
-											}"
-                                        >
-                                            <core:Item key="{key}" text="{products>Name}"/>
-                                        </ComboBox>
-                                    </form:fields>
-                                </form:FormElement>
-
-                                <form:FormElement label="{i18n>dateTitle}">
-                                    <form:fields>
-                                        <DatePicker
-                                                id="DP3"
-                                                editable="{state>/isCreatePage}"
-                                                value="{path: 'product>/Date', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source: {pattern: 'yyyy-MM-dd'}}}"
-                                                class="sapUiSmallMarginBottom"/>
-                                    </form:fields>
-                                </form:FormElement>
-
-                            </form:formElements>
-                        </form:FormContainer>
-                    </form:formContainers>
-                </form:Form>
+                <FlexBox wrap="Wrap" fitContainer="true">
+                    <Avatar src="./images/robot.png"
+                            class="sapUiMediumMarginEnd sapUiSmallMarginBottom"
+                            displayShape="Square"
+                            displaySize="L"/>
+                    <VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
+                        <HBox class="sapUiTinyMarginBottom" renderType="Bare">
+                            <Label text="{i18n>IDTitle}" class="sapUiTinyMarginEnd"/>
+                            <Text text="{product>/ID}"/>
+                        </HBox>
+                        <HBox class="sapUiTinyMarginBottom" renderType="Bare">
+                            <Label text="{i18n>nameTitle}" class="sapUiTinyMarginEnd"/>
+                            <Text text="{product>/Name}"/>
+                        </HBox>
+                        <HBox class="sapUiTinyMarginBottom" renderType="Bare">
+                            <Label text="{i18n>categoryTitle}" class="sapUiTinyMarginEnd"/>
+                            <Text text="{product>/Category/Name}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>supplierTitle}" class="sapUiTinyMarginEnd"/>
+                            <Text text="{product>/Supplier/Name}"/>
+                        </HBox>
+                    </VBox>
+                    <VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
+                        <Title text="{i18n>statusTitle}" class="sapUiSmallMarginBottom"/>
+                        <ObjectStatus class="sapSObjectStatusLarge"
+                                      text="{product>/Status}"
+                                      icon="{ path: 'product>/Status', formatter: '.formatter.statusIconFormatter' }"
+                                      state="{ path: 'product>/Status', formatter: '.formatter.statusFormatter' }"
+                        />
+                    </VBox>
+                    <VBox class="sapUiLargeMarginEnd">
+                        <Title text="{i18n>priceTitle}" class="sapUiSmallMarginBottom"/>
+                        <ObjectNumber number="{product>/Price}"
+                                      unit="USD"
+                                      emphasized="false"/>
+                    </VBox>
+                    <VBox class="sapUiLargeMarginEnd">
+                        <Title text="{i18n>ratingTitle}" class="sapUiTinyMarginBottom"/>
+                        <RatingIndicator editable="false" value="{product>/Rating}" iconSize="16px"/>
+                    </VBox>
+                </FlexBox>
             </f:DynamicPageHeader>
         </f:header>
-
         <f:content>
             <IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding">
                 <items>
-                    <IconTabFilter text="{i18n>compositionTitle}">
-                        <Table id="idProductsTable"
-                               inset="false"
-                               sticky="HeaderToolbar,ColumnHeaders"
-                               mode="{= ${state>/isCreatePage} ? 'MultiSelect' : 'None' }"
-                               selectionChange=".onSelection"
-                               items="{
-										path: 'product>/Composition',
-										sorter: {
-											path: 'Percent'
-										}
-									}">
-                            <headerToolbar>
-                                <Toolbar>
-                                    <Title text="{i18n>compositionTitle}"/>
-                                    <ToolbarSpacer/>
-                                    <Button
-                                            icon="sap-icon://add"
-                                            visible="{state>/isCreatePage}"
-                                            press="onPressCreateColumn"
-                                            ariaDescribedBy="rejectButtonDescription genericButtonDescription"
-                                    />
-                                    <Button
-                                            icon="sap-icon://delete"
-                                            visible="{state>/isCreatePage}"
-                                            press="onPressDeleteColumn"
-                                            ariaDescribedBy="rejectButtonDescription genericButtonDescription"
-                                    />
-                                </Toolbar>
-                            </headerToolbar>
-                            <columns>
-                                <Column>
-                                    <Text text="{i18n>elementOfProduct}"/>
-                                </Column>
-                                <Column>
-                                    <Text text="{i18n>percentsOnComposition}"/>
-                                </Column>
-                            </columns>
-                            <items>
-                                <ColumnListItem>
-                                    <cells>
-                                        <Input editable="{state>/isCreatePage}" value="{
-                                            path: 'product>Name',
-                                            type: 'sap.ui.model.type.String',
-                                            constraints: {
-                                                 minLength: 3,
-                                                 maxLength: 100
-                                             }
-                                         }"/>
-                                        <Input type="Number"
-                                               value="{
-                                                    path: 'product>Percent',
-                                                    type: 'sap.ui.model.type.Integer',
-                                                    constraints: {
-                                                        minimum: 1,
-                                                        maximum: 100
-                                                    }
-                                                }" editable="{state>/isCreatePage}"/>
-                                    </cells>
-                                </ColumnListItem>
-                            </items>
-                        </Table>
+                    <IconTabFilter text="{i18n>generalTitle}">
+                        <form:Form id="iconTabBarForm"
+                                   editable="true">
+                            <form:layout>
+                                <form:ColumnLayout columnsM="2"/>
+                            </form:layout>
+                            <form:formContainers>
+                                <form:FormContainer id="formContainerForGeneralPart">
+
+                                </form:FormContainer>
+                            </form:formContainers>
+                        </form:Form>
                     </IconTabFilter>
                 </items>
             </IconTabBar>
         </f:content>
-
         <f:footer>
-            <OverflowToolbar visible="{=!!${state>/isCreatePage}}">
-                <Button
-                        id="messagePopoverBtn"
+            <OverflowToolbar>
+                <Button id="messagePopoverBtn"
                         visible="{=!!${messages>/}.length}"
                         text="{=${messages>/}.length}"
                         icon="sap-icon://error"
                         type="Negative"
-                        press=".handleMessagePopoverPress"
+                        press="handleMessagePopoverPress"
                         ariaHasPopup="Dialog"
                 />
                 <ToolbarSpacer/>
-                <Button text="{i18n>save}" press="onPressCreateProduct"/>
-                <Button type="Reject" text="{i18n>cancel}" press="onPressCancel"/>
+                <Button text="{i18n>save}" type="Emphasized" press="onPressCreateProduct"/>
+                <Button text="{i18n>cancel}" type="Transparent" press="onPressCancel"/>
             </OverflowToolbar>
         </f:footer>
     </f:DynamicPage>

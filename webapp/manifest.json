@@ -6,7 +6,10 @@
         "type": "application",
         "i18n": {
             "bundleUrl": "i18n/i18n.properties",
-            "supportedLocales": ["en", "ru"]
+            "supportedLocales": [
+                "en",
+                "ru"
+            ]
         },
         "title": "{{appTitle}}",
         "description": "{{appDescription}}",
@@ -28,10 +31,19 @@
             "tablet": true,
             "phone": true
         },
-        "supportedThemes": ["sap_horizon"]
+        "supportedThemes": [
+            "sap_horizon"
+        ]
     },
     "sap.ui5": {
         "_version": "1.1.0",
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
         "rootView": "darya.zavaliuk.view.App",
         "routing": {
             "config": {
@@ -41,7 +53,9 @@
                 "controlId": "RootApp",
                 "controlAggregation": "pages",
                 "bypassed": {
-                    "target": ["notFound"]
+                    "target": [
+                        "notFound"
+                    ]
                 },
                 "async": true
             },
@@ -49,7 +63,9 @@
                 {
                     "pattern": "",
                     "name": "ProductsOverview",
-                    "target": ["productsOverview"]
+                    "target": [
+                        "productsOverview"
+                    ]
                 },
                 {
                     "pattern": "Products/{id}",
@@ -111,7 +127,10 @@
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
                     "bundleUrl": "i18n/i18n.properties",
-                    "supportedLocales": ["en", "ru"]
+                    "supportedLocales": [
+                        "en",
+                        "ru"
+                    ]
                 }
             },
             "": {
