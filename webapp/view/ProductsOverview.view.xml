@@ -92,9 +92,9 @@
                                             selectionChange="onSelectionChange"
                                             placeholder="{i18n>productsOverviewSupplier}"
                                             items="{
-                                            path: '/Suppliers',
-                                            templateShareable: true
-                                        }"
+                                                path: '/Suppliers',
+                                                templateShareable: true
+                                            }"
                                     >
                                         <core:Item key="{key}" text="{Name}"/>
                                     </MultiComboBox>
@@ -141,13 +141,13 @@
                                             <core:ListItem
                                                     key="{Price}"
                                                     text="{
-                                                    path: 'Price',
-                                                    formatter: '.formatter.replaceDoubleWhitespaceWithUnicodeSpace'
-                                                }"
+                                                        path: 'Price',
+                                                        formatter: '.formatter.replaceDoubleWhitespaceWithUnicodeSpace'
+                                                    }"
                                                     additionalText="{
-                                                    path: 'Name',
-                                                    formatter: '.formatter.replaceDoubleWhitespaceWithUnicodeSpace'
-                                                }"
+                                                        path: 'Name',
+                                                        formatter: '.formatter.replaceDoubleWhitespaceWithUnicodeSpace'
+                                                    }"
                                             />
                                         </suggestionItems>
                                     </MultiInput>
@@ -228,8 +228,7 @@
                             />
                             <Text text="{Category/Name}"/>
                             <Text text="{Supplier/Name}"/>
-                            <Text
-                                    text="{
+                            <Text text="{
                                     path: 'Date',
                                     type: 'sap.ui.model.type.Date',
                                     formatOptions: {
