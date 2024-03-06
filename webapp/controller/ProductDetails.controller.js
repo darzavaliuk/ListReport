@@ -103,6 +103,11 @@ sap.ui.define([
             return this.getView().getModel("product");
         },
 
+        /**
+         * Clears all messages from the messaging model.
+         *
+         * @private
+         */
         _clearAllMessagesFromMessaging: function () {
             Messaging.removeAllMessages();
         },
@@ -153,8 +158,8 @@ sap.ui.define([
             const oPage = this.byId("formContainerForGeneralPart");
 
             oPage.removeAllFormElements();
-            this._getFormFragment(sFragmentName).then(function (oVBox) {
-                oVBox.reduceRight((oElement, oItem) => {
+            this._getFormFragment(sFragmentName).then(function (oFormElement) {
+                oFormElement.reduceRight((oElement, oItem) => {
                     oPage.insertAggregation("formElements", oElement);
                     return oItem;
                 });
@@ -246,6 +251,13 @@ sap.ui.define([
             });
         },
 
+        /**
+         * Removes messages from the messaging model that have a matching target.
+         *
+         * @param {string} sTarget - The target binding path of the control.
+         * @private
+         */
+
         _removeMessageFromTarget: function (sTarget) {
             Messaging.getMessageModel().getData().forEach(function (oMessage) {
                 if (oMessage.target === sTarget) {
@@ -254,21 +266,21 @@ sap.ui.define([
             }.bind(this));
         },
 
+        /**
+         * Handles the validation for a required input field.
+         *
+         * @param {sap.ui.core.Control} oInput - The input control.
+         * @private
+         */
         _handleRequiredField: function (oInput) {
             const sTarget = oInput.getBindingPath("value");
 
             this._removeMessageFromTarget(sTarget);
             if (!oInput.getValue()) {
                 oInput.setValueState(ValueState.Error);
-                Messaging.addMessages(
-                    new Message({
-                        message: this._getTextFromI18n("messageForRequireField"),
-                        type: MessageType.Error,
-                        additionalText: oInput.getLabels()[0].getText(),
-                        target: sTarget,
-                        processor: this.getView().getModel("product")
-                    })
-                );
+                this._addMessageToMessaging(this._getTextFromI18n("messageForRequireField"), MessageType.Error,
+                    oInput.getLabels()[0].getText(), sTarget, this.getView().getModel("product")
+                )
             }
         },
 
@@ -446,13 +458,7 @@ sap.ui.define([
          */
         _getDefaultProductModel: function (newID) {
             return new JSONModel({
-                "ID": newID,
-                "Name": "",
-                "Category": { "Name": "" },
-                "Supplier": { "Name": "" },
-                "Status": "",
-                "Price": Number.NaN,
-                "Rating": Number.NaN
+                "ID": newID
             });
         },
 
@@ -519,6 +525,28 @@ sap.ui.define([
         },
 
         /**
+         * Adds a message to the messaging model.
+         *
+         * @param {string} message - The message text.
+         * @param {sap.ui.core.ValueState} valueState - The value state of the control.
+         * @param {string} additionalText - Additional text for the message.
+         * @param {string} target - The target binding path of the control.
+         * @param {sap.ui.model.Model} model - The model to which the message belongs.
+         * @private
+         */
+        _addMessageToMessaging: function (message, valueState, additionalText, target, model) {
+            Messaging.addMessages(
+                new Message({
+                    message: message,
+                    type: MessageType.Error,
+                    additionalText: additionalText,
+                    target: target,
+                    processor: model
+                })
+            );
+        },
+
+        /**
          * Event handler for the change event of a validated ComboBox control.
          * Handles validation and error messaging for mandatory fields.
          *
@@ -534,29 +562,16 @@ sap.ui.define([
 
             if (!oValidatedComboBox.getValue()) {
                 oValidatedComboBox.setValueState(ValueState.Error);
-                Messaging.addMessages(
-                    new Message({
-                        message: this._getTextFromI18n("messageForRequireField"),
-                        type: MessageType.Error,
-                        additionalText: oValidatedComboBox.getLabels()[0].getText(),
-                        target: sTarget,
-                        processor: this.getView().getModel("product")
-                    })
-                );
+                this._addMessageToMessaging(this._getTextFromI18n("messageForRequireField"), MessageType.Error,
+                    oValidatedComboBox.getLabels()[0].getText(), sTarget, this.getView().getModel("product"))
 
                 return;
             }
 
             if (!sSelectedKey) {
                 oValidatedComboBox.setValueState(ValueState.Error);
-                Messaging.addMessages(
-                    new Message({
-                        message: this._getTextFromI18n("messageForValidSelectedKey"),
-                        type: MessageType.Error,
-                        additionalText: oValidatedComboBox.getLabels()[0].getText(),
-                        target: sTarget,
-                        processor: this.getView().getModel("product")
-                    })
+                this._addMessageToMessaging(this._getTextFromI18n("messageForValidSelectedKey"), MessageType.Error,
+                    oValidatedComboBox.getLabels()[0].getText(), sTarget, this.getView().getModel("product")
                 );
             }
         },
