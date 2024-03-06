@@ -40,7 +40,7 @@
     </form:FormElement>
     <form:FormElement label="{i18n>dateTitle}">
         <form:fields>
-            <Text text="{path: 'product>/Date', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source: {pattern: 'yyyy-MM-dd'}}}"/>
+            <Text text="{ path: 'product>/Date', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source: {pattern: 'yyyy-MM-dd'} } }"/>
         </form:fields>
     </form:FormElement>
     <form:FormElement label="{i18n>factoryTitle}">
