@@ -21,7 +21,7 @@
             >
                 <fb:filterGroupItems>
                     <fb:FilterGroupItem
-                        groupName="__$INTERNAL$"
+                        groupName="Basic"
                         name="Price"
                         label="{i18n>labelFilterBarPrice}"
                         visibleInFilterBar="true"
@@ -41,7 +41,7 @@
                         </fb:control>
                     </fb:FilterGroupItem>
                     <fb:FilterGroupItem
-                        groupName="__$INTERNAL$"
+                        groupName="Basic"
                         name="Name"
                         label="{i18n>labelFilterBarName}"
                         visibleInFilterBar="true"
