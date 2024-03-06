@@ -66,7 +66,7 @@
                             >
                                 <fb:control>
                                     <MultiComboBox
-                                            id="Category"
+                                            id="productCategory"
                                             name="Category"
                                             selectionChange="onSelectionChange"
                                             placeholder="{i18n>productsOverviewCategory}"
@@ -87,7 +87,7 @@
                             >
                                 <fb:control>
                                     <MultiComboBox
-                                            id="Supplier"
+                                            id="productSupplier"
                                             name="Supplier"
                                             selectionChange="onSelectionChange"
                                             placeholder="{i18n>productsOverviewSupplier}"
@@ -101,7 +101,7 @@
                                 </fb:control>
                             </fb:FilterGroupItem>
                             <fb:FilterGroupItem
-                                    name="Status"
+                                    name="productStatus"
                                     label="{i18n>labelFilterBarStatus}"
                                     groupName="Basic"
                                     visibleInFilterBar="true"

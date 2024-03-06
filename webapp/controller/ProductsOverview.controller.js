@@ -46,9 +46,9 @@ sap.ui.define(
         };
 
         const MULTICOMBOBOX = {
-            CATEGORY: "Category",
-            STATUS: "Status",
-            SUPPLIER: "Supplier"
+            CATEGORY: "productCategory",
+            STATUS: "productStatus",
+            SUPPLIER: "productSupplier"
         };
 
         return BaseController.extend(
