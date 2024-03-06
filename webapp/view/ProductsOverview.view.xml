@@ -20,10 +20,10 @@
                     </VariantManagement>
                 </f:heading>
                 <f:expandedContent>
-                    <Label text="{appView>/filterText}"/>
+                    <Label text="{path: 'appView>/filterItems', formatter: '.formatter.filterItemsToText'}"/>
                 </f:expandedContent>
                 <f:snappedContent>
-                    <Label text="{appView>/filterText}"/>
+                    <Label text="{appView>/filterItems}"/>
                 </f:snappedContent>
             </f:DynamicPageTitle>
         </f:title>

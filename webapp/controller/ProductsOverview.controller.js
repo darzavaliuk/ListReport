@@ -82,6 +82,7 @@ sap.ui.define(
                     this.getView().setModel(new JSONModel({
                         "numberOfItemsToDelete": 0,
                         "filterText": this._getTextFromI18n("zeroFilters"),
+                        "filterItems": [],
                         "isVisibleOverlay": false
                     }), "appView");
                 },
@@ -155,7 +156,7 @@ sap.ui.define(
                  * @private
                  */
                 _updateLabelsAndTable: function () {
-                    this.getView().getModel("appView").setProperty("/filterText", this._getFormattedSummaryText());
+                    this._getSelectedFilters();
                     this.getView().getModel("appView").setProperty("/isVisibleOverlay", true);
                 },
 
@@ -231,33 +232,17 @@ sap.ui.define(
                 },
 
                 /**
-                 * Retrieves the formatted summary text based on the active filters.
-                 * Returns the formatted summary text indicating the number of active filters and their names.
-                 * @returns {string} - The formatted summary text.
+                 * Retrieves the names of active filters.
                  *
                  * @private
                  */
-                _getFormattedSummaryText: function () {
+                _getSelectedFilters: function () {
                     const aFiltersWithValues =
                         this._oFilterBar.retrieveFiltersWithValues();
 
-                    if (aFiltersWithValues.length === 0) {
-                        return this._getTextFromI18n("zeroFilters");
-                    }
-
-                    if (aFiltersWithValues.length > 5) {
-                        return (
-                            this._getTextFromI18n("oneFilterActive", [
-                                aFiltersWithValues.length
-                            ]) + aFiltersWithValues.join(", ", 5) + "..."
-                        );
-                    }
-
-                    return (
-                        this._getTextFromI18n("multiFiltersActive", [
-                            aFiltersWithValues.length
-                        ]) + aFiltersWithValues.join(", ")
-                    );
+                    this.getView().getModel("appView").setProperty(
+                        "/filterItems", aFiltersWithValues
+                    )
                 },
 
                 /**

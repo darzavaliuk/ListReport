@@ -58,5 +58,32 @@ sap.ui.define([], function () {
                 sWhitespace + sUnicodeWhitespaceCharacter
             );
         },
+
+        /**
+         * Converts an array of filters with values into a formatted text representation.
+         *
+         * @param {Array} aFiltersWithValues - The array of filters with values.
+         * @returns {string} The formatted text representation of the filters.
+         * @public
+         */
+        filterItemsToText: function (aFiltersWithValues) {
+            if (aFiltersWithValues.length === 0) {
+                return this._getTextFromI18n("zeroFilters");
+            }
+
+            if (aFiltersWithValues.length > 5) {
+                return (
+                    this._getTextFromI18n("oneFilterActive", [
+                        aFiltersWithValues.length
+                    ]) + aFiltersWithValues.join(", ", 5) + "..."
+                );
+            }
+
+            return (
+                this._getTextFromI18n("multiFiltersActive", [
+                    aFiltersWithValues.length
+                ]) + aFiltersWithValues.join(", ")
+            );
+        },
     };
 });
