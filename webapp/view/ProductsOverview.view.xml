@@ -101,14 +101,14 @@
                                 </fb:control>
                             </fb:FilterGroupItem>
                             <fb:FilterGroupItem
-                                    name="productStatus"
+                                    name="Status"
                                     label="{i18n>labelFilterBarStatus}"
                                     groupName="Basic"
                                     visibleInFilterBar="true"
                             >
                                 <fb:control>
                                     <MultiComboBox
-                                            id="Status"
+                                            id="productStatus"
                                             name="Status"
                                             selectionChange="onSelectionChange"
                                             placeholder="{i18n>productsOverviewStatus}"
