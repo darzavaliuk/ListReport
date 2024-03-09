@@ -519,6 +519,10 @@
     {
       "ID": "0",
       "Name": "White"
+    },
+    {
+      "ID": "1",
+      "Name": "Blue"
     }
   ],
   "Statuses": [
@@ -533,6 +537,34 @@
     {
       "ID": "2",
       "Name": "Product Damaged"
+    },
+    {
+      "ID": "3",
+      "Name": "Red"
+    },
+    {
+      "ID": "4",
+      "Name": "Green"
+    },
+    {
+      "ID": "5",
+      "Name": "Yellow"
+    },
+    {
+      "ID": "6",
+      "Name": "Purple"
+    },
+    {
+      "ID": "7",
+      "Name": "Black"
+    },
+    {
+      "ID": "8",
+      "Name": "Silver"
+    },
+    {
+      "ID": "9",
+      "Name": "Orange"
     }
   ],
   "Variants": [
