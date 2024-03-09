@@ -14,17 +14,17 @@
     </form:FormElement>
     <form:FormElement label="{i18n>nameTitle}">
         <form:fields>
-            <Input name="{i18n>nameTitle}" id="nameInput" value="{ path: 'product>/Name', type: 'sap.ui.model.type.String', constraints: { minLength: 3, maxLength: 100 } }" liveChange="onInputValueChange" />
+            <Input name="{i18n>nameTitle}" id="nameInput" value="{ path: 'product>/Name', type: 'sap.ui.model.type.String', constraints: { minLength: 3, maxLength: 100 } }" change="onInputValueChange" />
         </form:fields>
     </form:FormElement>
     <form:FormElement label="{i18n>descriptionTitle}">
         <form:fields>
-            <Input name="{i18n>descriptionTitle}" id="descriptionInput" value="{ path: 'product>/Description', type: 'sap.ui.model.type.String', constraints: { minLength: 5, maxLength: 100 } }" liveChange="onInputValueChange" />
+            <Input name="{i18n>descriptionTitle}" id="descriptionInput" value="{ path: 'product>/Description', type: 'sap.ui.model.type.String', constraints: { minLength: 5, maxLength: 100 } }" change="onInputValueChange" />
         </form:fields>
     </form:FormElement>
     <form:FormElement label="{i18n>priceTitle}">
         <form:fields>
-            <Input name="{i18n>priceTitle}" id="priceInput" value="{ path: 'product>/Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }" liveChange="onInputValueChange" />
+            <Input name="{i18n>priceTitle}" id="priceInput" value="{ path: 'product>/Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }" change="onInputValueChange" />
         </form:fields>
     </form:FormElement>
     <form:FormElement label="{i18n>ratingTitle}">
@@ -36,7 +36,7 @@
                             minimum: 1,
                             maximum: 5
                         }
-                    }" liveChange="onInputValueChange" />
+                    }" change="onInputValueChange" />
         </form:fields>
     </form:FormElement>
     <form:FormElement label="{i18n>categoryTitle}">
@@ -75,12 +75,12 @@
     </form:FormElement>
     <form:FormElement label="{i18n>factoryTitle}">
         <form:fields>
-            <Input name="{i18n>factoryTitle}" id="factoryInput" value="{ path: 'product>/Factory', type: 'sap.ui.model.type.String', constraints: { minLength: 2, maxLength: 2 } }" liveChange="onInputValueChange" />
+            <Input name="{i18n>factoryTitle}" id="factoryInput" value="{ path: 'product>/Factory', type: 'sap.ui.model.type.String', constraints: { minLength: 2, maxLength: 2 } }" change="onInputValueChange" />
         </form:fields>
     </form:FormElement>
     <form:FormElement label="{i18n>contractTitle}">
         <form:fields>
-            <Input id="contractInput" name="Contract" value="{ path: 'product>/Contract', type: 'sap.ui.model.type.String', constraints: { minLength: 8, maxLength: 10 } }" liveChange="onInputValueChange" />
+            <Input id="contractInput" name="Contract" value="{ path: 'product>/Contract', type: 'sap.ui.model.type.String', constraints: { minLength: 8, maxLength: 10 } }" change="onInputValueChange" />
         </form:fields>
     </form:FormElement>
     <form:FormElement label="{i18n>colorTitle}">

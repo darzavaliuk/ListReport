@@ -260,7 +260,7 @@ sap.ui.define([
 
         _removeMessageFromTarget: function (sTarget) {
             Messaging.getMessageModel().getData().forEach(function (oMessage) {
-                if (oMessage.target === sTarget) {
+                if (oMessage.target == sTarget) {
                     Messaging.removeMessages(oMessage);
                 }
             }.bind(this));
@@ -277,6 +277,7 @@ sap.ui.define([
 
             this._removeMessageFromTarget(sTarget);
             if (!oInput.getValue()) {
+                this._removeMessageFromTarget(oInput.sId + "/value");
                 oInput.setValueState(ValueState.Error);
                 this._addMessageToMessaging(this._getTextFromI18n("messageForRequireField"), MessageType.Error,
                     oInput.getLabels()[0].getText(), sTarget, this.getView().getModel("product")
