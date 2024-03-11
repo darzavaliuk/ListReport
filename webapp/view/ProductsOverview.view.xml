@@ -27,30 +27,21 @@
 							</FilterGroupItem>
 							<FilterGroupItem name="Category" label="{i18n>labelFilterBarCategory}" groupName="Basic" visibleInFilterBar="true">
 								<control>
-									<MultiComboBox id="productCategory" name="Category" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewCategory}" items="{
-                                                path: '/Categories',
-                                                templateShareable: true
-                                            }">
+									<MultiComboBox id="productCategory" name="Category" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewCategory}" items="{ path: '/Categories', templateShareable: true }">
 										<Item key="{key}" text="{Name}" />
 									</MultiComboBox>
 								</control>
 							</FilterGroupItem>
 							<FilterGroupItem name="Supplier" label="{i18n>labelFilterBarSupplier}" groupName="Basic" visibleInFilterBar="true">
 								<control>
-									<MultiComboBox id="productSupplier" name="Supplier" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewSupplier}" items="{
-                                                path: '/Suppliers',
-                                                templateShareable: true
-                                            }">
+									<MultiComboBox id="productSupplier" name="Supplier" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewSupplier}" items="{ path: '/Suppliers', templateShareable: true }">
 										<Item key="{key}" text="{Name}" />
 									</MultiComboBox>
 								</control>
 							</FilterGroupItem>
 							<FilterGroupItem name="Status" label="{i18n>labelFilterBarStatus}" groupName="Basic" visibleInFilterBar="true">
 								<control>
-									<MultiComboBox id="productStatus" name="Status" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewStatus}" items="{
-                                                path: '/Statuses',
-                                                templateShareable: true
-                                            }">
+									<MultiComboBox id="productStatus" name="Status" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewStatus}" items="{ path: '/Statuses', templateShareable: true }">
 										<Item key="{key}" text="{Name}" />
 									</MultiComboBox>
 								</control>
@@ -59,11 +50,7 @@
 								<control>
 									<MultiInput id="productsInput" placeholder="{i18n>productsOverviewInputPrice}" showSuggestion="true" showValueHelp="true" tokenUpdate="onSelectionChange" valueHelpRequest="onValueHelpRequest" suggestionItems="{/Products}">
 										<suggestionItems>
-											<ListItem key="{Price}" text="{
-                                                        path: 'Price'
-                                                    }" additionalText="{
-                                                        path: 'Name'
-                                                    }" />
+											<ListItem key="{Price}" text="{ path: 'Price' }" additionalText="{ path: 'Name' }" />
 										</suggestionItems>
 									</MultiInput>
 								</control>
@@ -74,16 +61,10 @@
 			</DynamicPageHeader>
 		</header>
 		<content>
-			<Table id="productsTable" class="sapUiResponsiveMargin" width="auto" mode="MultiSelect" selectionChange="onSelectionChangeTable" items="{
-                        path: '/Products',
-                        sorter: {path: 'ID'}
-                    }" showOverlay="{appView>/isVisibleOverlay}">
+			<Table id="productsTable" class="sapUiResponsiveMargin" width="auto" mode="MultiSelect" selectionChange="onSelectionChangeTable" items="{ path: '/Products', sorter: {path: 'ID'} }" showOverlay="{appView>/isVisibleOverlay}">
 				<headerToolbar>
 					<Toolbar>
-						<Title core:require="{formatMessage: 'sap/base/strings/formatMessage'}" text="{
-                                    parts: [ 'i18n>productListTitle', '/Products/length' ],
-                                    formatter: 'formatMessage'
-                            }" />
+						<Title core:require="{formatMessage: 'sap/base/strings/formatMessage'}" text="{ parts: [ 'i18n>productListTitle', '/Products/length' ], formatter: 'formatMessage' }" />
 						<ToolbarSpacer />
 						<Button icon="sap-icon://create" press="onPressCreateProduct" text="Create" type="Emphasized" />
 						<Button enabled="{= !!${appView>/numberOfItemsToDelete}}" icon="sap-icon://delete" press="onPressDeleteProducts" text="Delete" />
@@ -119,16 +100,7 @@
 							<ObjectNumber number="{Price}" unit="{i18n>currency}" />
 							<Text text="{Category/Name}" />
 							<Text text="{Supplier/Name}" />
-							<Text text="{
-                                    path: 'Date',
-                                    type: 'sap.ui.model.type.Date',
-                                    formatOptions: {
-                                        style: 'short',
-                                        source: {
-                                            pattern: 'yyyy-MM-dd'
-                                        }
-                                    }
-                                }" />
+							<Text text="{ path: 'Date', type: 'sap.ui.model.type.Date', formatOptions: { style: 'short', source: { pattern: 'yyyy-MM-dd' } } }" />
 							<RatingIndicator value="{Rating}" maxValue="5" editable="false" />
 							<ObjectStatus text="{Status}" icon="{ path: 'Status', formatter: '.formatter.statusIconFormatter' }" state="{ path: 'Status', formatter: '.formatter.statusFormatter' }" />
 						</cells>
