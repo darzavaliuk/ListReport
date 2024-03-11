@@ -1,139 +1,70 @@
-<core:FragmentDefinition xmlns="sap.m"
-                         xmlns:form="sap.ui.layout.form"
-                         xmlns:core="sap.ui.core">
-    <form:FormElement label="{i18n>productIdLabel}">
-        <form:fields>
-            <Input name="ID"
-                   value="{
-&#xA;                    path: 'appView>/product/ID',
-&#xA;                    type: 'sap.ui.model.type.Integer',
-&#xA;                    constraints: {
-&#xA;                        minimum: 0
-&#xA;                }
-&#xA;            }"
-                   editable="false" />
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productNameLabel}">
-        <form:fields>
-            <Input name="{i18n>productNameLabel}"
-                   id="nameInput"
-                   value="{ path: 'appView>/product/Name', type: 'sap.ui.model.type.String', constraints: { minLength: 3, maxLength: 100 } }"
-                   change="onInputValueChange" />
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productDescriptionLabel}">
-        <form:fields>
-            <Input name="{i18n>productDescriptionLabel}"
-                   id="descriptionInput"
-                   value="{ path: 'appView>/product/Description', type: 'sap.ui.model.type.String', constraints: { minLength: 5, maxLength: 100 } }"
-                   change="onInputValueChange" />
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productPriceLabel}">
-        <form:fields>
-            <Input name="{i18n>productPriceLabel}"
-                   id="priceInput"
-                   value="{ path: 'appView>/product/Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }"
-                   change="onInputValueChange" />
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productRatingLabel}">
-        <form:fields>
-            <Input id="ratingInput"
-                   name="Rating"
-                   type="Number"
-                   value="{
-&#xA;                        path: 'appView>/product/Rating',
-&#xA;                        type: 'sap.ui.model.type.Integer',
-&#xA;                        constraints: {
-&#xA;                            minimum: 1,
-&#xA;                            maximum: 5
-&#xA;                        }
-&#xA;                    }"
-                   change="onInputValueChange" />
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productCategoryLabel}">
-        <form:fields>
-            <ComboBox id="categoryComboBox"
-                      value="{appView>/product/Category/Name}"
-                      items="{
-&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;path: 'appView>/products/categoryNames'
-&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}"
-                      selectedKey="{appView>/product/Category/Name}"
-                      change="onChangeComboBoxValue">
-                <core:Item key="{appView>Name}"
-                           text="{appView>Name}" />
-            </ComboBox>
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productSupplierLabel}">
-        <form:fields>
-            <ComboBox name="SupplierName"
-                      id="supplierComboBox"
-                      selectionChange=".onSelectionChange"
-                      value="{appView>/product/Supplier/Name}"
-                      selectedKey="{appView>/product/Supplier/Name}"
-                      change="onChangeComboBoxValue"
-                      items="{
-&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;path: 'appView>/products/supplierNames'
-&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}">
-                <core:Item key="{appView>Name}"
-                           text="{appView>Name}" />
-            </ComboBox>
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productStatusLabel}">
-        <form:fields>
-            <ComboBox name="StatusName"
-                      id="statusComboBox"
-                      value="{appView>/product/Status}"
-                      change="onChangeComboBoxValue"
-                      selectedKey="{appView>/product/Status}"
-                      items="{
-&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;path: 'appView>/products/statusNames'
-&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}">
-                <core:Item key="{appView>Name}"
-                           text="{appView>Name}" />
-            </ComboBox>
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productDateLabel}">
-        <form:fields>
-            <DatePicker id="datePicker"
-                        value="{path: 'appView>/product/Date', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source: {pattern: 'yyyy-MM-dd'}}}" />
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productFactoryLabel}">
-        <form:fields>
-            <Input name="{i18n>productFactoryLabel}"
-                   id="factoryInput"
-                   value="{ path: 'appView>/product/Factory', type: 'sap.ui.model.type.String', constraints: { minLength: 2, maxLength: 2 } }"
-                   change="onInputValueChange" />
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productContractLabel}">
-        <form:fields>
-            <Input id="contractInput"
-                   name="Contract"
-                   value="{ path: 'appView>/product/Contract', type: 'sap.ui.model.type.String', constraints: { minLength: 8, maxLength: 10 } }"
-                   change="onInputValueChange" />
-        </form:fields>
-    </form:FormElement>
-    <form:FormElement label="{i18n>productColorLabel}">
-        <form:fields>
-            <ComboBox name="colorName"
-                      id="colorComboBox"
-                      value="{appView>/product/Color}"
-                      change="onChangeComboBoxValue"
-                      selectedKey="{appView>/product/Color}"
-                      items="{
-&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;path: 'appView>/products/colorNames'
-&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}">
-                <core:Item key="{appView>Name}"
-                           text="{appView>Name}" />
-            </ComboBox>
-        </form:fields>
-    </form:FormElement>
-</core:FragmentDefinition>
+<FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<FormElement label="{i18n>productIdLabel}">
+		<fields>
+			<Input name="ID" value="{ path: 'appView>/product/ID', type: 'sap.ui.model.type.Integer', constraints: { minimum: 0 } }" editable="false" />
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productNameLabel}">
+		<fields>
+			<Input name="{i18n>productNameLabel}" id="nameInput" value="{ path: 'appView>/product/Name', type: 'sap.ui.model.type.String', constraints: { minLength: 3, maxLength: 100 } }" change="onInputValueChange" />
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productDescriptionLabel}">
+		<fields>
+			<Input name="{i18n>productDescriptionLabel}" id="descriptionInput" value="{ path: 'appView>/product/Description', type: 'sap.ui.model.type.String', constraints: { minLength: 5, maxLength: 100 } }" change="onInputValueChange" />
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productPriceLabel}">
+		<fields>
+			<Input name="{i18n>productPriceLabel}" id="priceInput" value="{ path: 'appView>/product/Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }" change="onInputValueChange" />
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productRatingLabel}">
+		<fields>
+			<Input id="ratingInput" name="Rating" type="Number" value="{ path: 'appView>/product/Rating', type: 'sap.ui.model.type.Integer', constraints: { minimum: 1, maximum: 5 } }" change="onInputValueChange" />
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productCategoryLabel}">
+		<fields>
+			<ComboBox id="categoryComboBox" value="{appView>/product/Category/Name}" items="{ path: 'appView>/products/categoryNames' }" selectedKey="{appView>/product/Category/Name}" change="onChangeComboBoxValue">
+				<Item key="{appView>Name}" text="{appView>Name}" />
+			</ComboBox>
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productSupplierLabel}">
+		<fields>
+			<ComboBox name="SupplierName" id="supplierComboBox" selectionChange=".onSelectionChange" value="{appView>/product/Supplier/Name}" selectedKey="{appView>/product/Supplier/Name}" change="onChangeComboBoxValue" items="{ path: 'appView>/products/supplierNames' }">
+				<Item key="{appView>Name}" text="{appView>Name}" />
+			</ComboBox>
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productStatusLabel}">
+		<fields>
+			<ComboBox name="StatusName" id="statusComboBox" value="{appView>/product/Status}" change="onChangeComboBoxValue" selectedKey="{appView>/product/Status}" items="{ path: 'appView>/products/statusNames' }">
+				<Item key="{appView>Name}" text="{appView>Name}" />
+			</ComboBox>
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productDateLabel}">
+		<fields>
+			<DatePicker id="datePicker" value="{path: 'appView>/product/Date', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source: {pattern: 'yyyy-MM-dd'}}}" />
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productFactoryLabel}">
+		<fields>
+			<Input name="{i18n>productFactoryLabel}" id="factoryInput" value="{ path: 'appView>/product/Factory', type: 'sap.ui.model.type.String', constraints: { minLength: 2, maxLength: 2 } }" change="onInputValueChange" />
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productContractLabel}">
+		<fields>
+			<Input id="contractInput" name="Contract" value="{ path: 'appView>/product/Contract', type: 'sap.ui.model.type.String', constraints: { minLength: 8, maxLength: 10 } }" change="onInputValueChange" />
+		</fields>
+	</FormElement>
+	<FormElement label="{i18n>productColorLabel}">
+		<fields>
+			<ComboBox name="colorName" id="colorComboBox" value="{appView>/product/Color}" change="onChangeComboBoxValue" selectedKey="{appView>/product/Color}" items="{ path: 'appView>/products/colorNames' }">
+				<Item key="{appView>Name}" text="{appView>Name}" />
+			</ComboBox>
+		</fields>
+	</FormElement>
+</FragmentDefinition>

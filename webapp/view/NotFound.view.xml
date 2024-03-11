@@ -1,5 +1,3 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc"
-          xmlns="sap.m"
-          height="100%">
-    <IllustratedMessage enableVerticalResponsiveness="true" />
-</mvc:View>
+<View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" height="100%">
+	<IllustratedMessage enableVerticalResponsiveness="true" />
+</View>
