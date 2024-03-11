@@ -523,20 +523,6 @@
     {
       "ID": "1",
       "Name": "Blue"
-    }
-  ],
-  "Statuses": [
-    {
-      "ID": "0",
-      "Name": "Product Missing"
-    },
-    {
-      "ID": "1",
-      "Name": "Product Shipped"
-    },
-    {
-      "ID": "2",
-      "Name": "Product Damaged"
     },
     {
       "ID": "3",
@@ -565,6 +551,20 @@
     {
       "ID": "9",
       "Name": "Orange"
+    }
+  ],
+  "Statuses": [
+    {
+      "ID": "0",
+      "Name": "Product Missing"
+    },
+    {
+      "ID": "1",
+      "Name": "Product Shipped"
+    },
+    {
+      "ID": "2",
+      "Name": "Product Damaged"
     }
   ],
   "Variants": [

@@ -1,22 +1,16 @@
-<mvc:View
-        controllerName="darya.zavaliuk.controller.ProductsOverview"
-        xmlns:mvc="sap.ui.core.mvc"
-        xmlns="sap.m"
-        xmlns:f="sap.f"
-        xmlns:fb="sap.ui.comp.filterbar"
-        xmlns:core="sap.ui.core"
-        height="100%"
->
-    <f:DynamicPage
-            id="dynamicPageProductOverview"
-            class="sapUiNoContentPadding"
-    >
+<mvc:View controllerName="darya.zavaliuk.controller.ProductsOverview"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          xmlns:f="sap.f"
+          xmlns:fb="sap.ui.comp.filterbar"
+          xmlns:core="sap.ui.core"
+          height="100%">
+    <f:DynamicPage class="sapUiNoContentPadding">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <VariantManagement items="{/Variants}" selectedKey="0"
-                                       defaultKey="0" id="variantManagement">
-                        <VariantItem text="{VariantName}" key="{VariantKey}"/>
+                    <VariantManagement items="{/Variants}" selectedKey="0" defaultKey="0">
+                        <VariantItem text="{VariantName}" key="{VariantKey}" />
                     </VariantManagement>
                 </f:heading>
                 <f:expandedContent>
@@ -30,19 +24,11 @@
         <f:header>
             <f:DynamicPageHeader>
                 <f:content>
-                    <fb:FilterBar
-                            id="filterBarProductOverview"
-                            class="searchInputLabel"
-                            useToolbar="false"
-                            search="onPressConfirmFilters"
-                            afterVariantLoad="onAfterVariantLoad"
-                            afterVariantSave="onPressConfirmFilters"
-                    >
+                    <fb:FilterBar id="filterBarProductOverview" class="searchInputLabel" useToolbar="false" search="onPressConfirmFilters">
                         <fb:filterGroupItems>
                             <fb:FilterGroupItem
-                                    id="productId"
                                     class="searchInputLabel"
-                                    label="{i18n>labelFilterBarSearch}"
+                                    label="{i18n>filterBarSearchLabel}"
                                     name="Product"
                                     groupName="Basic"
                                     visibleInFilterBar="true"
@@ -53,7 +39,7 @@
                                             class="searchInputLabel"
                                             id="searchField"
                                             change="onSelectionChange"
-                                            search="onSearchStores"
+                                            search="onPressConfirmFilters"
                                             placeholder="{i18n>productsOverviewSearchPlaceholder}"
                                     />
                                 </fb:control>
@@ -75,7 +61,7 @@
                                                 templateShareable: true
                                             }"
                                     >
-                                        <core:Item key="{key}" text="{Name}"/>
+                                        <core:Item key="{key}" text="{Name}" />
                                     </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
@@ -96,7 +82,7 @@
                                                 templateShareable: true
                                             }"
                                     >
-                                        <core:Item key="{key}" text="{Name}"/>
+                                        <core:Item key="{key}" text="{Name}" />
                                     </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
@@ -117,7 +103,7 @@
                                                 templateShareable: true
                                             }"
                                     >
-                                        <core:Item key="{key}" text="{Name}"/>
+                                        <core:Item key="{key}" text="{Name}" />
                                     </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
@@ -138,17 +124,11 @@
                                             suggestionItems="{/Products}"
                                     >
                                         <suggestionItems>
-                                            <core:ListItem
-                                                    key="{Price}"
-                                                    text="{
-                                                        path: 'Price',
-                                                        formatter: '.formatter.replaceDoubleWhitespaceWithUnicodeSpace'
-                                                    }"
-                                                    additionalText="{
-                                                        path: 'Name',
-                                                        formatter: '.formatter.replaceDoubleWhitespaceWithUnicodeSpace'
-                                                    }"
-                                            />
+                                            <core:ListItem key="{Price}" text="{
+                                                        path: 'Price'
+                                                    }" additionalText="{
+                                                        path: 'Name'
+                                                    }" />
                                         </suggestionItems>
                                     </MultiInput>
                                 </fb:control>
@@ -159,8 +139,7 @@
             </f:DynamicPageHeader>
         </f:header>
         <f:content>
-            <Table
-                    id="productsTable"
+            <Table id="productsTable"
                     class="sapUiResponsiveMargin"
                     width="auto"
                     mode="MultiSelect"
@@ -173,22 +152,16 @@
             >
                 <headerToolbar>
                     <Toolbar>
-                        <Title
-                                core:require="{formatMessage: 'sap/base/strings/formatMessage'}"
+                        <Title core:require="{formatMessage: 'sap/base/strings/formatMessage'}"
                                 text="{
-                                parts: [ 'i18n>productListTitle', '/Products/length' ],
-                                formatter: 'formatMessage'
+                                    parts: [ 'i18n>productListTitle', '/Products/length' ],
+                                    formatter: 'formatMessage'
                             }"
                         />
-                        <ToolbarSpacer/>
+                        <ToolbarSpacer />
+                        <Button icon="sap-icon://create" press="onPressCreateProduct" text="Create" type="Emphasized" />
                         <Button
-                                icon="sap-icon://create"
-                                press="onPressCreateProduct"
-                                text="Create"
-                        />
-                        <Button
-                                id="deleteProduct"
-                                enabled="{= ${appView>/numberOfItemsToDelete} > 0 ? true : false}"
+                                enabled="{= !!${appView>/numberOfItemsToDelete}}"
                                 icon="sap-icon://delete"
                                 press="onPressDeleteProducts"
                                 text="Delete"
@@ -221,13 +194,13 @@
                 <items>
                     <ColumnListItem type="Navigation" press="onPressListItem">
                         <cells>
-                            <ObjectIdentifier title="{Name}"/>
+                            <ObjectIdentifier title="{Name}" />
                             <ObjectNumber
                                     number="{Price}"
                                     unit="{i18n>currency}"
                             />
-                            <Text text="{Category/Name}"/>
-                            <Text text="{Supplier/Name}"/>
+                            <Text text="{Category/Name}" />
+                            <Text text="{Supplier/Name}" />
                             <Text text="{
                                     path: 'Date',
                                     type: 'sap.ui.model.type.Date',
@@ -237,18 +210,9 @@
                                             pattern: 'yyyy-MM-dd'
                                         }
                                     }
-                                }"
-                            />
-                            <RatingIndicator
-                                    value="{Rating}"
-                                    maxValue="5"
-                                    editable="false"
-                            />
-                            <ObjectStatus
-                                    text="{Status}"
-                                    icon="{ path: 'Status', formatter: '.formatter.statusIconFormatter' }"
-                                    state="{ path: 'Status', formatter: '.formatter.statusFormatter' }"
-                            />
+                                }" />
+                            <RatingIndicator value="{Rating}" maxValue="5" editable="false" />
+                            <ObjectStatus text="{Status}" icon="{ path: 'Status', formatter: '.formatter.statusIconFormatter' }" state="{ path: 'Status', formatter: '.formatter.statusFormatter' }" />
                         </cells>
                     </ColumnListItem>
                 </items>

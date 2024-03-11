@@ -5,16 +5,11 @@ sap.ui.define(
         "./BaseController",
         "sap/ui/model/json/JSONModel",
         "sap/m/SearchField",
-        "sap/ui/model/type/String",
-        "sap/m/Column",
-        "sap/m/Label",
-        "sap/m/ColumnListItem",
-        "sap/ui/table/Column",
-        "sap/m/Text",
         "sap/m/MultiInput",
         "sap/m/MultiComboBox",
         "../utils/formatter",
-        "sap/m/MessageBox"
+        "sap/m/MessageBox",
+        "./ValueHelpController",
     ],
     function (
         Filter,
@@ -22,16 +17,11 @@ sap.ui.define(
         BaseController,
         JSONModel,
         SearchField,
-        TypeString,
-        MColumn,
-        Label,
-        ColumnListItem,
-        UIColumn,
-        Text,
         MultiInput,
         MultiComboBox,
         formatter,
-        MessageBox
+        MessageBox,
+        ValueHelpController
     ) {
         "use strict";
 
@@ -55,6 +45,7 @@ sap.ui.define(
             "darya.zavaliuk.controller.ProductsOverview",
             {
                 formatter: formatter,
+                ...ValueHelpController,
 
                 /**
                  * Lifecycle method called during the initialization of the view.
@@ -65,7 +56,7 @@ sap.ui.define(
                 onInit: function () {
                     this._oFilterBar = this.getView().byId("filterBarProductOverview");
                     this._oTable = this.getView().byId("productsTable");
-                    this._oWhiteSpacesInput = this.byId("productsInput");
+                    this._oPriceInput = this.byId("productsInput");
 
                     this._oFilterBar.registerGetFiltersWithValues(
                         this._getFiltersWithValues.bind(this)
@@ -78,7 +69,7 @@ sap.ui.define(
                  *
                  * @public
                  */
-                onAfterRendering: function () {
+                onBeforeRendering: function () {
                     this.getView().setModel(new JSONModel({
                         "numberOfItemsToDelete": 0,
                         "filterText": this._getTextFromI18n("zeroFilters"),
@@ -100,32 +91,6 @@ sap.ui.define(
                     oStateModel.setProperty(
                         "/numberOfItemsToDelete", oControlEvent.getSource().getSelectedItems().length
                     );
-                },
-
-                /**
-                 * Event handler for the "OK" press of the dialog.
-                 * Replaces whitespace tokens with corresponding characters and sets the tokens to the input control.
-                 * Closes the whitespace dialog.
-                 * @param {sap.ui.base.Event} oEvent - The event object.
-                 *
-                 * @public
-                 */
-                onDialogOkPress: function (oEvent) {
-                    const aTokens = oEvent.getParameter("tokens");
-
-                    aTokens.forEach(
-                        function (oToken) {
-                            oToken.setText(
-                                this.formatter.replaceDoubleWhitespaceWithUnicodeSpace(
-                                    oToken.getText()
-                                )
-                            );
-                        }.bind(this)
-                    );
-
-                    this._oWhiteSpacesInput.setTokens(aTokens);
-                    this.oWhitespaceDialog.close();
-                    this._updateLabelsAndTable();
                 },
 
                 /**
@@ -242,36 +207,16 @@ sap.ui.define(
 
                     this.getView().getModel("appView").setProperty(
                         "/filterItems", aFiltersWithValues
-                    )
+                    );
                 },
 
                 /**
-                 * Filters the table in the value help dialog using the given filter.
-                 * @param {sap.ui.model.Filter} oFilter - The filter to apply to the table.
-                 *
-                 * @private
-                 */
-                _filterTableWhitespace: function (oFilter) {
-                    const oValueHelpDialog = this.oWhitespaceDialog;
-
-                    oValueHelpDialog.getTableAsync().then(function (oTable) {
-                        if (oTable.bindRows) {
-                            oTable.getBinding("rows").filter(oFilter);
-                        }
-                        if (oTable.bindItems) {
-                            oTable.getBinding("items").filter(oFilter);
-                        }
-                        oValueHelpDialog.update();
-                    });
-                },
-
-                /**
-                 * Handles the search event of the filter bar in the whitespaces.
+                 * Handles the search event of the filter bar.
                  * @param {sap.ui.base.Event} oEvent - The search event object.
                  *
                  * @public
                  */
-                onFilterBarWhitespacesSearch: function (oEvent) {
+                onFilterBarSearch: function (oEvent) {
                     const sSearchQuery = this._oBasicSearchField.getValue(),
                         aSelectionSet = oEvent.getParameter("selectionSet");
 
@@ -310,202 +255,12 @@ sap.ui.define(
                         })
                     );
 
-                    this._filterTableWhitespace(
+                    this._filterTableWithPriceValue(
                         new Filter({
                             filters: aFilters,
                             and: true
                         })
                     );
-                },
-
-                /**
-                 * Handles the value help request event.
-                 * @param {sap.ui.base.Event} oEvent - The value help request event object.
-                 *
-                 * @public
-                 */
-                onValueHelpRequest: function () {
-                    this._initializeBasicSearchField();
-
-                    this.pWhitespaceDialog = this.loadFragment({
-                        name: "darya.zavaliuk.view.fragments.ValueHelpDialog"
-                    }).then(
-                        function (oWhitespaceDialog) {
-                            this._configureWhitespaceDialog(oWhitespaceDialog);
-
-                            oWhitespaceDialog.setTokens(
-                                this._oWhiteSpacesInput.getTokens()
-                            );
-                            oWhitespaceDialog.open();
-                        }.bind(this)
-                    );
-                },
-
-                /**
-                 * Initializes the basic search field.
-                 *
-                 * @private
-                 */
-                _initializeBasicSearchField: function () {
-                    this._oBasicSearchField = new SearchField({
-                        search: function () {
-                            this.oWhitespaceDialog.getFilterBar().search();
-                        }.bind(this)
-                    });
-                },
-
-                /**
-                 * Configures the whitespace dialog.
-                 * @param {sap.m.Dialog} oWhitespaceDialog - The whitespace dialog to configure.
-                 *
-                 * @private
-                 */
-                _configureWhitespaceDialog: function (oWhitespaceDialog) {
-                    const oFilterBar = oWhitespaceDialog.getFilterBar();
-
-                    this.oWhitespaceDialog = oWhitespaceDialog;
-                    this.getView().addDependent(oWhitespaceDialog);
-
-                    oWhitespaceDialog.setRangeKeyFields([
-                        {
-                            label: this._getTextFromI18n(
-                                "productsOverviewInputPrice"
-                            ),
-                            key: "Price",
-                            type: "string",
-                            typeInstance: new TypeString(
-                                {},
-                                {
-                                    maxLength: 7
-                                }
-                            )
-                        }
-                    ]);
-
-                    oFilterBar.setFilterBarExpanded(false);
-                    oFilterBar.setBasicSearch(this._oBasicSearchField);
-
-                    this._configureTableInWhitespaceDialog(oWhitespaceDialog);
-                },
-
-                /**
-                 * Configures the table in the whitespace dialog.
-                 * @param {sap.m.Dialog} oWhitespaceDialog - The whitespace dialog containing the table.
-                 *
-                 * @private
-                 */
-                _configureTableInWhitespaceDialog: function (
-                    oWhitespaceDialog
-                ) {
-                    oWhitespaceDialog.getTableAsync().then(
-                        function (oTable) {
-                            oTable.setModel(this.oModel);
-
-                            if (oTable.bindRows) {
-                                this._configureUIColumnsForTable(oTable);
-                                oTable.bindAggregation("rows", {
-                                    path: PRODUCT_FIELDS_BINDING.PRODUCTS,
-                                    events: {
-                                        dataReceived: function () {
-                                            oWhitespaceDialog.update();
-                                        }
-                                    }
-                                });
-                            }
-
-                            if (oTable.bindItems) {
-                                this._configureMColumnsForTable(oTable);
-                                oTable.bindItems({
-                                    path: PRODUCT_FIELDS_BINDING.PRODUCTS,
-                                    template: new ColumnListItem({
-                                        cells: [
-                                            new Label({ text: "{Price}" }),
-                                            new Label({ text: "{Name}" })
-                                        ]
-                                    }),
-                                    events: {
-                                        dataReceived: function () {
-                                            oWhitespaceDialog.update();
-                                        }
-                                    }
-                                });
-                            }
-
-                            oWhitespaceDialog.update();
-                        }.bind(this)
-                    );
-                },
-
-                /**
-                 * Configures UI columns for the table.
-                 *
-                 * @param {sap.ui.table.Table} oTable - The table to configure the columns for.
-                 * @private
-                 */
-                _configureUIColumnsForTable: function (oTable) {
-                    const oColumnPrice = new UIColumn({
-                        label: new Label({
-                            text: this._getTextFromI18n(
-                                "productsOverviewColumnPrice"
-                            )
-                        }),
-                        template: new Text({
-                            wrapping: false,
-                            text: "{Price}"
-                        })
-                    });
-
-                    oColumnPrice.data({ fieldName: "Price" });
-                    oTable.addColumn(oColumnPrice);
-
-                    const oColumnName = new UIColumn({
-                        label: new Label({
-                            text: this._getTextFromI18n(
-                                "productsOverviewInputName"
-                            )
-                        }),
-                        template: new Text({ wrapping: false, text: "{Name}" })
-                    });
-
-                    oColumnName.data({ fieldName: "Name" });
-                    oTable.addColumn(oColumnName);
-                },
-
-                /**
-                 * Configures columns for the table.
-                 *
-                 * @param {sap.m.Table} oTable - The table to configure the columns for.
-                 * @private
-                 */
-                _configureMColumnsForTable: function (oTable) {
-                    oTable.addColumn(
-                        new MColumn({
-                            header: new Label({
-                                text: this._getTextFromI18n(
-                                    "productsOverviewInputPrice"
-                                )
-                            })
-                        })
-                    );
-                    oTable.addColumn(
-                        new MColumn({
-                            header: new Label({
-                                text: this._getTextFromI18n(
-                                    "productsOverviewInputName"
-                                )
-                            })
-                        })
-                    );
-                },
-
-                /**
-                 * Handles the press event of the cancel button in the whitespace dialog.
-                 * Closes the whitespace dialog.
-                 *
-                 * @public
-                 */
-                onWhitespaceCancelPress: function () {
-                    this.oWhitespaceDialog.close();
                 },
 
                 /**
@@ -523,8 +278,8 @@ sap.ui.define(
                 /**
                  * Handles the event when a list item is pressed.
                  * Navigates to the "ProductDetails" route with the selected item's ID as a parameter.
-                 *
                  * @param {sap.ui.base.Event} oEvent - The event triggered when a list item is pressed.
+                 *
                  * @public
                  */
                 onPressListItem: function (oEvent) {
@@ -547,28 +302,22 @@ sap.ui.define(
                     const oSelectedItems = oTable.getSelectedItems();
 
                     if (oSelectedItems.length > 0) {
-                        const oSelectedIndices = oSelectedItems.map((oItem) =>
-                            oItem
-                                .getBindingContext()
-                                .getPath()
-                                .split("/")
-                                .pop()
-                        );
+                        const oSelectedIndices = oTable.getSelectedContexts().map((oItem) => oItem.getProperty("ID"));
 
-                        oSelectedIndices.forEach((iIndex, i) => {
-                            if (
-                                iIndex >= 0 &&
-                                iIndex <
-                                oBinding.getProperty(
+                        oSelectedIndices.forEach((iSelectedIndex) => {
+                            oBinding
+                                .getProperty(
                                     PRODUCT_FIELDS_BINDING.PRODUCTS
-                                ).length
-                            ) {
-                                oBinding
-                                    .getProperty(
-                                        PRODUCT_FIELDS_BINDING.PRODUCTS
-                                    )
-                                    .splice(iIndex - i, 1);
-                            }
+                                )
+                                .forEach((oProduct, i) => {
+                                    if (oProduct.ID == iSelectedIndex) {
+                                        oBinding
+                                            .getProperty(
+                                                PRODUCT_FIELDS_BINDING.PRODUCTS
+                                            )
+                                            .splice(i, 1);
+                                    }
+                                });
                         });
 
                         oBinding.refresh();
@@ -589,16 +338,15 @@ sap.ui.define(
 
                     const oThat = this;
                     MessageBox.error(sConfirmMessage, {
-                        title: "Error",
+                        title: this._getTextFromI18n("messageBoxTitleWithErrorState"),
                         actions: [MessageBox.Action.DELETE, MessageBox.Action.CLOSE],
                         emphasizedAction: MessageBox.Action.DELETE,
-                        onClose: function (action) {
-                            if (action === MessageBox.Action.DELETE) {
+                        onClose: function (oAction) {
+                            if (oAction === MessageBox.Action.DELETE) {
                                 oThat._onPressDialogDelete();
                             }
                         }
                     });
-
                 },
 
                 /**
@@ -684,9 +432,9 @@ sap.ui.define(
 
                 /**
                  * Generates filters based on the selected values from the Category MultiComboBox.
+                 * @returns {sap.ui.model.Filter[]|undefined} An array of filters or undefined if no values are selected.
                  *
                  * @private
-                 * @returns {sap.ui.model.Filter[]|undefined} An array of filters or undefined if no values are selected.
                  */
                 _getCategoryMultiComboboxFilters: function (
                     sFieldId,
@@ -697,7 +445,7 @@ sap.ui.define(
                         .getSelectedItems()
                         .map((oItem) => oItem.getProperty("text"));
 
-                    if (aSelectedValues.length === 0) {
+                    if (!aSelectedValues.length) {
                         return;
                     }
 
@@ -713,31 +461,31 @@ sap.ui.define(
 
                 /**
                  * Generates filters based on the input value from the products input field.
+                 * @returns {sap.ui.model.Filter[]|undefined} An array of filters or undefined if no query is present.
                  *
                  * @private
-                 * @returns {sap.ui.model.Filter[]|undefined} An array of filters or undefined if no query is present.
                  */
                 _getInputFilters: function () {
-                    const oMultiInput = this._oWhiteSpacesInput;
+                    const oMultiInput = this._oPriceInput;
                     const aSelectedTokens = oMultiInput.getTokens();
 
                     const aItemsWithOperator = [];
                     const aItemsWithoutOperator = [];
 
                     aSelectedTokens.forEach((oToken) => {
-                        const value = oToken
+                        const oValue = oToken
                             .getCustomData()[0]
                             .getProperty("value");
-                        if (value.operation !== undefined) {
-                            aItemsWithOperator.push(value);
+                        if (oValue.operation !== undefined) {
+                            aItemsWithOperator.push(oValue);
                         } else {
                             aItemsWithoutOperator.push(oToken.getText());
                         }
                     });
 
                     if (
-                        aItemsWithOperator.length === 0 &&
-                        aItemsWithoutOperator.length === 0
+                        !aItemsWithOperator.length &&
+                        !aItemsWithoutOperator.length
                     ) {
                         return;
                     }
@@ -773,9 +521,9 @@ sap.ui.define(
 
                 /**
                  * Generates filters based on the search value from the search input field.
+                 * @returns {sap.ui.model.Filter[]|undefined} An array of filters or undefined if no query is present.
                  *
                  * @private
-                 * @returns {sap.ui.model.Filter[]|undefined} An array of filters or undefined if no query is present.
                  */
                 _getSearchInputFilters: function () {
                     const sQuery = this.byId("searchField").getValue();

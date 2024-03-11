@@ -37,29 +37,6 @@ sap.ui.define([], function () {
         },
 
         /**
-         * Replaces occurrences of double whitespace in the original text with a Unicode whitespace character.
-         * @param {string} sOriginalText - The original text to perform the replacement on.
-         * @returns {string} - The text with double whitespace replaced with a Unicode whitespace character.
-         *
-         * @public
-         */
-        replaceDoubleWhitespaceWithUnicodeSpace: function (
-            sOriginalText
-        ) {
-            const sWhitespace = " ",
-                sUnicodeWhitespaceCharacter = "\u00A0";
-
-            if (typeof sOriginalText !== "string") {
-                return sOriginalText;
-            }
-
-            return sOriginalText.replaceAll(
-                sWhitespace + sWhitespace,
-                sWhitespace + sUnicodeWhitespaceCharacter
-            );
-        },
-
-        /**
          * Converts an array of filters with values into a formatted text representation.
          *
          * @param {Array} aFiltersWithValues - The array of filters with values.

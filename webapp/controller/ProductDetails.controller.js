@@ -19,6 +19,16 @@ sap.ui.define([
 
     const ValueState = coreLibrary.ValueState;
 
+    const FRAGMENT_STATE = {
+        EDIT: "Edit",
+        DISPLAY: "Display"
+    };
+
+    const DEFAULT_VALUES = {
+        NAME: "Default name",
+        DESCRIPTION: "Default description"
+    };
+
     return BaseController.extend("darya.zavaliuk.controller.ProductDetails", {
         formatter: formatter,
 
@@ -48,8 +58,20 @@ sap.ui.define([
          * @private
          */
         _setupModels: function () {
+            this.getView().setModel(new JSONModel({
+                "state": {
+                    "isEditPage": false
+                },
+                "products": {
+                    "colorNames": [],
+                    "categoryNames": [],
+                    "supplierNames": [],
+                    "statusNames": []
+                },
+                "product": {}
+            }
+            ), "appView");
             this.getView().setModel(Messaging.getMessageModel(), "messages");
-            this.getView().setModel(new JSONModel(), "state");
         },
 
         /**
@@ -61,11 +83,11 @@ sap.ui.define([
         onPressCancel: function () {
             const oThat = this;
 
-            MessageBox.warning(this._getTextFromI18n("closePageConfirmMessage"), {
+            MessageBox.warning(this._getTextFromI18n("messageForClosePage"), {
                 actions: [MessageBox.Action.OK, MessageBox.Action.CLOSE],
                 emphasizedAction: MessageBox.Action.OK,
-                onClose: function (action) {
-                    if (action === MessageBox.Action.OK) {
+                onClose: function (oAction) {
+                    if (oAction === MessageBox.Action.OK) {
                         oThat._onPressOkMessageBoxError();
                     }
                 }
@@ -74,18 +96,18 @@ sap.ui.define([
 
         /**
          * Toggles the edit mode for the page.
+         * @param {boolean} bIsEdit - Indicates whether the page is in edit mode or not.
          *
-         * @param {boolean} isEdit - Indicates whether the page is in edit mode or not.
          * @private
          */
-        _toggleEditPage: function (isEdit) {
-            this.getView().getModel("state").setProperty("/isEditPage", isEdit);
+        _toggleEditPage: function (bIsEdit) {
+            this.getView().getModel("appView").setProperty("/state/isEditPage", bIsEdit);
         },
 
         /**
          * Retrieves the array of product items from the model.
-         *
          * @returns {Array} An array of product items.
+         *
          * @private
          */
         _getProductsItems: function () {
@@ -95,12 +117,12 @@ sap.ui.define([
 
         /**
          * Retrieves the "product" model for the view.
-         *
          * @returns {sap.ui.model.Model} The "product" model.
+         *
          * @private
          */
         _getProductModel: function () {
-            return this.getView().getModel("product");
+            return this.getView().getModel("appView").getProperty("/product");
         },
 
         /**
@@ -123,12 +145,12 @@ sap.ui.define([
 
             const oItems = this._getProductsItems();
             const oProductViewModel = this._getProductModel();
-            const iExistingElementIndex = oItems.findIndex(element => element.ID === oProductViewModel.getProperty("/ID"));
+            const iExistingElementIndex = oItems.findIndex(element => element.ID === oProductViewModel.ID);
 
             if (iExistingElementIndex !== -1) {
                 this.getOwnerComponent()
                     .getRouter()
-                    .navTo("ProductDetails", { id: oProductViewModel.getProperty("/ID") }, true);
+                    .navTo("ProductDetails", { id: oProductViewModel.ID }, true);
                 return;
             }
 
@@ -144,14 +166,14 @@ sap.ui.define([
          * @private
          */
         _toggleButtonsAndView: function (bEdit) {
-            this._showFormFragment(bEdit ? "Edit" : "Display");
+            this._showFormFragment(bEdit ? FRAGMENT_STATE.EDIT : FRAGMENT_STATE.DISPLAY);
         },
 
         /**
          * Shows the specified form fragment in the page.
          * Removes all existing form elements and inserts the form elements from the fragment.
-         *
          * @param {string} sFragmentName - The name of the form fragment to show.
+         *
          * @private
          */
         _showFormFragment: function (sFragmentName) {
@@ -169,8 +191,8 @@ sap.ui.define([
         /**
          * Event handler for the input change event.
          * Calls the handleRequiredField function to handle required field validation.
-         *
          * @param {sap.ui.base.Event} oEvent - The input change event object.
+         *
          * @public
          */
         onInputValueChange: function (oEvent) {
@@ -180,9 +202,9 @@ sap.ui.define([
         /**
          * Retrieves the specified form fragment.
          * If the fragment has not been loaded before, it is loaded and stored in the _formFragments cache.
-         *
          * @param {string} sFragmentName - The name of the form fragment to retrieve.
          * @returns {Promise} A promise that resolves to the form fragment.
+         *
          * @private
          */
         _getFormFragment: function (sFragmentName) {
@@ -215,7 +237,7 @@ sap.ui.define([
 
             this.getOwnerComponent()
                 .getRouter()
-                .navTo("ProductDetailsUpdate", { id: oProductViewModel.getProperty("/ID"), edit: true }, true);
+                .navTo("ProductDetailsUpdate", { id: oProductViewModel.ID, edit: true }, true);
         },
 
         /**
@@ -227,16 +249,16 @@ sap.ui.define([
             const oProductViewModel = this._getProductModel();
             const oModel = this.getView().getModel();
             const oItems = oModel.getProperty("/Products");
-            const iExistingElementIndex = oItems.findIndex(element => element.ID === oProductViewModel.getProperty("/ID"));
+            const iExistingElementIndex = oItems.findIndex(element => element.ID === oProductViewModel.ID);
 
             if (iExistingElementIndex !== -1) {
-                oItems[iExistingElementIndex] = oProductViewModel.getData();
+                oItems[iExistingElementIndex] = oProductViewModel;
             } else {
-                oItems.push(oProductViewModel.getData());
+                oItems.push(oProductViewModel);
             }
             oModel.setProperty("/Products", oItems);
 
-            this.getOwnerComponent().getRouter().navTo("ProductDetails", { id: oProductViewModel.getProperty("/ID") }, true);
+            this.getOwnerComponent().getRouter().navTo("ProductDetails", { id: oProductViewModel.ID }, true);
         },
 
         /**
@@ -245,7 +267,7 @@ sap.ui.define([
          * @private
          */
         _showErrorDialog: function () {
-            MessageBox.error(this._getTextFromI18n("notAllValidInputs"), {
+            MessageBox.error(this._getTextFromI18n("messageForInvalidInputs"), {
                 actions: [MessageBox.Action.CLOSE],
                 emphasizedAction: MessageBox.Action.CLOSE
             });
@@ -253,8 +275,8 @@ sap.ui.define([
 
         /**
          * Removes messages from the messaging model that have a matching target.
-         *
          * @param {string} sTarget - The target binding path of the control.
+         *
          * @private
          */
 
@@ -268,8 +290,8 @@ sap.ui.define([
 
         /**
          * Handles the validation for a required input field.
-         *
          * @param {sap.ui.core.Control} oInput - The input control.
+         *
          * @private
          */
         _handleRequiredField: function (oInput) {
@@ -280,8 +302,8 @@ sap.ui.define([
                 this._removeMessageFromTarget(oInput.sId + "/value");
                 oInput.setValueState(ValueState.Error);
                 this._addMessageToMessaging(this._getTextFromI18n("messageForRequireField"), MessageType.Error,
-                    oInput.getLabels()[0].getText(), sTarget, this.getView().getModel("product")
-                )
+                    oInput.getLabels()[0].getText(), sTarget, this.getView().getModel("appView")
+                );
             }
         },
 
@@ -321,8 +343,7 @@ sap.ui.define([
             MessageBox.error(this._getTextFromI18n(
                 "deleteProductConfirmMessage",
                 [
-                    this._getProductModel()
-                        .getProperty("/Name")
+                    this._getProductModel().Name
                 ]
             ), {
                 title: "Error",
@@ -347,7 +368,7 @@ sap.ui.define([
 
             const oModel = this.getView().getModel();
             const oItems = oModel.getProperty("/Products");
-            const iExistingElementIndex = oItems.findIndex(element => element.ID === oProductViewModel.getProperty("/ID"));
+            const iExistingElementIndex = oItems.findIndex(element => element.ID === oProductViewModel.ID);
 
             if (iExistingElementIndex !== -1) {
                 oItems.splice(iExistingElementIndex, 1);
@@ -393,10 +414,7 @@ sap.ui.define([
          * Sets the state to indicate that the page is in create mode, resets the form,
          * loads product data, and sets up the default product model.
          *
-         * @param {sap.ui.base.Event} oEvent - The event object.
-         * @returns {void}
-         *
-         * @public
+         * @private
          */
         _onPatternMatchedProductCreate: function () {
             this._toggleEditPage(true);
@@ -404,7 +422,7 @@ sap.ui.define([
             this._loadProductData();
             const oProductModel = this._getProductsItems();
             const oModel = this._getDefaultProductModel(oProductModel.length + 1);
-            this.getView().setModel(oModel, "product");
+            this.getView().getModel("appView").setProperty("/product", oModel)
             this._clearAllMessagesFromMessaging();
         },
 
@@ -412,31 +430,22 @@ sap.ui.define([
          * Loads product-related data (categories, statuses, suppliers) from the model and sets up
          * a new JSON model for the product-related data in the view.
          *
-         * @returns {void}
          * @private
          */
         _loadProductData: function () {
             const oDataProducts = this.getOwnerComponent().getModel();
-            const oCategoryNames = oDataProducts.getProperty("/Categories");
-            const oStatusNames = oDataProducts.getProperty("/Statuses");
-            const oSupplierNames = oDataProducts.getProperty("/Suppliers");
-            const oColorNames = oDataProducts.getProperty("/Colors");
+            const oAppViewModel = this.getView().getModel("appView");
 
-            const oProductsModel = new JSONModel({
-                categoryNames: oCategoryNames,
-                statusNames: oStatusNames,
-                supplierNames: oSupplierNames,
-                colorNames: oColorNames
-            });
-
-            this.getView().setModel(oProductsModel, "products");
+            oAppViewModel.setProperty("/products/colorNames", oDataProducts.getProperty("/Colors"));
+            oAppViewModel.setProperty("/products/statusNames", oDataProducts.getProperty("/Statuses"));
+            oAppViewModel.setProperty("/products/supplierNames", oDataProducts.getProperty("/Suppliers"));
+            oAppViewModel.setProperty("/products/categoryNames", oDataProducts.getProperty("/Categories"));
         },
 
         /**
          * Sets up a new JSON model for a specific product using data from the main model.
-         *
          * @param {sap.ui.base.Event} oEvent - The event object containing route arguments.
-         * @returns {void}
+         *
          * @private
          */
         _setProductModel: function (oEvent) {
@@ -445,22 +454,24 @@ sap.ui.define([
             const oJSONModel = this.getView().getModel().getProperty("/Products");
 
             const oItem = oJSONModel.find(oItem => oItem.ID == sStoreID);
-            const oModel = new JSONModel(JSON.parse(JSON.stringify(oItem)));
+            const oModel = JSON.parse(JSON.stringify(oItem));
 
-            this.getView().setModel(oModel, "product");
+            this.getView().getModel("appView").setProperty("/product", oModel)
         },
 
         /**
          * Creates a new JSON model with default values for a product.
-         *
-         * @param {number} newID - The new ID for the product.
+         * @param {number} iNewID - The new ID for the product.
          * @returns {sap.ui.model.json.JSONModel} - The JSON model with default product values.
+         *
          * @private
          */
-        _getDefaultProductModel: function (newID) {
-            return new JSONModel({
-                "ID": newID
-            });
+        _getDefaultProductModel: function (iNewID) {
+            return {
+                "ID": iNewID,
+                "Name": DEFAULT_VALUES.NAME,
+                "Description": DEFAULT_VALUES.DESCRIPTION
+            };
         },
 
         /**
@@ -487,8 +498,8 @@ sap.ui.define([
          * Event handler for the "press" event on an item in the Message Popover.
          * Extracts information from the item's binding context to determine the target control ID.
          * Closes the Message Popover and sets a timeout to focus on the identified control.
-         *
          * @param {sap.ui.base.Event} oEvent - The event object.
+         *
          * @public
          */
         onPressItemMessageItem: function (oEvent) {
@@ -512,8 +523,8 @@ sap.ui.define([
         /**
          * Event handler for the press event on the control triggering the Message Popover.
          * Creates the Message Popover if it does not exist and toggles its visibility.
-         *
          * @param {sap.ui.base.Event} oEvent - The event object.
+         *
          * @public
          */
         handleMessagePopoverPress: function (oEvent) {
@@ -527,22 +538,22 @@ sap.ui.define([
 
         /**
          * Adds a message to the messaging model.
+         * @param {string} sMessage - The message text.
+         * @param {sap.ui.core.ValueState} sValueState - The value state of the control.
+         * @param {string} sAdditionalText - Additional text for the message.
+         * @param {string} sTarget - The target binding path of the control.
+         * @param {sap.ui.model.Model} oModel - The model to which the message belongs.
          *
-         * @param {string} message - The message text.
-         * @param {sap.ui.core.ValueState} valueState - The value state of the control.
-         * @param {string} additionalText - Additional text for the message.
-         * @param {string} target - The target binding path of the control.
-         * @param {sap.ui.model.Model} model - The model to which the message belongs.
          * @private
          */
-        _addMessageToMessaging: function (message, valueState, additionalText, target, model) {
+        _addMessageToMessaging: function (sMessage, sValueState, sAdditionalText, sTarget, oModel) {
             Messaging.addMessages(
                 new Message({
-                    message: message,
-                    type: MessageType.Error,
-                    additionalText: additionalText,
-                    target: target,
-                    processor: model
+                    message: sMessage,
+                    type: sValueState,
+                    additionalText: sAdditionalText,
+                    target: sTarget,
+                    processor: oModel
                 })
             );
         },
@@ -550,8 +561,8 @@ sap.ui.define([
         /**
          * Event handler for the change event of a validated ComboBox control.
          * Handles validation and error messaging for mandatory fields.
-         *
          * @param {sap.m.ComboBox} oValidatedComboBox - The validated ComboBox control.
+         *
          * @public
          */
         handleChangeComboBox: function (oValidatedComboBox) {
@@ -564,7 +575,7 @@ sap.ui.define([
             if (!oValidatedComboBox.getValue()) {
                 oValidatedComboBox.setValueState(ValueState.Error);
                 this._addMessageToMessaging(this._getTextFromI18n("messageForRequireField"), MessageType.Error,
-                    oValidatedComboBox.getLabels()[0].getText(), sTarget, this.getView().getModel("product"))
+                    oValidatedComboBox.getLabels()[0].getText(), sTarget, this.getView().getModel("appView"));
 
                 return;
             }
@@ -572,7 +583,7 @@ sap.ui.define([
             if (!sSelectedKey) {
                 oValidatedComboBox.setValueState(ValueState.Error);
                 this._addMessageToMessaging(this._getTextFromI18n("messageForValidSelectedKey"), MessageType.Error,
-                    oValidatedComboBox.getLabels()[0].getText(), sTarget, this.getView().getModel("product")
+                    oValidatedComboBox.getLabels()[0].getText(), sTarget, this.getView().getModel("appView")
                 );
             }
         },
@@ -581,8 +592,8 @@ sap.ui.define([
          * Event handler for the "change" event on a ComboBox. Validates the selected key and value,
          * removes existing error messages associated with the ComboBox, and adds a new error message
          * if the input is invalid. Adjusts the ComboBox's value state and value state text accordingly.
-         *
          * @param {sap.ui.base.Event} oEvent - The event object.
+         *
          * @public
          */
         onChangeComboBoxValue: function (oEvent) {
