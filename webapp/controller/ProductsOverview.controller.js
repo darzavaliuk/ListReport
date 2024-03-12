@@ -9,7 +9,7 @@ sap.ui.define(
         "sap/m/MultiComboBox",
         "../utils/formatter",
         "sap/m/MessageBox",
-        "./ValueHelpController",
+        "./ValueHelpController"
     ],
     function (
         Filter,
@@ -72,8 +72,25 @@ sap.ui.define(
                     "numberOfItemsToDelete": 0,
                     "filterText": this._getTextFromI18n("zeroFilters"),
                     "filterItems": [],
-                    "isVisibleOverlay": false
+                    "isVisibleOverlay": false,
+                    "statuses": [this._getTextFromI18n("availableStatusText"), this._getTextFromI18n("unavailableStatusText")],
+                    "productsCount": 0
                 }), "appView");
+
+                this._getProductsCount();
+            },
+
+            _getProductsCount: function () {
+                const oThat = this;
+                const sPath = "/Products/$count";
+                this.getView().getModel().read(sPath, {
+                    success: function (oData) {
+                        oThat.getView().getModel("appView").setProperty("/productsCount", oData);
+                    },
+                    error: function (oError) {
+                        console.error("Error reading product count: " + oError);
+                    }
+                });
             },
 
             /**
@@ -393,9 +410,8 @@ sap.ui.define(
                         MULTICOMBOBOX.CATEGORY,
                         PRODUCT_FIELDS_BINDING.CATEGORY
                     );
-                const oStatusFilter = this._getCategoryMultiComboboxFilters(
-                    MULTICOMBOBOX.STATUS,
-                    PRODUCT_FIELDS_BINDING.STATUS
+                const oStatusFilter = this._getCategoryMultiComboboxFiltersStatus(
+                    MULTICOMBOBOX.STATUS
                 );
                 const oSupplierFilter =
                     this._getCategoryMultiComboboxFilters(
@@ -454,6 +470,39 @@ sap.ui.define(
                             FilterOperator.Contains,
                             sValue
                         )
+                );
+            },
+
+            /**
+             * Generates filters based on the selected values from the Status MultiComboBox.
+             * @returns {sap.ui.model.Filter[]|undefined} An array of filters or undefined if no values are selected.
+             *
+             * @private
+             */
+            _getCategoryMultiComboboxFiltersStatus: function (
+                sFieldId
+            ) {
+                const oMultiComboBox = this.byId(sFieldId);
+                const aSelectedValues = oMultiComboBox
+                    .getSelectedItems()
+                    .map((oItem) => oItem.getProperty("text"));
+
+                if (!aSelectedValues.length) {
+                    return;
+                }
+
+                return aSelectedValues.map(
+                    (sValue) =>
+                        (sValue === this._getTextFromI18n("availableStatusText")) ?
+                            new Filter(
+                                "DiscontinuedDate",
+                                FilterOperator.EQ,
+                                null
+                            ) : new Filter(
+                                "DiscontinuedDate",
+                                FilterOperator.LE,
+                                new Date().toISOString()
+                            )
                 );
             },
 

@@ -18,8 +18,13 @@
         },
         "dataSources": {
             "products": {
-                "uri": "./model/data.json",
-                "type": "JSON"
+                "uri": "https://services.odata.org/V2/(S(e1ec0fqc2dv4maredcpxgb21))/OData/OData.svc/",
+                "type": "OData",
+                "settings": {
+                    "useBatch": false,
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline"
+                }
             }
         }
     },
@@ -136,7 +141,9 @@
             "": {
                 "dataSource": "products",
                 "settings": {
-                    "defaultBindingMode": "TwoWay"
+                    "useBatch": false,
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline"
                 }
             }
         }

@@ -443,20 +443,27 @@ sap.ui.define([
         },
 
         /**
-         * Sets up a new JSON model for a specific product using data from the main model.
+         * Sets up a new OData model for a specific product using data from the main model.
          * @param {sap.ui.base.Event} oEvent - The event object containing route arguments.
          *
          * @private
          */
         _setProductModel: function (oEvent) {
+            const pThis = this;
             const mRouteArguments = oEvent.getParameter("arguments");
-            const sStoreID = mRouteArguments.id;
-            const oJSONModel = this.getView().getModel().getProperty("/Products");
+            const sProductID = mRouteArguments.id;
+            const oODataModel = this.getView().getModel();
 
-            const oItem = oJSONModel.find(oItem => oItem.ID == sStoreID);
-            const oModel = JSON.parse(JSON.stringify(oItem));
+            oODataModel.metadataLoaded().then(function () {
+                const sKey = oODataModel.createKey("/Products", { ID: sProductID });
 
-            this.getView().getModel("appView").setProperty("/product", oModel)
+                pThis.getView().bindObject({
+                    path: sKey,
+                    parameters: {
+                        expand: "Supplier,Category"
+                    }
+                });
+            });
         },
 
         /**

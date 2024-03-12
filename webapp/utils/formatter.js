@@ -1,39 +1,54 @@
-sap.ui.define([], function () {
+sap.ui.define(["sap/ui/core/ValueState"], function (ValueState) {
     "use strict";
 
-    const PRODUCT_STATUS = {
-        "Product Damaged": "Error",
-        "Product Shipped": "Success",
-        "Product Missing": "Warning"
-    };
-
     const PRODUCT_STATUS_ICON = {
-        "Product Damaged": "sap-icon://error",
-        "Product Shipped": "sap-icon://sys-enter-2",
-        "Product Missing": "sap-icon://alert"
+        ERROR: "sap-icon://error",
+        SUCCESS: "sap-icon://sys-enter-2",
     };
 
     return {
         /**
-         * Formatter function for displaying human-readable status labels based on a given product status.
-         * @param {string} sStatusProduct - The product status code.
-         * @returns {string} The human-readable status label.
-         *
-         * @public
-         */
-        statusFormatter: function (sStatusProduct) {
-            return PRODUCT_STATUS[sStatusProduct];
-        },
-
-        /**
-         * Formatter function for retrieving status icons based on a given product status.
-         * @param {string} sStatusProduct - The product status code.
+         * Formatter function for retrieving text based on a given product discontinued status.
+         * @param {string} sValue - The product status code.
          * @returns {string} The URL or class of the status icon.
          *
          * @public
          */
-        statusIconFormatter: function (sStatusProduct) {
-            return PRODUCT_STATUS_ICON[sStatusProduct];
+        formatAvailabilityText: function (sValue) {
+            return sValue ? this._getTextFromI18n("unavailableStatusText") : this._getTextFromI18n("availableStatusText")
+        },
+
+        /**
+         * Formatter function for retrieving status on a given product discontinued status.
+         * @param {string} sValue - The product status code.
+         * @returns {string} The URL or class of the status icon.
+         *
+         * @public
+         */
+        formatAvailabilityState: function (sValue) {
+            return sValue ? ValueState.Error : ValueState.Success;
+        },
+
+        /**
+         * Formatter function for retrieving status icons based on a given product discontinued status.
+         * @param {string} sValue - The product status code.
+         * @returns {string} The URL or class of the status icon.
+         *
+         * @public
+         */
+        formatAvailabilityIcon: function (sValue) {
+            return sValue ? PRODUCT_STATUS_ICON.ERROR : PRODUCT_STATUS_ICON.SUCCESS
+        },
+
+        /**
+         * Formatter function for retrieving dates based on a given product discontinued status.
+         * @param {string} sValue - The product status code.
+         * @returns {string} The URL or class of the status icon.
+         *
+         * @public
+         */
+        formatDiscontinuedDate: function (sValue) {
+            return sValue ? new Date(sValue).getFullYear() : this._getTextFromI18n("discontinuedStatusText");
         },
 
         /**

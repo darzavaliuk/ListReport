@@ -3,8 +3,8 @@
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:heading>
-					<VariantManagement items="{/Variants}" selectedKey="0" defaultKey="0">
-						<VariantItem text="{VariantName}" key="{VariantKey}" />
+					<VariantManagement selectedKey="0" defaultKey="0">
+						<VariantItem text="{i18n>defaultVariantText}" key="0" />
 					</VariantManagement>
 				</f:heading>
 				<f:expandedContent>
@@ -41,8 +41,8 @@
 							</fb:FilterGroupItem>
 							<fb:FilterGroupItem name="Status" label="{i18n>labelFilterBarStatus}" groupName="Basic" visibleInFilterBar="true">
 								<fb:control>
-									<MultiComboBox id="productStatus" name="Status" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewStatus}" items="{ path: '/Statuses', templateShareable: true }">
-										<core:Item key="{key}" text="{Name}" />
+									<MultiComboBox id="productStatus" name="Status" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewStatus}" items="{ path: 'appView>/statuses', templateShareable: true }">
+										<core:Item key="{appView>}" text="{appView>}" />
 									</MultiComboBox>
 								</fb:control>
 							</fb:FilterGroupItem>
@@ -61,10 +61,10 @@
 			</f:DynamicPageHeader>
 		</f:header>
 		<f:content>
-			<Table id="productsTable" class="sapUiResponsiveMargin" width="auto" mode="MultiSelect" selectionChange="onSelectionChangeTable" items="{ path: '/Products', sorter: {path: 'ID'} }" showOverlay="{appView>/isVisibleOverlay}">
+			<Table id="productsTable" class="sapUiResponsiveMargin" width="auto" mode="MultiSelect" selectionChange="onSelectionChangeTable" items="{ path: '/Products',  parameters: { expand: 'Category,Supplier' }, sorter: {path: 'ID'} }" showOverlay="{appView>/isVisibleOverlay}">
 				<headerToolbar>
 					<Toolbar>
-						<Title core:require="{formatMessage: 'sap/base/strings/formatMessage'}" text="{ parts: [ 'i18n>productListTitle', '/Products/length' ], formatter: 'formatMessage' }" />
+						<Title core:require="{formatMessage: 'sap/base/strings/formatMessage'}" text="{ parts: [ 'i18n>productListTitle', 'appView>/productsCount' ], formatter: 'formatMessage' }" />
 						<ToolbarSpacer />
 						<Button icon="sap-icon://create" press="onPressCreateProduct" text="Create" type="Emphasized" />
 						<Button enabled="{= !!${appView>/numberOfItemsToDelete}}" icon="sap-icon://delete" press="onPressDeleteProducts" text="Delete" />
@@ -100,9 +100,10 @@
 							<ObjectNumber number="{Price}" unit="{i18n>currency}" />
 							<Text text="{Category/Name}" />
 							<Text text="{Supplier/Name}" />
-							<Text text="{ path: 'Date', type: 'sap.ui.model.type.Date', formatOptions: { style: 'short', source: { pattern: 'yyyy-MM-dd' } } }" />
+							<Text text="{ path: 'ReleaseDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'short' } }" />
 							<RatingIndicator value="{Rating}" maxValue="5" editable="false" />
-							<ObjectStatus text="{Status}" icon="{ path: 'Status', formatter: '.formatter.statusIconFormatter' }" state="{ path: 'Status', formatter: '.formatter.statusFormatter' }" />
+							<ObjectStatus icon="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityIcon' }"
+									text="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityText' }" state="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityState' }" />
 						</cells>
 					</ColumnListItem>
 				</items>
