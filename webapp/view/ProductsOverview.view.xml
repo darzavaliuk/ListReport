@@ -1,4 +1,4 @@
-<View controllerName="darya.zavaliuk.controller.ProductsOverview" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core" height="100%">
+<mvc:View controllerName="darya.zavaliuk.controller.ProductsOverview" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core" height="100%">
 	<f:DynamicPage class="sapUiNoContentPadding">
 		<f:title>
 			<f:DynamicPageTitle>
@@ -109,4 +109,4 @@
 			</Table>
 		</f:content>
 	</f:DynamicPage>
-</View>
+</mvc:View>

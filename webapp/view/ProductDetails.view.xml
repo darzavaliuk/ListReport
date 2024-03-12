@@ -1,27 +1,27 @@
-<View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" height="100%" xmlns:form="sap.ui.layout.form" controllerName="darya.zavaliuk.controller.ProductDetails">
-	<DynamicPage showFooter="{= ${appView>/state/isEditPage}}" class="sapUiNoContentPadding">
-		<title>
-			<DynamicPageTitle>
-				<heading>
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" height="100%" xmlns:form="sap.ui.layout.form" controllerName="darya.zavaliuk.controller.ProductDetails">
+	<f:DynamicPage showFooter="{= ${appView>/state/isEditPage}}" class="sapUiNoContentPadding">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
 					<Title text="{appView>/product/Name}" />
-				</heading>
-				<expandedContent>
+				</f:heading>
+				<f:expandedContent>
 					<Label text="{appView>/product/Description}" />
-				</expandedContent>
-				<snappedContent>
+				</f:expandedContent>
+				<f:snappedContent>
 					<Label text="{appView>/product/Description}" />
-				</snappedContent>
-				<snappedTitleOnMobile>
+				</f:snappedContent>
+				<f:snappedTitleOnMobile>
 					<Title text="{appView>/product/Description}" />
-				</snappedTitleOnMobile>
-				<actions>
+				</f:snappedTitleOnMobile>
+				<f:actions>
 					<Button text="{i18n>editButton}" visible="{=!${appView>/state/isEditPage}}" type="Emphasized" press="onPressEditProduct" />
 					<Button text="{i18n>deleteButton}" visible="{=!${appView>/state/isEditPage}}" type="Transparent" press="onPressDeleteProduct" />
-				</actions>
-			</DynamicPageTitle>
-		</title>
-		<header>
-			<DynamicPageHeader>
+				</f:actions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:header>
+			<f:DynamicPageHeader>
 				<FlexBox wrap="Wrap" fitContainer="true">
 					<Avatar src="./images/robot.png" class="sapUiMediumMarginEnd sapUiSmallMarginBottom" displayShape="Square" displaySize="L" />
 					<VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
@@ -55,32 +55,32 @@
 						<RatingIndicator editable="false" value="{appView>/product/Rating}" iconSize="16px" />
 					</VBox>
 				</FlexBox>
-			</DynamicPageHeader>
-		</header>
-		<content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
 			<IconTabBar class="sapUiResponsiveContentPadding">
 				<items>
 					<IconTabFilter text="{i18n>productsDetailsGeneralTile}">
-						<Form>
-							<layout>
-								<ColumnLayout columnsM="2" />
-							</layout>
-							<formContainers>
-								<FormContainer id="formContainerForGeneralPart">
-								</FormContainer>
-							</formContainers>
-						</Form>
+						<form:Form>
+							<form:layout>
+								<form:ColumnLayout columnsM="2" />
+							</form:layout>
+							<form:formContainers>
+								<form:FormContainer id="formContainerForGeneralPart">
+								</form:FormContainer>
+							</form:formContainers>
+						</form:Form>
 					</IconTabFilter>
 				</items>
 			</IconTabBar>
-		</content>
-		<footer>
+		</f:content>
+		<f:footer>
 			<OverflowToolbar>
 				<Button id="messagePopoverBtn" visible="{=!!${messages>/}.length}" text="{=${messages>/}.length}" icon="sap-icon://error" type="Negative" press="handleMessagePopoverPress" ariaHasPopup="Dialog" />
 				<ToolbarSpacer />
 				<Button text="{i18n>saveButton}" type="Emphasized" press="onPressCreateProduct" />
 				<Button text="{i18n>cancel}" type="Transparent" press="onPressCancel" />
 			</OverflowToolbar>
-		</footer>
-	</DynamicPage>
-</View>
+		</f:footer>
+	</f:DynamicPage>
+</mvc:View>

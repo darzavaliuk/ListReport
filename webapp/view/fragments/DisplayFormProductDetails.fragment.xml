@@ -1,57 +1,57 @@
-<FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
-	<FormElement label="{i18n>productIdLabel}">
-		<fields>
+<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<form:FormElement label="{i18n>productIdLabel}">
+		<form:fields>
 			<Text text="{product>/ID}" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productNameLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productNameLabel}">
+		<form:fields>
 			<Text text="{appView>/product/Name}" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productPriceLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productPriceLabel}">
+		<form:fields>
 			<Text text="{ path: 'appView>/product/Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productRatingLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productRatingLabel}">
+		<form:fields>
 			<Text text="{appView>/product/Rating}" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productCategoryLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productCategoryLabel}">
+		<form:fields>
 			<Text text="{appView>/product/Category/Name}" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productSupplierLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productSupplierLabel}">
+		<form:fields>
 			<Text text="{appView>/product/Supplier/Name}" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productStatusLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productStatusLabel}">
+		<form:fields>
 			<Text text="{appView>/product/Status}" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productDateLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productDateLabel}">
+		<form:fields>
 			<Text text="{ path: 'appView>/product/Date', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source: {pattern: 'yyyy-MM-dd'} } }" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productFactoryLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productFactoryLabel}">
+		<form:fields>
 			<Text text="{appView>/product/Factory}" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productContractLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productContractLabel}">
+		<form:fields>
 			<Text text="{appView>/product/Contract}" />
-		</fields>
-	</FormElement>
-	<FormElement label="{i18n>productColorLabel}">
-		<fields>
+		</form:fields>
+	</form:FormElement>
+	<form:FormElement label="{i18n>productColorLabel}">
+		<form:fields>
 			<Text text="{appView>/product/Color}" />
-		</fields>
-	</FormElement>
-</FragmentDefinition>
+		</form:fields>
+	</form:FormElement>
+</core:FragmentDefinition>
