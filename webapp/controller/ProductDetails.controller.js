@@ -62,12 +62,6 @@ sap.ui.define([
                 "state": {
                     "isEditPage": false
                 },
-                "products": {
-                    "colorNames": [],
-                    "categoryNames": [],
-                    "supplierNames": [],
-                    "statusNames": []
-                },
                 "product": {}
             }
             ), "appView");
@@ -390,7 +384,6 @@ sap.ui.define([
         _onPatternMatchedProduct: function (oEvent) {
             this._toggleEditPage(false);
             this._toggleButtonsAndView(false);
-            this._loadProductData();
             this._setProductModel(oEvent);
             this._clearAllMessagesFromMessaging();
         },
@@ -404,7 +397,6 @@ sap.ui.define([
         _onPatternMatchedProductUpdate: function (oEvent) {
             this._toggleEditPage(true);
             this._toggleButtonsAndView(true);
-            this._loadProductData();
             this._setProductModel(oEvent);
             this._clearAllMessagesFromMessaging();
         },
@@ -419,27 +411,10 @@ sap.ui.define([
         _onPatternMatchedProductCreate: function () {
             this._toggleEditPage(true);
             this._toggleButtonsAndView(true);
-            this._loadProductData();
             const oProductModel = this._getProductsItems();
             const oModel = this._getDefaultProductModel(oProductModel.length + 1);
             this.getView().getModel("appView").setProperty("/product", oModel)
             this._clearAllMessagesFromMessaging();
-        },
-
-        /**
-         * Loads product-related data (categories, statuses, suppliers) from the model and sets up
-         * a new JSON model for the product-related data in the view.
-         *
-         * @private
-         */
-        _loadProductData: function () {
-            const oDataProducts = this.getOwnerComponent().getModel();
-            const oAppViewModel = this.getView().getModel("appView");
-
-            oAppViewModel.setProperty("/products/colorNames", oDataProducts.getProperty("/Colors"));
-            oAppViewModel.setProperty("/products/statusNames", oDataProducts.getProperty("/Statuses"));
-            oAppViewModel.setProperty("/products/supplierNames", oDataProducts.getProperty("/Suppliers"));
-            oAppViewModel.setProperty("/products/categoryNames", oDataProducts.getProperty("/Categories"));
         },
 
         /**
