@@ -76,26 +76,18 @@ sap.ui.define(
                     "statuses": [this._getTextFromI18n("availableStatusText"), this._getTextFromI18n("unavailableStatusText")],
                     "productsCount": 0
                 }), "appView");
-
-                this._getProductsCount();
             },
 
             /**
-             * Sets the count for products.
+             * Handles the "dataReceived" event.
+             * Updates the "productsCount" property in the "appView" model with the count value from the event data.
+             * @param {sap.ui.base.Event} oEvent The event object
              *
-             * @private
+             * @public
              */
-            _getProductsCount: function () {
-                const oThat = this;
-                const sPath = "/Products/$count";
-                this.getView().getModel().read(sPath, {
-                    success: function (oData) {
-                        oThat.getView().getModel("appView").setProperty("/productsCount", oData);
-                    },
-                    error: function (oError) {
-                        console.error("Error reading product count: " + oError);
-                    }
-                });
+            dataReceived: function (oEvent) {
+                let sCount = oEvent.getParameter("data").__count;
+                this.getView().getModel("appView").setProperty("/productsCount", sCount);
             },
 
             /**

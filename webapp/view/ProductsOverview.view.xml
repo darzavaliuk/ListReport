@@ -61,7 +61,7 @@
 			</f:DynamicPageHeader>
 		</f:header>
 		<f:content>
-			<Table id="productsTable" class="sapUiResponsiveMargin" width="auto" mode="MultiSelect" selectionChange="onSelectionChangeTable" items="{ path: '/Products',  parameters: { expand: 'Category,Supplier' }, sorter: {path: 'ID'} }" showOverlay="{appView>/isVisibleOverlay}">
+			<Table id="productsTable" class="sapUiResponsiveMargin" width="auto" mode="MultiSelect" selectionChange="onSelectionChangeTable" items="{ path: '/Products',  parameters: { expand: 'Category,Supplier' }, sorter: {path: 'ID'}, events: {dataReceived: '.dataReceived'} }"  showOverlay="{appView>/isVisibleOverlay}">
 				<headerToolbar>
 					<Toolbar>
 						<Title core:require="{formatMessage: 'sap/base/strings/formatMessage'}" text="{ parts: [ 'i18n>productListTitle', 'appView>/productsCount' ], formatter: 'formatMessage' }" />
