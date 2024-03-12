@@ -1,66 +1,66 @@
 <View controllerName="darya.zavaliuk.controller.ProductsOverview" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core" height="100%">
-	<DynamicPage class="sapUiNoContentPadding">
-		<title>
-			<DynamicPageTitle>
-				<heading>
+	<f:DynamicPage class="sapUiNoContentPadding">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
 					<VariantManagement items="{/Variants}" selectedKey="0" defaultKey="0">
 						<VariantItem text="{VariantName}" key="{VariantKey}" />
 					</VariantManagement>
-				</heading>
-				<expandedContent>
+				</f:heading>
+				<f:expandedContent>
 					<Label text="{path: 'appView>/filterItems', formatter: '.formatter.filterItemsToText'}" />
-				</expandedContent>
-				<snappedContent>
+				</f:expandedContent>
+				<f:snappedContent>
 					<Label text="{path: 'appView>/filterItems', formatter: '.formatter.filterItemsToText'}" />
-				</snappedContent>
-			</DynamicPageTitle>
-		</title>
-		<header>
-			<DynamicPageHeader>
-				<content>
-					<FilterBar id="filterBarProductOverview" class="searchInputLabel" useToolbar="false" search="onPressConfirmFilters">
-						<filterGroupItems>
-							<FilterGroupItem class="searchInputLabel" label="{i18n>filterBarSearchLabel}" name="Product" groupName="Basic" visibleInFilterBar="true">
-								<control>
+				</f:snappedContent>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:header>
+			<f:DynamicPageHeader>
+				<f:content>
+					<fb:FilterBar id="filterBarProductOverview" class="searchInputLabel" useToolbar="false" search="onPressConfirmFilters">
+						<fb:filterGroupItems>
+							<fb:FilterGroupItem class="searchInputLabel" label="{i18n>filterBarSearchLabel}" name="Product" groupName="Basic" visibleInFilterBar="true">
+								<fb:control>
 									<SearchField width="100%" class="searchInputLabel" id="searchField" change="onSelectionChange" search="onPressConfirmFilters" placeholder="{i18n>productsOverviewSearchPlaceholder}" />
-								</control>
-							</FilterGroupItem>
-							<FilterGroupItem name="Category" label="{i18n>labelFilterBarCategory}" groupName="Basic" visibleInFilterBar="true">
-								<control>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="Category" label="{i18n>labelFilterBarCategory}" groupName="Basic" visibleInFilterBar="true">
+								<fb:control>
 									<MultiComboBox id="productCategory" name="Category" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewCategory}" items="{ path: '/Categories', templateShareable: true }">
-										<Item key="{key}" text="{Name}" />
+										<core:Item key="{key}" text="{Name}" />
 									</MultiComboBox>
-								</control>
-							</FilterGroupItem>
-							<FilterGroupItem name="Supplier" label="{i18n>labelFilterBarSupplier}" groupName="Basic" visibleInFilterBar="true">
-								<control>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="Supplier" label="{i18n>labelFilterBarSupplier}" groupName="Basic" visibleInFilterBar="true">
+								<fb:control>
 									<MultiComboBox id="productSupplier" name="Supplier" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewSupplier}" items="{ path: '/Suppliers', templateShareable: true }">
-										<Item key="{key}" text="{Name}" />
+										<core:Item key="{key}" text="{Name}" />
 									</MultiComboBox>
-								</control>
-							</FilterGroupItem>
-							<FilterGroupItem name="Status" label="{i18n>labelFilterBarStatus}" groupName="Basic" visibleInFilterBar="true">
-								<control>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="Status" label="{i18n>labelFilterBarStatus}" groupName="Basic" visibleInFilterBar="true">
+								<fb:control>
 									<MultiComboBox id="productStatus" name="Status" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewStatus}" items="{ path: '/Statuses', templateShareable: true }">
-										<Item key="{key}" text="{Name}" />
+										<core:Item key="{key}" text="{Name}" />
 									</MultiComboBox>
-								</control>
-							</FilterGroupItem>
-							<FilterGroupItem name="Price" label="{i18n>labelFilterBarPrice}" groupName="Basic" visibleInFilterBar="true">
-								<control>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="Price" label="{i18n>labelFilterBarPrice}" groupName="Basic" visibleInFilterBar="true">
+								<fb:control>
 									<MultiInput id="productsInput" placeholder="{i18n>productsOverviewInputPrice}" showSuggestion="true" showValueHelp="true" tokenUpdate="onSelectionChange" valueHelpRequest="onValueHelpRequest" suggestionItems="{/Products}">
 										<suggestionItems>
-											<ListItem key="{Price}" text="{ path: 'Price' }" additionalText="{ path: 'Name' }" />
+											<core:ListItem key="{Price}" text="{ path: 'Price' }" additionalText="{ path: 'Name' }" />
 										</suggestionItems>
 									</MultiInput>
-								</control>
-							</FilterGroupItem>
-						</filterGroupItems>
-					</FilterBar>
-				</content>
-			</DynamicPageHeader>
-		</header>
-		<content>
+								</fb:control>
+							</fb:FilterGroupItem>
+						</fb:filterGroupItems>
+					</fb:FilterBar>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
 			<Table id="productsTable" class="sapUiResponsiveMargin" width="auto" mode="MultiSelect" selectionChange="onSelectionChangeTable" items="{ path: '/Products', sorter: {path: 'ID'} }" showOverlay="{appView>/isVisibleOverlay}">
 				<headerToolbar>
 					<Toolbar>
@@ -107,6 +107,6 @@
 					</ColumnListItem>
 				</items>
 			</Table>
-		</content>
-	</DynamicPage>
+		</f:content>
+	</f:DynamicPage>
 </View>
