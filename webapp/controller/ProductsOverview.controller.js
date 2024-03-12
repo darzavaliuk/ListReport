@@ -80,6 +80,11 @@ sap.ui.define(
                 this._getProductsCount();
             },
 
+            /**
+             * Sets the count for products.
+             *
+             * @private
+             */
             _getProductsCount: function () {
                 const oThat = this;
                 const sPath = "/Products/$count";
