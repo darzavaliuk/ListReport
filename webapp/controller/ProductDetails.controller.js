@@ -363,7 +363,7 @@ sap.ui.define([
 
             const oModel = this.getView().getModel();
             const aItems = oModel.getProperty("/Products");
-            const iExistingElementIndex = aItems.findIndex(element => element.ID === oProductViewModel.ID);
+            const iExistingElementIndex = aItems.findIndex(oElement => oElement.ID === oProductViewModel.ID);
 
             if (iExistingElementIndex !== -1) {
                 aItems.splice(iExistingElementIndex, 1);
