@@ -362,17 +362,17 @@ sap.ui.define(
 
             /**
              * Constructs the confirmation text based on the selected items and the number of items.
-             * @param {Array} oSelectedItems - The array of selected items.
+             * @param {Array} aSelectedItems - The array of selected items.
              * @param {number} iItemsNumber - The number of selected items.
              * @returns {string} The confirmation text.
              *
              * @private
              */
-            _buildConfirmationText: function (oSelectedItems, iItemsNumber) {
+            _buildConfirmationText: function (aSelectedItems, iItemsNumber) {
                 const sSingleDeleteText = this._getTextFromI18n(
                     "deleteProductConfirmMessage",
                     [
-                        oSelectedItems[0]
+                        aSelectedItems[0]
                             .getBindingContext()
                             .getProperty("Name")
                     ]
