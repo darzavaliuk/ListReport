@@ -341,7 +341,7 @@ sap.ui.define([
                     this._getProductModel().Name
                 ]
             ), {
-                title: "Error",
+                title: this._getTextFromI18n("messageBoxTitleWithErrorState"),
                 actions: [MessageBox.Action.DELETE, MessageBox.Action.CLOSE],
                 emphasizedAction: MessageBox.Action.DELETE,
                 onClose: function (sAction) {
