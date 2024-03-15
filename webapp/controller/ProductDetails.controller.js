@@ -444,7 +444,7 @@ sap.ui.define([
 
         /**
          * Creates a new JSON model with default values for a product.
-         * @param {number} iNewID - The new ID for the product.
+         * @param {integer} iNewID - The new ID for the product.
          * @returns {sap.ui.model.json.JSONModel} - The JSON model with default product values.
          *
          * @private
