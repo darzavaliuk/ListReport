@@ -584,5 +584,4 @@ sap.ui.define([
             this.handleChangeComboBox(oValidatedComboBox);
         }
     });
-}
-);
+});
