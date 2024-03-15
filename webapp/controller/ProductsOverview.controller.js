@@ -115,16 +115,6 @@ sap.ui.define(
             },
 
             /**
-             * Event handler called after a variant is loaded.
-             * Updates labels and table based on the loaded variant.
-             *
-             * @public
-             */
-            onAfterVariantLoad: function () {
-                this._updateLabelsAndTable();
-            },
-
-            /**
              * Updates labels and table based on the current state.
              * Updates the text of expanded and snapped labels with formatted summary text.
              * Sets the overlay visibility of the table to true.
