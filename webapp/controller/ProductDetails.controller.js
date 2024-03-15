@@ -344,8 +344,8 @@ sap.ui.define([
                 title: "Error",
                 actions: [MessageBox.Action.DELETE, MessageBox.Action.CLOSE],
                 emphasizedAction: MessageBox.Action.DELETE,
-                onClose: function (action) {
-                    if (action === MessageBox.Action.DELETE) {
+                onClose: function (sAction) {
+                    if (sAction === MessageBox.Action.DELETE) {
                         oThat._onPressDialogDelete();
                     }
                 }
