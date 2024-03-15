@@ -244,7 +244,7 @@ sap.ui.define([
             const oProductViewModel = this._getProductModel();
             const oModel = this.getView().getModel();
             const aItems = oModel.getProperty("/Products");
-            const iExistingElementIndex = aItems.findIndex(element => element.ID === oProductViewModel.ID);
+            const iExistingElementIndex = aItems.findIndex(oElement => oElement.ID === oProductViewModel.ID);
 
             if (iExistingElementIndex !== -1) {
                 aItems[iExistingElementIndex] = oProductViewModel;
