@@ -243,15 +243,15 @@ sap.ui.define([
         _updateProductDetails: function () {
             const oProductViewModel = this._getProductModel();
             const oModel = this.getView().getModel();
-            const oItems = oModel.getProperty("/Products");
-            const iExistingElementIndex = oItems.findIndex(element => element.ID === oProductViewModel.ID);
+            const aItems = oModel.getProperty("/Products");
+            const iExistingElementIndex = aItems.findIndex(element => element.ID === oProductViewModel.ID);
 
             if (iExistingElementIndex !== -1) {
-                oItems[iExistingElementIndex] = oProductViewModel;
+                aItems[iExistingElementIndex] = oProductViewModel;
             } else {
-                oItems.push(oProductViewModel);
+                aItems.push(oProductViewModel);
             }
-            oModel.setProperty("/Products", oItems);
+            oModel.setProperty("/Products", aItems);
 
             this.getOwnerComponent().getRouter().navTo("ProductDetails", { id: oProductViewModel.ID }, true);
         },
