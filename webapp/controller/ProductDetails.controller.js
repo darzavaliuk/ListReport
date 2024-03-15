@@ -100,7 +100,7 @@ sap.ui.define([
 
         /**
          * Retrieves the array of product items from the model.
-         * @returns {Array} An array of product items.
+         * @returns {Object[]} An array of product items.
          *
          * @private
          */
