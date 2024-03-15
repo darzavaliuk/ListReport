@@ -285,7 +285,7 @@ sap.ui.define([
 
         /**
          * Handles the validation for a required input field.
-         * @param {sap.ui.core.Control} oInput - The input control.
+         * @param {sap.m.Input} oInput - The input control.
          *
          * @private
          */
