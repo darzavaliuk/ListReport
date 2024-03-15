@@ -1,5 +1,7 @@
-sap.ui.define(["sap/ui/core/ValueState"], function (ValueState) {
+sap.ui.define(["sap/ui/core/library"], function (coreLibrary) {
     "use strict";
+
+    const ValueState = coreLibrary.ValueState;
 
     const PRODUCT_STATUS_ICON = {
         ERROR: "sap-icon://error",
