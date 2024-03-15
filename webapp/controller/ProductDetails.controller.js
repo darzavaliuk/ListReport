@@ -362,14 +362,14 @@ sap.ui.define([
             const oProductViewModel = this._getProductModel();
 
             const oModel = this.getView().getModel();
-            const oItems = oModel.getProperty("/Products");
-            const iExistingElementIndex = oItems.findIndex(element => element.ID === oProductViewModel.ID);
+            const aItems = oModel.getProperty("/Products");
+            const iExistingElementIndex = aItems.findIndex(element => element.ID === oProductViewModel.ID);
 
             if (iExistingElementIndex !== -1) {
-                oItems.splice(iExistingElementIndex, 1);
+                aItems.splice(iExistingElementIndex, 1);
             }
 
-            oModel.setProperty("/Products", oItems);
+            oModel.setProperty("/Products", aItems);
 
             this.getOwnerComponent()
                 .getRouter()
