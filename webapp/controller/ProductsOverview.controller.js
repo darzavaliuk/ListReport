@@ -70,7 +70,6 @@ sap.ui.define(
             onBeforeRendering: function () {
                 this.getView().setModel(new JSONModel({
                     "numberOfItemsToDelete": 0,
-                    "filterText": this._getTextFromI18n("zeroFilters"),
                     "filterItems": [],
                     "isVisibleOverlay": false,
                     "statuses": [this._getTextFromI18n("availableStatusText"), this._getTextFromI18n("unavailableStatusText")],
