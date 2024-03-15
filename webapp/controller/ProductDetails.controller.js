@@ -156,6 +156,7 @@ sap.ui.define([
         /**
          * Toggles the buttons and view based on the edit mode.
          * Shows the corresponding form fragment.
+         * @param {boolean} bEdit - Indicates whether the page is in edit mode or not.
          *
          * @private
          */
