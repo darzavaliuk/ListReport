@@ -5,7 +5,6 @@ sap.ui.define([
     "sap/ui/core/Messaging",
     "./BaseController",
     "sap/ui/core/message/Message",
-    "sap/ui/core/MessageType",
     "../utils/formatter",
     "sap/ui/core/Element",
     "sap/ui/dom/isBehindOtherElement",
@@ -13,11 +12,12 @@ sap.ui.define([
     "sap/m/Input",
     "sap/m/ComboBox"
 ], function (coreLibrary, JSONModel, Fragment, Messaging,
-    BaseController, Message, MessageType, formatter, Element,
+    BaseController, Message, formatter, Element,
     isBehindOtherElement, MessageBox, Input, ComboBox) {
     "use strict";
 
     const ValueState = coreLibrary.ValueState;
+    const MessageType = coreLibrary.MessageType;
 
     const FRAGMENT_STATE = {
         EDIT: "Edit",
