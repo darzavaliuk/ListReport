@@ -23,7 +23,7 @@
         <f:header>
             <f:DynamicPageHeader>
                 <FlexBox wrap="Wrap" fitContainer="true">
-                    <Avatar src="./images/robot.png" class="sapUiMediumMarginEnd sapUiSmallMarginBottom" displayShape="Square" displaySize="L" />
+                    <Avatar src="" class="sapUiMediumMarginEnd sapUiSmallMarginBottom" displayShape="Square" displaySize="L" />
                     <VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
                         <HBox class="sapUiTinyMarginBottom" renderType="Bare">
                             <Label text="{i18n>productIdLabel}" class="sapUiTinyMarginEnd" />
