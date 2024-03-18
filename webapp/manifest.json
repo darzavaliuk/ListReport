@@ -18,7 +18,7 @@
         },
         "dataSources": {
             "products": {
-                "uri": "https://services.odata.org/V2/(S(e1ec0fqc2dv4maredcpxgb21))/OData/OData.svc/",
+                "uri": "https://services.odata.org/V2/(S(nethsadejwdx3gw1cxewxnv1))/OData/OData.svc/",
                 "type": "OData",
                 "settings": {
                     "defaultBindingMode": "TwoWay",
@@ -72,17 +72,17 @@
                     ]
                 },
                 {
-                    "pattern": "Products/{id}",
-                    "name": "ProductDetails",
-                    "target": [
-                        "productDetails"
-                    ]
-                },
-                {
                     "pattern": "Products",
                     "name": "ProductDetailsCreate",
                     "target": [
                         "productDetailsCreate"
+                    ]
+                },
+                {
+                    "pattern": "Products/{id}",
+                    "name": "ProductDetails",
+                    "target": [
+                        "productDetails"
                     ]
                 },
                 {
