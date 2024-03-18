@@ -29,7 +29,8 @@
             <Input required="true"
                    name="{i18n>productPriceLabel}"
                    id="priceInput"
-                   value="{ path: 'appView>/product/Price', type: 'sap.ui.model.type.Number' }"
+                   type="Number"
+                   value="{ path: 'appView>/product/Price' }"
                    change="onInputValueChange" />
         </form:fields>
     </form:FormElement>
@@ -71,7 +72,7 @@
             </ComboBox>
         </form:fields>
     </form:FormElement>
-    <form:FormElement label="{i18n>productDateLabel}">
+    <form:FormElement label="{i18n>productReleaseDateLabel}">
         <form:fields>
             <DatePicker required="true"
                         id="datePicker"
@@ -79,7 +80,7 @@
                         change="onInputValueChange" />
         </form:fields>
     </form:FormElement>
-    <form:FormElement label="{i18n>productDateLabel}">
+    <form:FormElement label="{i18n>productDiscontinuedDateLabel}">
         <form:fields>
             <DatePicker id="dateDiscontinuedPicker"
                         value="{path: 'appView>/product/DiscontinuedDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium'}}" />

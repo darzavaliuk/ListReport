@@ -31,12 +31,12 @@
             <Text text="{Supplier/Name}" />
         </form:fields>
     </form:FormElement>
-    <form:FormElement label="{i18n>productDiscontinuedLabel}">
+    <form:FormElement label="{i18n>productDiscontinuedDateLabel}">
         <form:fields>
             <Text text="{ path: 'DiscontinuedDate', formatter: '.formatter.formatDiscontinuedDate' }" />
         </form:fields>
     </form:FormElement>
-    <form:FormElement label="{i18n>productDateLabel}">
+    <form:FormElement label="{i18n>productReleaseDateLabel}">
         <form:fields>
             <Text text="{ path: 'ReleaseDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium' } }" />
         </form:fields>
