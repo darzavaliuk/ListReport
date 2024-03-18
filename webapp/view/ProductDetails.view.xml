@@ -3,16 +3,16 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="{Name}" />
+                    <Title text="{= ${appView>/state/isEditPage} ? ${appView>/product/Name} : ${Name}}" />
                 </f:heading>
                 <f:expandedContent>
-                    <Label text="{Description}" />
+                    <Label text="{= ${appView>/state/isEditPage} ? ${appView>/product/Description} : ${Description}}" />
                 </f:expandedContent>
                 <f:snappedContent>
-                    <Label text="{Description}" />
+                    <Label text="{= ${appView>/state/isEditPage} ? ${appView>/product/Description} : ${Description}}" />
                 </f:snappedContent>
                 <f:snappedTitleOnMobile>
-                    <Title text="{Description}" />
+                    <Title text="{= ${appView>/state/isEditPage} ? ${appView>/product/Description} : ${Description}}"/>
                 </f:snappedTitleOnMobile>
                 <f:actions>
                     <Button text="{i18n>editButton}" visible="{=!${appView>/state/isEditPage}}" type="Emphasized" press="onPressEditProduct" />
@@ -27,33 +27,34 @@
                     <VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
                         <HBox class="sapUiTinyMarginBottom" renderType="Bare">
                             <Label text="{i18n>productIdLabel}" class="sapUiTinyMarginEnd" />
-                            <Text text="{ID}" />
+                            <Text text="{= ${appView>/state/isEditPage} ? ${appView>/product/ID} : ${ID}}" />
                         </HBox>
                         <HBox class="sapUiTinyMarginBottom" renderType="Bare">
                             <Label text="{i18n>productNameLabel}" class="sapUiTinyMarginEnd" />
-                            <Text text="{Name}" />
+                            <Text text="{= ${appView>/state/isEditPage} ? ${appView>/product/Name} : ${Name}}" />
                         </HBox>
                         <HBox class="sapUiTinyMarginBottom" renderType="Bare">
                             <Label text="{i18n>productCategoryLabel}" class="sapUiTinyMarginEnd" />
-                            <Text text="{Category/Name}" />
+                            <Text text="{= ${appView>/state/isEditPage} ? ${appView>/product/Category/Name} : ${Category/Name}}" />
                         </HBox>
                         <HBox>
                             <Label text="{i18n>productSupplierLabel}" class="sapUiTinyMarginEnd" />
-                            <Text text="{Supplier/Name}" />
+                            <Text text="{= ${appView>/state/isEditPage} ? ${appView>/product/Supplier/Name} : ${Supplier/Name}}" />
                         </HBox>
                     </VBox>
                     <VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
                         <Title text="{i18n>productStatusLabel}" class="sapUiSmallMarginBottom" />
-                        <ObjectStatus class="sapSObjectStatusLarge" icon="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityIcon' }"
-									  text="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityText' }" state="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityState' }" />
+                        <ObjectStatus class="sapSObjectStatusLarge" icon="{ parts: [{path: 'appView>/product/DiscontinuedDate'}, {path: 'DiscontinuedDate'}, {path: 'appView>/state/isEditPage'}], formatter: '.formatter.formatAvailabilityIcon' }"
+									  text="{ formatter: '.formatter.formatAvailabilityText', parts: [{path: 'appView>/product/DiscontinuedDate'}, {path: 'DiscontinuedDate'}, {path: 'appView>/state/isEditPage'}] }"
+                                      state="{ parts: [{path: 'appView>/product/DiscontinuedDate'}, {path: 'DiscontinuedDate'}, {path: 'appView>/state/isEditPage'}], formatter: '.formatter.formatAvailabilityState' }" />
                     </VBox>
                     <VBox class="sapUiLargeMarginEnd">
                         <Title text="{i18n>productPriceLabel}" class="sapUiSmallMarginBottom" />
-                        <ObjectNumber number="{Price}" unit="USD" emphasized="false" />
+                        <ObjectNumber number="{= ${appView>/state/isEditPage} ? ${appView>/product/Price} : ${Price}}" unit="USD" emphasized="false" />
                     </VBox>
                     <VBox class="sapUiLargeMarginEnd">
                         <Title text="{i18n>productRatingLabel}" class="sapUiTinyMarginBottom" />
-                        <RatingIndicator editable="false" value="{Rating}" iconSize="16px" />
+                        <RatingIndicator editable="false" value="{= ${appView>/state/isEditPage} ? ${appView>/product/Rating} : ${Rating}}" iconSize="16px" />
                     </VBox>
                 </FlexBox>
             </f:DynamicPageHeader>
