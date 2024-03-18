@@ -303,25 +303,24 @@ sap.ui.define(
                 const oSelectedItems = oTable.getSelectedItems();
 
                 if (oSelectedItems.length > 0) {
-                    const oSelectedIndices = oTable.getSelectedContexts().map((oItem) => oItem.getProperty("ID"));
-
-                    oSelectedIndices.forEach((iSelectedIndex) => {
-                        oBinding
-                            .getProperty(
-                                PRODUCT_FIELDS_BINDING.PRODUCTS
-                            )
-                            .forEach((oProduct, i) => {
-                                if (oProduct.ID == iSelectedIndex) {
-                                    oBinding
-                                        .getProperty(
-                                            PRODUCT_FIELDS_BINDING.PRODUCTS
-                                        )
-                                        .splice(i, 1);
-                                }
-                            });
+                    const aSelectedBindings = oSelectedItems.map((oItem) => {
+                        const sPath = oItem.getBindingContextPath();
+                        return oBinding.getContext(sPath);
                     });
 
-                    oBinding.refresh();
+                    aSelectedBindings.forEach((iSelectedIndex) => {
+                        const sKey = oBinding.createKey("/Products", iSelectedIndex.getObject());
+
+                        oBinding.remove(sKey, {
+                            headers: {
+                                "Content-ID": iSelectedIndex.getProperty("ID")
+                            },
+                            error: function () {
+                                this._getTextFromI18n("messageForErrorWhileDeleting");
+                            }
+                        });
+                    });
+
                     oTable.removeSelections(true);
                 }
             },
@@ -507,8 +506,7 @@ sap.ui.define(
 
                 aSelectedTokens.forEach((oToken) => {
                     const oValue = oToken
-                        .getCustomData()[0]
-                        .getProperty("value");
+                        .getProperty("text");
                     if (oValue.operation !== undefined) {
                         aItemsWithOperator.push(oValue);
                     } else {
