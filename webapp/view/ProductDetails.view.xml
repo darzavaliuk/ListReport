@@ -1,5 +1,11 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" height="100%" xmlns:form="sap.ui.layout.form" controllerName="darya.zavaliuk.controller.ProductDetails">
-    <f:DynamicPage showFooter="{= ${appView>/state/isEditPage}}" class="sapUiNoContentPadding">
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          xmlns:f="sap.f"
+          height="100%"
+          xmlns:form="sap.ui.layout.form"
+          controllerName="darya.zavaliuk.controller.ProductDetails">
+    <f:DynamicPage showFooter="{= ${appView>/state/isEditPage}}"
+                   class="sapUiNoContentPadding">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
@@ -12,49 +18,74 @@
                     <Label text="{= ${appView>/state/isEditPage} ? ${appView>/product/Description} : ${Description}}" />
                 </f:snappedContent>
                 <f:snappedTitleOnMobile>
-                    <Title text="{= ${appView>/state/isEditPage} ? ${appView>/product/Description} : ${Description}}"/>
+                    <Title text="{= ${appView>/state/isEditPage} ? ${appView>/product/Description} : ${Description}}" />
                 </f:snappedTitleOnMobile>
                 <f:actions>
-                    <Button text="{i18n>editButton}" visible="{=!${appView>/state/isEditPage}}" type="Emphasized" press="onPressEditProduct" />
-                    <Button text="{i18n>deleteButton}" visible="{=!${appView>/state/isEditPage}}" type="Transparent" press="onPressDeleteProduct" />
+                    <Button text="{i18n>editButton}"
+                            visible="{=!${appView>/state/isEditPage}}"
+                            type="Emphasized"
+                            press="onPressEditProduct" />
+                    <Button text="{i18n>deleteButton}"
+                            visible="{=!${appView>/state/isEditPage}}"
+                            type="Transparent"
+                            press="onPressDeleteProduct" />
                 </f:actions>
             </f:DynamicPageTitle>
         </f:title>
         <f:header>
             <f:DynamicPageHeader>
-                <FlexBox wrap="Wrap" fitContainer="true">
-                    <Avatar src="" class="sapUiMediumMarginEnd sapUiSmallMarginBottom" displayShape="Square" displaySize="L" />
+                <FlexBox wrap="Wrap"
+                         fitContainer="true">
+                    <Avatar src=""
+                            class="sapUiMediumMarginEnd sapUiSmallMarginBottom"
+                            displayShape="Square"
+                            displaySize="L" />
                     <VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
-                        <HBox class="sapUiTinyMarginBottom" renderType="Bare">
-                            <Label text="{i18n>productIdLabel}" class="sapUiTinyMarginEnd" />
+                        <HBox class="sapUiTinyMarginBottom"
+                              renderType="Bare">
+                            <Label text="{i18n>productIdLabel}"
+                                   class="sapUiTinyMarginEnd" />
                             <Text text="{= ${appView>/state/isEditPage} ? ${appView>/product/ID} : ${ID}}" />
                         </HBox>
-                        <HBox class="sapUiTinyMarginBottom" renderType="Bare">
-                            <Label text="{i18n>productNameLabel}" class="sapUiTinyMarginEnd" />
+                        <HBox class="sapUiTinyMarginBottom"
+                              renderType="Bare">
+                            <Label text="{i18n>productNameLabel}"
+                                   class="sapUiTinyMarginEnd" />
                             <Text text="{= ${appView>/state/isEditPage} ? ${appView>/product/Name} : ${Name}}" />
                         </HBox>
-                        <HBox class="sapUiTinyMarginBottom" renderType="Bare">
-                            <Label text="{i18n>productCategoryLabel}" class="sapUiTinyMarginEnd" />
+                        <HBox class="sapUiTinyMarginBottom"
+                              renderType="Bare">
+                            <Label text="{i18n>productCategoryLabel}"
+                                   class="sapUiTinyMarginEnd" />
                             <Text text="{= ${appView>/state/isEditPage} ? ${appView>/product/Category/Name} : ${Category/Name}}" />
                         </HBox>
                         <HBox>
-                            <Label text="{i18n>productSupplierLabel}" class="sapUiTinyMarginEnd" />
+                            <Label text="{i18n>productSupplierLabel}"
+                                   class="sapUiTinyMarginEnd" />
                             <Text text="{= ${appView>/state/isEditPage} ? ${appView>/product/Supplier/Name} : ${Supplier/Name}}" />
                         </HBox>
                     </VBox>
                     <VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
-                        <Title text="{i18n>productStatusLabel}" class="sapUiSmallMarginBottom" />
-                        <ObjectStatus class="sapSObjectStatusLarge" icon="{ parts: [{path: 'appView>/product/DiscontinuedDate'}, {path: 'DiscontinuedDate'}, {path: 'appView>/state/isEditPage'}], formatter: '.formatter.formatAvailabilityIcon' }"
-									  text="{ formatter: '.formatter.formatAvailabilityText', parts: [{path: 'appView>/product/DiscontinuedDate'}, {path: 'DiscontinuedDate'}, {path: 'appView>/state/isEditPage'}] }"
+                        <Title text="{i18n>productStatusLabel}"
+                               class="sapUiSmallMarginBottom" />
+                        <ObjectStatus class="sapSObjectStatusLarge"
+                                      icon="{ parts: [{path: 'appView>/product/DiscontinuedDate'}, {path: 'DiscontinuedDate'}, {path: 'appView>/state/isEditPage'}], formatter: '.formatter.formatAvailabilityIcon' }"
+                                      text="{ formatter: '.formatter.formatAvailabilityText', parts: [{path: 'appView>/product/DiscontinuedDate'}, {path: 'DiscontinuedDate'}, {path: 'appView>/state/isEditPage'}] }"
                                       state="{ parts: [{path: 'appView>/product/DiscontinuedDate'}, {path: 'DiscontinuedDate'}, {path: 'appView>/state/isEditPage'}], formatter: '.formatter.formatAvailabilityState' }" />
                     </VBox>
                     <VBox class="sapUiLargeMarginEnd">
-                        <Title text="{i18n>productPriceLabel}" class="sapUiSmallMarginBottom" />
-                        <ObjectNumber number="{= ${appView>/state/isEditPage} ? ${appView>/product/Price} : ${Price}}" unit="USD" emphasized="false" />
+                        <Title text="{i18n>productPriceLabel}"
+                               class="sapUiSmallMarginBottom" />
+                        <ObjectNumber number="{= ${appView>/state/isEditPage} ? ${appView>/product/Price} : ${Price}}"
+                                      unit="USD"
+                                      emphasized="false" />
                     </VBox>
                     <VBox class="sapUiLargeMarginEnd">
-                        <Title text="{i18n>productRatingLabel}" class="sapUiTinyMarginBottom" />
-                        <RatingIndicator editable="false" value="{= ${appView>/state/isEditPage} ? ${appView>/product/Rating} : ${Rating}}" iconSize="16px" />
+                        <Title text="{i18n>productRatingLabel}"
+                               class="sapUiTinyMarginBottom" />
+                        <RatingIndicator editable="false"
+                                         value="{= ${appView>/state/isEditPage} ? ${appView>/product/Rating} : ${Rating}}"
+                                         iconSize="16px" />
                     </VBox>
                 </FlexBox>
             </f:DynamicPageHeader>
@@ -68,8 +99,7 @@
                                 <form:ColumnLayout columnsM="2" />
                             </form:layout>
                             <form:formContainers>
-                                <form:FormContainer id="formContainerForGeneralPart">
-								</form:FormContainer>
+                                <form:FormContainer id="formContainerForGeneralPart" />
                             </form:formContainers>
                         </form:Form>
                     </IconTabFilter>
@@ -78,10 +108,20 @@
         </f:content>
         <f:footer>
             <OverflowToolbar>
-                <Button id="messagePopoverBtn" visible="{=!!${messages>/}.length}" text="{=${messages>/}.length}" icon="sap-icon://error" type="Negative" press="handleMessagePopoverPress" ariaHasPopup="Dialog" />
+                <Button id="messagePopoverBtn"
+                        visible="{=!!${messages>/}.length}"
+                        text="{=${messages>/}.length}"
+                        icon="sap-icon://error"
+                        type="Negative"
+                        press="handleMessagePopoverPress"
+                        ariaHasPopup="Dialog" />
                 <ToolbarSpacer />
-                <Button text="{i18n>saveButton}" type="Emphasized" press="onPressCreateProduct" />
-                <Button text="{i18n>cancel}" type="Transparent" press="onPressCancel" />
+                <Button text="{i18n>saveButton}"
+                        type="Emphasized"
+                        press="onPressCreateProduct" />
+                <Button text="{i18n>cancel}"
+                        type="Transparent"
+                        press="onPressCancel" />
             </OverflowToolbar>
         </f:footer>
     </f:DynamicPage>
