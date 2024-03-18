@@ -23,7 +23,7 @@
                                    showValueHelp="false"
                                    suggestionItems="{ path: '/Products', sorter: { path: 'Price' } }">
                                 <core:Item key="{Price}"
-                                           text="{ path: 'Price' }" />
+                                           text="{Price}" />
                             </Input>
                         </fb:control>
                     </fb:FilterGroupItem>
