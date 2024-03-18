@@ -1,51 +1,88 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
-	<form:FormElement label="{i18n>productIdLabel}">
-		<form:fields>
-			<Input name="ID" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productNameLabel}">
-		<form:fields>
-			<Input required="true" name="{i18n>productNameLabel}" id="nameInput" value="{ path: 'appView>/product/Name', type: 'sap.ui.model.type.String', constraints: { minLength: 3, maxLength: 100 } }" change="onInputValueChange" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productDescriptionLabel}">
-		<form:fields>
-			<Input required="true" name="{i18n>productDescriptionLabel}" id="descriptionInput" value="{ path: 'appView>/product/Description', type: 'sap.ui.model.type.String', constraints: { minLength: 5, maxLength: 100 } }" change="onInputValueChange" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productPriceLabel}">
-		<form:fields>
-			<Input required="true" name="{i18n>productPriceLabel}" id="priceInput" value="{ path: 'appView>/product/Price', type: 'sap.ui.model.type.Number' }" change="onInputValueChange" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productRatingLabel}">
-		<form:fields>
-			<Input required="true" id="ratingInput" name="Rating" type="Number" value="{ path: 'appView>/product/Rating', type: 'sap.ui.model.type.Integer', constraints: { minimum: 1, maximum: 5 } }" change="onInputValueChange" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productCategoryLabel}">
-		<form:fields>
-			<ComboBox required="true" id="categoryComboBox" value="{appView>/product/Category/Name}" items="{ path: '/Categories' }" selectedKey="{appView>/product/Category/ID}" change="onChangeComboBoxValue">
-				<core:Item key="{ID}" text="{Name}" />
-			</ComboBox>
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productSupplierLabel}">
-		<form:fields>
-			<ComboBox required="true" name="SupplierName" id="supplierComboBox" selectionChange=".onSelectionChange" value="{appView>/product/Supplier/Name}" selectedKey="{appView>/product/Supplier/ID}" change="onChangeComboBoxValue" items="{ path: '/Suppliers' }">
-				<core:Item key="{ID}" text="{Name}" />
-			</ComboBox>
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productDateLabel}">
-		<form:fields>
-			<DatePicker required="true" id="datePicker" value="{path: 'appView>/product/ReleaseDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium'}}" change="onInputValueChange" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productDateLabel}">
-		<form:fields>
-			<DatePicker id="dateDiscontinuedPicker" value="{path: 'appView>/product/DiscontinuedDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium'}}" />
-		</form:fields>
-	</form:FormElement>
+<core:FragmentDefinition xmlns="sap.m"
+                         xmlns:form="sap.ui.layout.form"
+                         xmlns:core="sap.ui.core">
+    <form:FormElement label="{i18n>productIdLabel}">
+        <form:fields>
+            <Input name="ID" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productNameLabel}">
+        <form:fields>
+            <Input required="true"
+                   name="{i18n>productNameLabel}"
+                   id="nameInput"
+                   value="{ path: 'appView>/product/Name', type: 'sap.ui.model.type.String', constraints: { minLength: 3, maxLength: 100 } }"
+                   change="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productDescriptionLabel}">
+        <form:fields>
+            <Input required="true"
+                   name="{i18n>productDescriptionLabel}"
+                   id="descriptionInput"
+                   value="{ path: 'appView>/product/Description', type: 'sap.ui.model.type.String', constraints: { minLength: 5, maxLength: 100 } }"
+                   change="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productPriceLabel}">
+        <form:fields>
+            <Input required="true"
+                   name="{i18n>productPriceLabel}"
+                   id="priceInput"
+                   value="{ path: 'appView>/product/Price', type: 'sap.ui.model.type.Number' }"
+                   change="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productRatingLabel}">
+        <form:fields>
+            <Input required="true"
+                   id="ratingInput"
+                   name="Rating"
+                   type="Number"
+                   value="{ path: 'appView>/product/Rating', type: 'sap.ui.model.type.Integer', constraints: { minimum: 1, maximum: 5 } }"
+                   change="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productCategoryLabel}">
+        <form:fields>
+            <ComboBox required="true"
+                      id="categoryComboBox"
+                      value="{appView>/product/Category/Name}"
+                      items="{ path: '/Categories' }"
+                      selectedKey="{appView>/product/Category/ID}"
+                      change="onChangeComboBoxValue">
+                <core:Item key="{ID}"
+                           text="{Name}" />
+            </ComboBox>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productSupplierLabel}">
+        <form:fields>
+            <ComboBox required="true"
+                      name="SupplierName"
+                      id="supplierComboBox"
+                      selectionChange=".onSelectionChange"
+                      value="{appView>/product/Supplier/Name}"
+                      selectedKey="{appView>/product/Supplier/ID}"
+                      change="onChangeComboBoxValue"
+                      items="{ path: '/Suppliers' }">
+                <core:Item key="{ID}"
+                           text="{Name}" />
+            </ComboBox>
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productDateLabel}">
+        <form:fields>
+            <DatePicker required="true"
+                        id="datePicker"
+                        value="{path: 'appView>/product/ReleaseDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium'}}"
+                        change="onInputValueChange" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productDateLabel}">
+        <form:fields>
+            <DatePicker id="dateDiscontinuedPicker"
+                        value="{path: 'appView>/product/DiscontinuedDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium'}}" />
+        </form:fields>
+    </form:FormElement>
 </core:FragmentDefinition>

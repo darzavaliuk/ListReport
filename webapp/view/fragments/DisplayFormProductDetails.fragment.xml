@@ -1,42 +1,44 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core">
-	<form:FormElement label="{i18n>productIdLabel}">
-		<form:fields>
-			<Text text="{ID}" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productNameLabel}">
-		<form:fields>
-			<Text text="{Name}" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productPriceLabel}">
-		<form:fields>
-			<Text text="{ path: 'Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productRatingLabel}">
-		<form:fields>
-			<Text text="{Rating}" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productCategoryLabel}">
-		<form:fields>
-			<Text text="{Category/Name}" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productSupplierLabel}">
-		<form:fields>
-			<Text text="{Supplier/Name}" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productDiscontinuedLabel}">
-		<form:fields>
-			<Text text="{ path: 'DiscontinuedDate', formatter: '.formatter.formatDiscontinuedDate' }" />
-		</form:fields>
-	</form:FormElement>
-	<form:FormElement label="{i18n>productDateLabel}">
-		<form:fields>
-			<Text text="{ path: 'ReleaseDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium' } }" />
-		</form:fields>
-	</form:FormElement>
+<core:FragmentDefinition xmlns="sap.m"
+                         xmlns:form="sap.ui.layout.form"
+                         xmlns:core="sap.ui.core">
+    <form:FormElement label="{i18n>productIdLabel}">
+        <form:fields>
+            <Text text="{ID}" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productNameLabel}">
+        <form:fields>
+            <Text text="{Name}" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productPriceLabel}">
+        <form:fields>
+            <Text text="{ path: 'Price', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2 }, constraints: { minimum: 0, maximum: 10000 } }" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productRatingLabel}">
+        <form:fields>
+            <Text text="{Rating}" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productCategoryLabel}">
+        <form:fields>
+            <Text text="{Category/Name}" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productSupplierLabel}">
+        <form:fields>
+            <Text text="{Supplier/Name}" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productDiscontinuedLabel}">
+        <form:fields>
+            <Text text="{ path: 'DiscontinuedDate', formatter: '.formatter.formatDiscontinuedDate' }" />
+        </form:fields>
+    </form:FormElement>
+    <form:FormElement label="{i18n>productDateLabel}">
+        <form:fields>
+            <Text text="{ path: 'ReleaseDate', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium' } }" />
+        </form:fields>
+    </form:FormElement>
 </core:FragmentDefinition>

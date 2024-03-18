@@ -1,113 +1,188 @@
-<mvc:View controllerName="darya.zavaliuk.controller.ProductsOverview" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core" height="100%">
-	<f:DynamicPage class="sapUiNoContentPadding">
-		<f:title>
-			<f:DynamicPageTitle>
-				<f:heading>
-					<VariantManagement selectedKey="0" defaultKey="0">
-						<VariantItem text="{i18n>defaultVariantText}" key="0" />
-					</VariantManagement>
-				</f:heading>
-				<f:expandedContent>
-					<Label text="{path: 'appView>/filterItems', formatter: '.formatter.filterItemsToText'}" />
-				</f:expandedContent>
-				<f:snappedContent>
-					<Label text="{path: 'appView>/filterItems', formatter: '.formatter.filterItemsToText'}" />
-				</f:snappedContent>
-			</f:DynamicPageTitle>
-		</f:title>
-		<f:header>
-			<f:DynamicPageHeader>
-				<f:content>
-					<fb:FilterBar id="filterBarProductOverview" class="searchInputLabel" useToolbar="false" search="onPressConfirmFilters">
-						<fb:filterGroupItems>
-							<fb:FilterGroupItem class="searchInputLabel" label="{i18n>filterBarSearchLabel}" name="Product" groupName="Basic" visibleInFilterBar="true">
-								<fb:control>
-									<SearchField width="100%" class="searchInputLabel" id="searchField" change="onSelectionChange" search="onPressConfirmFilters" placeholder="{i18n>productsOverviewSearchPlaceholder}" />
-								</fb:control>
-							</fb:FilterGroupItem>
-							<fb:FilterGroupItem name="Category" label="{i18n>labelFilterBarCategory}" groupName="Basic" visibleInFilterBar="true">
-								<fb:control>
-									<MultiComboBox id="productCategory" name="Category" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewCategory}" items="{ path: '/Categories', templateShareable: true }">
-										<core:Item key="{key}" text="{Name}" />
-									</MultiComboBox>
-								</fb:control>
-							</fb:FilterGroupItem>
-							<fb:FilterGroupItem name="Supplier" label="{i18n>labelFilterBarSupplier}" groupName="Basic" visibleInFilterBar="true">
-								<fb:control>
-									<MultiComboBox id="productSupplier" name="Supplier" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewSupplier}" items="{ path: '/Suppliers', templateShareable: true }">
-										<core:Item key="{key}" text="{Name}" />
-									</MultiComboBox>
-								</fb:control>
-							</fb:FilterGroupItem>
-							<fb:FilterGroupItem name="Status" label="{i18n>labelFilterBarStatus}" groupName="Basic" visibleInFilterBar="true">
-								<fb:control>
-									<MultiComboBox id="productStatus" name="Status" selectionChange="onSelectionChange" placeholder="{i18n>productsOverviewStatus}" items="{ path: 'appView>/statuses', templateShareable: true }">
-										<core:Item key="{appView>}" text="{appView>}" />
-									</MultiComboBox>
-								</fb:control>
-							</fb:FilterGroupItem>
-							<fb:FilterGroupItem name="Price" label="{i18n>labelFilterBarPrice}" groupName="Basic" visibleInFilterBar="true">
-								<fb:control>
-									<MultiInput id="productsInput" placeholder="{i18n>productsOverviewInputPrice}" showSuggestion="true" showValueHelp="true" tokenUpdate="onSelectionChange" valueHelpRequest="onValueHelpRequest" suggestionItems="{/Products}">
-										<suggestionItems>
-											<core:ListItem key="{Price}" text="{ path: 'Price' }" additionalText="{ path: 'Name' }" />
-										</suggestionItems>
-									</MultiInput>
-								</fb:control>
-							</fb:FilterGroupItem>
-						</fb:filterGroupItems>
-					</fb:FilterBar>
-				</f:content>
-			</f:DynamicPageHeader>
-		</f:header>
-		<f:content>
-			<Table id="productsTable" class="sapUiResponsiveMargin" width="auto" mode="MultiSelect" selectionChange="onSelectionChangeTable" items="{ path: '/Products',  parameters: { expand: 'Category,Supplier' }, sorter: {path: 'ID'}, events: {dataReceived: '.dataReceived'} }"  showOverlay="{appView>/isVisibleOverlay}">
-				<headerToolbar>
-					<Toolbar>
-						<Title core:require="{formatMessage: 'sap/base/strings/formatMessage'}" text="{ parts: [ 'i18n>productListTitle', 'appView>/productsCount' ], formatter: 'formatMessage' }" />
-						<ToolbarSpacer />
-						<Button icon="sap-icon://create" press="onPressCreateProduct" text="Create" type="Emphasized" />
-						<Button enabled="{= !!${appView>/numberOfItemsToDelete}}" icon="sap-icon://delete" press="onPressDeleteProducts" text="Delete" />
-					</Toolbar>
-				</headerToolbar>
-				<columns>
-					<Column>
-						<Text text="{i18n>productsOverviewColumnName}" />
-					</Column>
-					<Column hAlign="End">
-						<Text text="{i18n>productsOverviewColumnPrice}" />
-					</Column>
-					<Column minScreenWidth="Small" demandPopin="true">
-						<Text text="{i18n>productsOverviewColumnCategory}" />
-					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="false">
-						<Text text="{i18n>productsOverviewColumnSupplier}" />
-					</Column>
-					<Column hAlign="End">
-						<Text text="{i18n>productsOverviewColumnDate}" />
-					</Column>
-					<Column>
-						<Text text="{i18n>productsOverviewColumnRating}" />
-					</Column>
-					<Column>
-						<Text text="{i18n>productsOverviewColumnState}" />
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem type="Navigation" press="onPressListItem">
-						<cells>
-							<ObjectIdentifier title="{Name}" />
-							<ObjectNumber number="{Price}" unit="{i18n>currency}" />
-							<Text text="{Category/Name}" />
-							<Text text="{Supplier/Name}" />
-							<Text text="{ path: 'ReleaseDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'short' } }" />
-							<RatingIndicator value="{Rating}" maxValue="5" editable="false" />
-							<ObjectStatus icon="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityIcon' }"
-									text="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityText' }" state="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityState' }" />
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-		</f:content>
-	</f:DynamicPage>
+<mvc:View controllerName="darya.zavaliuk.controller.ProductsOverview"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          xmlns:f="sap.f"
+          xmlns:fb="sap.ui.comp.filterbar"
+          xmlns:core="sap.ui.core"
+          height="100%">
+    <f:DynamicPage class="sapUiNoContentPadding">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <VariantManagement selectedKey="0"
+                                       defaultKey="0">
+                        <VariantItem text="{i18n>defaultVariantText}"
+                                     key="0" />
+                    </VariantManagement>
+                </f:heading>
+                <f:expandedContent>
+                    <Label text="{path: 'appView>/filterItems', formatter: '.formatter.filterItemsToText'}" />
+                </f:expandedContent>
+                <f:snappedContent>
+                    <Label text="{path: 'appView>/filterItems', formatter: '.formatter.filterItemsToText'}" />
+                </f:snappedContent>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:header>
+            <f:DynamicPageHeader>
+                <f:content>
+                    <fb:FilterBar id="filterBarProductOverview"
+                                  class="searchInputLabel"
+                                  useToolbar="false"
+                                  search="onPressConfirmFilters">
+                        <fb:filterGroupItems>
+                            <fb:FilterGroupItem class="searchInputLabel"
+                                                label="{i18n>filterBarSearchLabel}"
+                                                name="Product"
+                                                groupName="Basic"
+                                                visibleInFilterBar="true">
+                                <fb:control>
+                                    <SearchField width="100%"
+                                                 class="searchInputLabel"
+                                                 id="searchField"
+                                                 change="onSelectionChange"
+                                                 search="onPressConfirmFilters"
+                                                 placeholder="{i18n>productsOverviewSearchPlaceholder}" />
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="Category"
+                                                label="{i18n>labelFilterBarCategory}"
+                                                groupName="Basic"
+                                                visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox id="productCategory"
+                                                   name="Category"
+                                                   selectionChange="onSelectionChange"
+                                                   placeholder="{i18n>productsOverviewCategory}"
+                                                   items="{ path: '/Categories', templateShareable: true }">
+                                        <core:Item key="{key}"
+                                                   text="{Name}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="Supplier"
+                                                label="{i18n>labelFilterBarSupplier}"
+                                                groupName="Basic"
+                                                visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox id="productSupplier"
+                                                   name="Supplier"
+                                                   selectionChange="onSelectionChange"
+                                                   placeholder="{i18n>productsOverviewSupplier}"
+                                                   items="{ path: '/Suppliers', templateShareable: true }">
+                                        <core:Item key="{key}"
+                                                   text="{Name}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="Status"
+                                                label="{i18n>labelFilterBarStatus}"
+                                                groupName="Basic"
+                                                visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox id="productStatus"
+                                                   name="Status"
+                                                   selectionChange="onSelectionChange"
+                                                   placeholder="{i18n>productsOverviewStatus}"
+                                                   items="{ path: 'appView>/statuses', templateShareable: true }">
+                                        <core:Item key="{appView>}"
+                                                   text="{appView>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="Price"
+                                                label="{i18n>labelFilterBarPrice}"
+                                                groupName="Basic"
+                                                visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiInput id="productsInput"
+                                                placeholder="{i18n>productsOverviewInputPrice}"
+                                                showSuggestion="true"
+                                                showValueHelp="true"
+                                                tokenUpdate="onSelectionChange"
+                                                valueHelpRequest="onValueHelpRequest"
+                                                suggestionItems="{/Products}">
+                                        <suggestionItems>
+                                            <core:ListItem key="{Price}"
+                                                           text="{ path: 'Price' }"
+                                                           additionalText="{ path: 'Name' }" />
+                                        </suggestionItems>
+                                    </MultiInput>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        </fb:filterGroupItems>
+                    </fb:FilterBar>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <Table id="productsTable"
+                   class="sapUiResponsiveMargin"
+                   width="auto"
+                   mode="MultiSelect"
+                   selectionChange="onSelectionChangeTable"
+                   items="{ path: '/Products',  parameters: { expand: 'Category,Supplier' }, sorter: {path: 'ID'}, events: {dataReceived: '.dataReceived'} }"
+                   showOverlay="{appView>/isVisibleOverlay}">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title core:require="{formatMessage: 'sap/base/strings/formatMessage'}"
+                               text="{ parts: [ 'i18n>productListTitle', 'appView>/productsCount' ], formatter: 'formatMessage' }" />
+                        <ToolbarSpacer />
+                        <Button icon="sap-icon://create"
+                                press="onPressCreateProduct"
+                                text="Create"
+                                type="Emphasized" />
+                        <Button enabled="{= !!${appView>/numberOfItemsToDelete}}"
+                                icon="sap-icon://delete"
+                                press="onPressDeleteProducts"
+                                text="Delete" />
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="{i18n>productsOverviewColumnName}" />
+                    </Column>
+                    <Column hAlign="End">
+                        <Text text="{i18n>productsOverviewColumnPrice}" />
+                    </Column>
+                    <Column minScreenWidth="Small"
+                            demandPopin="true">
+                        <Text text="{i18n>productsOverviewColumnCategory}" />
+                    </Column>
+                    <Column minScreenWidth="Tablet"
+                            demandPopin="false">
+                        <Text text="{i18n>productsOverviewColumnSupplier}" />
+                    </Column>
+                    <Column hAlign="End">
+                        <Text text="{i18n>productsOverviewColumnDate}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>productsOverviewColumnRating}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>productsOverviewColumnState}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation"
+                                    press="onPressListItem">
+                        <cells>
+                            <ObjectIdentifier title="{Name}" />
+                            <ObjectNumber number="{Price}"
+                                          unit="{i18n>currency}" />
+                            <Text text="{Category/Name}" />
+                            <Text text="{Supplier/Name}" />
+                            <Text text="{ path: 'ReleaseDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'short' } }" />
+                            <RatingIndicator value="{Rating}"
+                                             maxValue="5"
+                                             editable="false" />
+                            <ObjectStatus icon="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityIcon' }"
+                                          text="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityText' }"
+                                          state="{ path: 'DiscontinuedDate', formatter: '.formatter.formatAvailabilityState' }" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+    </f:DynamicPage>
 </mvc:View>

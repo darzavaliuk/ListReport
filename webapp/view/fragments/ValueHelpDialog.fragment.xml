@@ -1,24 +1,48 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:vh="sap.ui.comp.valuehelpdialog" xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core">
-	<vh:ValueHelpDialog title="{i18n>labelFilterBarProduct}" ok="onDialogOkPress" cancel="onValueHelpDialogCancelPress" supportRanges="true" key="Price" descriptionKey="ProductName">
-		<vh:filterBar>
-			<fb:FilterBar advancedMode="true" search="onFilterBarSearch" isRunningInValueHelpDialog="true">
-				<fb:filterGroupItems>
-					<fb:FilterGroupItem groupName="Basic" name="Price" label="{i18n>labelFilterBarPrice}" visibleInFilterBar="true">
-						<fb:control>
-							<Input name="Price" showSuggestion="true" showValueHelp="false" suggestionItems="{ path: '/Products', sorter: { path: 'Price' } }">
-								<core:Item key="{Price}" text="{ path: 'Price' }" />
-							</Input>
-						</fb:control>
-					</fb:FilterGroupItem>
-					<fb:FilterGroupItem groupName="Basic" name="Name" label="{i18n>filterBarNameLabel}" visibleInFilterBar="true">
-						<fb:control>
-							<Input name="Name" showSuggestion="true" showValueHelp="false" suggestionItems="{ path: '/Products', sorter: { path: 'Name' } }">
-								<core:Item key="{Name}" text="{Name}" />
-							</Input>
-						</fb:control>
-					</fb:FilterGroupItem>
-				</fb:filterGroupItems>
-			</fb:FilterBar>
-		</vh:filterBar>
-	</vh:ValueHelpDialog>
+<core:FragmentDefinition xmlns="sap.m"
+                         xmlns:vh="sap.ui.comp.valuehelpdialog"
+                         xmlns:fb="sap.ui.comp.filterbar"
+                         xmlns:core="sap.ui.core">
+    <vh:ValueHelpDialog title="{i18n>labelFilterBarProduct}"
+                        ok="onDialogOkPress"
+                        cancel="onValueHelpDialogCancelPress"
+                        supportRanges="true"
+                        key="Price"
+                        descriptionKey="ProductName">
+        <vh:filterBar>
+            <fb:FilterBar advancedMode="true"
+                          search="onFilterBarSearch"
+                          isRunningInValueHelpDialog="true">
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem groupName="Basic"
+                                        name="Price"
+                                        label="{i18n>labelFilterBarPrice}"
+                                        visibleInFilterBar="true">
+                        <fb:control>
+                            <Input name="Price"
+                                   showSuggestion="true"
+                                   showValueHelp="false"
+                                   suggestionItems="{ path: '/Products', sorter: { path: 'Price' } }">
+                                <core:Item key="{Price}"
+                                           text="{ path: 'Price' }" />
+                            </Input>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem groupName="Basic"
+                                        name="Name"
+                                        label="{i18n>filterBarNameLabel}"
+                                        visibleInFilterBar="true">
+                        <fb:control>
+                            <Input name="Name"
+                                   showSuggestion="true"
+                                   showValueHelp="false"
+                                   suggestionItems="{ path: '/Products', sorter: { path: 'Name' } }">
+                                <core:Item key="{Name}"
+                                           text="{Name}" />
+                            </Input>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                </fb:filterGroupItems>
+            </fb:FilterBar>
+        </vh:filterBar>
+    </vh:ValueHelpDialog>
 </core:FragmentDefinition>
