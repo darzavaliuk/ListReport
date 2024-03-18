@@ -12,8 +12,8 @@ sap.ui.define([
     "sap/m/Input",
     "sap/m/ComboBox"
 ], function (coreLibrary, JSONModel, Fragment, Messaging,
-    BaseController, Message, formatter, Element,
-    isBehindOtherElement, MessageBox, Input, ComboBox) {
+             BaseController, Message, formatter, Element,
+             isBehindOtherElement, MessageBox, Input, ComboBox) {
     "use strict";
 
     const ValueState = coreLibrary.ValueState;
@@ -59,11 +59,11 @@ sap.ui.define([
          */
         _setupModels: function () {
             this.getView().setModel(new JSONModel({
-                "state": {
-                    "isEditPage": false
-                },
-                "product": {}
-            }
+                    "state": {
+                        "isEditPage": false
+                    },
+                    "product": {}
+                }
             ), "appView");
             this.getView().setModel(Messaging.getMessageModel(), "messages");
         },
@@ -111,7 +111,7 @@ sap.ui.define([
 
         /**
          * Retrieves the "product" model for the view.
-         * @returns {sap.ui.model.Model} The "product" model.
+         * @returns {sap.ui.model.JSONModel} The "product" model.
          *
          * @private
          */
@@ -137,14 +137,10 @@ sap.ui.define([
         _onPressOkMessageBoxError: function () {
             this._toggleEditPage(false);
 
-            const oItems = this._getProductsItems();
-            const oProductViewModel = this._getProductModel();
-            const iExistingElementIndex = oItems.findIndex(element => element.ID === oProductViewModel.ID);
-
-            if (iExistingElementIndex !== -1) {
+            if (this.getView().getModel().getProperty("/ID")) {
                 this.getOwnerComponent()
                     .getRouter()
-                    .navTo("ProductDetails", { id: oProductViewModel.ID }, true);
+                    .navTo("ProductDetails", {id: this.getView().getModel().getProperty("/ID")}, true);
                 return;
             }
 
@@ -232,7 +228,7 @@ sap.ui.define([
 
             this.getOwnerComponent()
                 .getRouter()
-                .navTo("ProductDetailsUpdate", { id: oProductViewModel.ID, edit: true }, true);
+                .navTo("ProductDetailsUpdate", {id: oProductViewModel.ID, edit: true}, true);
         },
 
         /**
@@ -240,20 +236,9 @@ sap.ui.define([
          *
          * @private
          */
-        _updateProductDetails: function () {
-            const oProductViewModel = this._getProductModel();
-            const oModel = this.getView().getModel();
-            const aItems = oModel.getProperty("/Products");
-            const iExistingElementIndex = aItems.findIndex(oElement => oElement.ID === oProductViewModel.ID);
-
-            if (iExistingElementIndex !== -1) {
-                aItems[iExistingElementIndex] = oProductViewModel;
-            } else {
-                aItems.push(oProductViewModel);
-            }
-            oModel.setProperty("/Products", aItems);
-
-            this.getOwnerComponent().getRouter().navTo("ProductDetails", { id: oProductViewModel.ID }, true);
+        _updateProductDetails: function (sID) {
+            this._toggleEditPage(true);
+            this.getOwnerComponent().getRouter().navTo("ProductDetails", {id: sID}, true);
         },
 
         /**
@@ -274,7 +259,6 @@ sap.ui.define([
          *
          * @private
          */
-
         _removeMessageFromTarget: function (sTarget) {
             Messaging.getMessageModel().getData().forEach(function (oMessage) {
                 if (oMessage.target == sTarget) {
@@ -303,24 +287,77 @@ sap.ui.define([
         },
 
         /**
-         * Event handler for the create product button press.
+         * Saves product in model
          *
-         * @public
+         * @private
          */
-        onPressCreateProduct: function () {
+        _saveProductInModel: function () {
+            const oODataModel = this.getView().getModel();
+            const oAppViewModel = this.getView().getModel("appView");
+
+            oODataModel.createEntry("/Products", {
+                headers: {
+                    "Content-ID": oAppViewModel.getProperty("/product/ID")
+                },
+                properties: {
+                    ...oAppViewModel.getProperty("/product")
+                }
+            });
+
+            oODataModel.submitChanges({
+                    success: function () {
+                        oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Supplier`, {
+                            uri: `/Suppliers(${Number(oAppViewModel.getProperty("/product/Supplier/ID"))})`
+                        }, {
+                            headers: {
+                                "Content-ID": oAppViewModel.getProperty("/product/ID") + 1
+                            }
+                        });
+
+                        oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Category`, {
+                            uri: `/Categories(${Number(oAppViewModel.getProperty("/product/Category/ID"))})`
+                        }, {
+                            headers: {
+                                "Content-ID": oAppViewModel.getProperty("/product/ID") + 2
+                            }
+                        });
+                    }
+                }
+            );
+        },
+
+        /**
+         * Checks the values in the general form and handles required fields.
+         * This function iterates over the form elements in the general form and performs the necessary checks
+         * based on the type of field present in each form element.
+         *
+         * @private
+         */
+        _checkValuesInGeneralForm: function () {
             this.oView.byId("formContainerForGeneralPart").getFormElements().forEach((oElement) => {
                 if (oElement.getFields()[0] instanceof Input) {
                     this._handleRequiredField(oElement.getFields()[0]);
                 } else if (oElement.getFields()[0] instanceof ComboBox) {
                     this.handleChangeComboBox(oElement.getFields()[0]);
                 } else {
-                    this._handleRequiredField(oElement.getFields()[0]);
+                    if (oElement.getFields()[0].getRequired())
+                        this._handleRequiredField(oElement.getFields()[0]);
                 }
             });
+        },
+
+        /**
+         * Event handler for the create product button press.
+         *
+         * @public
+         */
+        onPressCreateProduct: function (oEvent) {
+            this._checkValuesInGeneralForm();
 
             if (!this.getView().getModel("messages").getProperty("/").length) {
+                this._saveProductInModel();
                 this._toggleEditPage(false);
-                this._updateProductDetails.call(this);
+                this._updateProductDetails.call(this, this.getView().getModel("appView").getProperty("/product/ID"));
             } else {
                 this._showErrorDialog.call(this);
             }
@@ -332,13 +369,14 @@ sap.ui.define([
          *
          * @public
          */
-        onPressDeleteProduct: function () {
+        onPressDeleteProduct: function (oEvent) {
             const oThat = this;
+            const oBindingContext = oEvent.getSource().getBindingContext();
 
             MessageBox.error(this._getTextFromI18n(
                 "deleteProductConfirmMessage",
                 [
-                    this._getProductModel().Name
+                    oBindingContext.getObject().Name
                 ]
             ), {
                 title: this._getTextFromI18n("messageBoxTitleWithErrorState"),
@@ -346,7 +384,7 @@ sap.ui.define([
                 emphasizedAction: MessageBox.Action.DELETE,
                 onClose: function (sAction) {
                     if (sAction === MessageBox.Action.DELETE) {
-                        oThat._onPressDialogDelete();
+                        oThat._onPressDialogDelete(oEvent);
                     }
                 }
             });
@@ -358,18 +396,19 @@ sap.ui.define([
          *
          * @private
          */
-        _onPressDialogDelete: function () {
-            const oProductViewModel = this._getProductModel();
+        _onPressDialogDelete: function (oEvent) {
+            const oBindingContext = oEvent.getSource().getBindingContext();
+            const oODataModel = oBindingContext.getModel();
+            const sKey = oODataModel.createKey("/Products", oBindingContext.getObject());
 
-            const oModel = this.getView().getModel();
-            const aItems = oModel.getProperty("/Products");
-            const iExistingElementIndex = aItems.findIndex(oElement => oElement.ID === oProductViewModel.ID);
-
-            if (iExistingElementIndex !== -1) {
-                aItems.splice(iExistingElementIndex, 1);
-            }
-
-            oModel.setProperty("/Products", aItems);
+            oODataModel.remove(sKey, {
+                headers: {
+                    "Content-ID": oBindingContext.getProperty("ID")
+                },
+                error: function () {
+                    this._getTextFromI18n("messageForErrorWhileDeleting");
+                }
+            });
 
             this.getOwnerComponent()
                 .getRouter()
@@ -412,9 +451,8 @@ sap.ui.define([
         _onPatternMatchedProductCreate: function () {
             this._toggleEditPage(true);
             this._toggleButtonsAndView(true);
-            const oProductModel = this._getProductsItems();
-            const oModel = this._getDefaultProductModel(oProductModel.length + 1);
-            this.getView().getModel("appView").setProperty("/product", oModel)
+            const oModel = this._getDefaultProductModel(Date.now().toString().slice(-4));
+            this.getView().getModel("appView").setProperty("/product", oModel);
             this._clearAllMessagesFromMessaging();
         },
 
@@ -431,7 +469,7 @@ sap.ui.define([
             const oODataModel = this.getView().getModel();
 
             oODataModel.metadataLoaded().then(function () {
-                const sKey = oODataModel.createKey("/Products", { ID: sProductID });
+                const sKey = oODataModel.createKey("/Products", {ID: sProductID});
 
                 pThis.getView().bindObject({
                     path: sKey,
@@ -453,7 +491,9 @@ sap.ui.define([
             return {
                 "ID": iNewID,
                 "Name": DEFAULT_VALUES.NAME,
-                "Description": DEFAULT_VALUES.DESCRIPTION
+                "Description": DEFAULT_VALUES.DESCRIPTION,
+                "Category": {},
+                "Supplier": {}
             };
         },
 
