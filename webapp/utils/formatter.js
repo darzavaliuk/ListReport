@@ -5,41 +5,68 @@ sap.ui.define(["sap/ui/core/library"], function (coreLibrary) {
 
     const PRODUCT_STATUS_ICON = {
         ERROR: "sap-icon://error",
-        SUCCESS: "sap-icon://sys-enter-2",
+        SUCCESS: "sap-icon://sys-enter-2"
     };
 
     return {
         /**
+         * Formats the product text based on the edit mode.
+         * If the page is in edit mode, the edit description is returned. Otherwise, the display description is returned.
+         *
+         * @param {boolean} bIsEditPage - Indicates whether the page is in edit mode.
+         * @param {string} sValueEdit - The description to be displayed in edit mode.
+         * @param {string} sValueDisplay - The description to be displayed in non-edit mode.
+         * @returns {string} The formatted product text.
+         *
+         * @public
+         */
+        formatProductText: function (sValueEdit, sValueDisplay, bIsEditPage = true) {
+            return bIsEditPage ? sValueEdit : sValueDisplay;
+        },
+
+        /**
          * Formatter function for retrieving text based on a given product discontinued status.
-         * @param {string} sValue - The product status code.
+         * @param {boolean} bIsEditPage - Indicates whether the page is in edit mode.
+         * @param {string} sValueEdit - The description to be displayed in edit mode.
+         * @param {string} sValueDisplay - The description to be displayed in non-edit mode.
          * @returns {string} The URL or class of the status icon.
          *
          * @public
          */
-        formatAvailabilityText: function (sValue) {
-            return sValue ? this._getTextFromI18n("unavailableStatusText") : this._getTextFromI18n("availableStatusText")
+        formatAvailabilityText: function (sValueEdit, sValueDisplay, bIsEditPage = true) {
+            return bIsEditPage
+                ? sValueEdit  ? this._getTextFromI18n("unavailableStatusText") : this._getTextFromI18n("availableStatusText")
+                : sValueDisplay  ? this._getTextFromI18n("unavailableStatusText") : this._getTextFromI18n("availableStatusText");
         },
 
         /**
          * Formatter function for retrieving status on a given product discontinued status.
-         * @param {string} sValue - The product status code.
+         * @param {boolean} bIsEditPage - Indicates whether the page is in edit mode.
+         * @param {string} sValueEdit - The description to be displayed in edit mode.
+         * @param {string} sValueDisplay - The description to be displayed in non-edit mode.
          * @returns {string} The URL or class of the status icon.
          *
          * @public
          */
-        formatAvailabilityState: function (sValue) {
-            return sValue ? ValueState.Error : ValueState.Success;
+        formatAvailabilityState: function (sValueEdit, sValueDisplay, bIsEditPage = true) {
+            return bIsEditPage
+                ? sValueEdit ? ValueState.Error : ValueState.Success
+                : sValueDisplay ? ValueState.Error : ValueState.Success;
         },
 
         /**
          * Formatter function for retrieving status icons based on a given product discontinued status.
-         * @param {string} sValue - The product status code.
+         * @param {boolean} bIsEditPage - Indicates whether the page is in edit mode.
+         * @param {string} sValueEdit - The description to be displayed in edit mode.
+         * @param {string} sValueDisplay - The description to be displayed in non-edit mode.
          * @returns {string} The URL or class of the status icon.
          *
          * @public
          */
-        formatAvailabilityIcon: function (sValue) {
-            return sValue ? PRODUCT_STATUS_ICON.ERROR : PRODUCT_STATUS_ICON.SUCCESS
+        formatAvailabilityIcon: function (sValueEdit, sValueDisplay, bIsEditPage = true) {
+            return bIsEditPage
+                ? sValueEdit ? PRODUCT_STATUS_ICON.ERROR : PRODUCT_STATUS_ICON.SUCCESS
+                : sValueDisplay ? PRODUCT_STATUS_ICON.ERROR : PRODUCT_STATUS_ICON.SUCCESS;
         },
 
         /**
@@ -78,6 +105,6 @@ sap.ui.define(["sap/ui/core/library"], function (coreLibrary) {
                     aFiltersWithValues.length
                 ]) + aFiltersWithValues.join(", ")
             );
-        },
+        }
     };
 });
