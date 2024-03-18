@@ -36,7 +36,7 @@ sap.ui.define(
              * @private
              */
             _filterTableWithPriceValue: function (oFilter) {
-                const oValueHelpDialog = this._oPriceHelpValueDialog;
+                const oValueHelpDialog = this._oPriceValueHelpDialog;
 
                 oValueHelpDialog.getTableAsync().then(function (oTable) {
                     if (oTable.bindRows) {
@@ -51,17 +51,17 @@ sap.ui.define(
 
             /**
              * Configures the help value dialog.
-             * @param {sap.m.Dialog} oHelpValueDialog - The help value dialog to configure.
+             * @param {sap.m.Dialog} oValueHelpDialog - The help value dialog to configure.
              *
              * @private
              */
-            _configureHelpValueDialog: function (oHelpValueDialog) {
-                const oFilterBar = oHelpValueDialog.getFilterBar();
+            _configureValueHelpDialog: function (oValueHelpDialog) {
+                const oFilterBar = oValueHelpDialog.getFilterBar();
 
-                this._oPriceHelpValueDialog = oHelpValueDialog;
-                this.getView().addDependent(oHelpValueDialog);
+                this._oPriceValueHelpDialog = oValueHelpDialog;
+                this.getView().addDependent(oValueHelpDialog);
 
-                oHelpValueDialog.setRangeKeyFields([
+                oValueHelpDialog.setRangeKeyFields([
                     {
                         label: this._getTextFromI18n(
                             "productsOverviewInputPrice"
@@ -80,19 +80,19 @@ sap.ui.define(
                 oFilterBar.setFilterBarExpanded(false);
                 oFilterBar.setBasicSearch(this._oBasicSearchField);
 
-                this._configureTableInHelpValueDialog(oHelpValueDialog);
+                this._configureTableInValueHelpDialog(oValueHelpDialog);
             },
 
             /**
              * Configures the table in the help value dialog.
-             * @param {sap.m.Dialog} oHelpValueDialog - The help value dialog containing the table.
+             * @param {sap.m.Dialog} oValueHelpDialog - The help value dialog containing the table.
              *
              * @private
              */
-            _configureTableInHelpValueDialog: function (
-                oHelpValueDialog
+            _configureTableInValueHelpDialog: function (
+                oValueHelpDialog
             ) {
-                oHelpValueDialog.getTableAsync().then(
+                oValueHelpDialog.getTableAsync().then(
                     function (oTable) {
                         oTable.setModel(this.oModel);
 
@@ -102,7 +102,7 @@ sap.ui.define(
                                 path: PRODUCT_FIELDS_BINDING.PRODUCTS,
                                 events: {
                                     dataReceived: function () {
-                                        oHelpValueDialog.update();
+                                        oValueHelpDialog.update();
                                     }
                                 }
                             });
@@ -120,13 +120,13 @@ sap.ui.define(
                                 }),
                                 events: {
                                     dataReceived: function () {
-                                        oHelpValueDialog.update();
+                                        oValueHelpDialog.update();
                                     }
                                 }
                             });
                         }
 
-                        oHelpValueDialog.update();
+                        oValueHelpDialog.update();
                     }.bind(this)
                 );
             },
@@ -139,7 +139,7 @@ sap.ui.define(
             _initializeBasicSearchField: function () {
                 this._oBasicSearchField = new SearchField({
                     search: function () {
-                        this._oPriceHelpValueDialog.getFilterBar().search();
+                        this._oPriceValueHelpDialog.getFilterBar().search();
                     }.bind(this)
                 });
             },
@@ -213,7 +213,7 @@ sap.ui.define(
              * @public
              */
             onValueHelpDialogCancelPress: function () {
-                this._oPriceHelpValueDialog.close();
+                this._oPriceValueHelpDialog.close();
             },
 
             /**
@@ -225,16 +225,16 @@ sap.ui.define(
             onValueHelpRequest: function () {
                 this._initializeBasicSearchField();
 
-                this.pHelpValueDialog = this.loadFragment({
+                this.pValueHelpDialog = this.loadFragment({
                     name: "darya.zavaliuk.view.fragments.ValueHelpDialog"
                 }).then(
-                    function (oHelpValueDialog) {
-                        this._configureHelpValueDialog(oHelpValueDialog);
+                    function (oValueHelpDialog) {
+                        this._configureValueHelpDialog(oValueHelpDialog);
 
-                        oHelpValueDialog.setTokens(
+                        oValueHelpDialog.setTokens(
                             this._oPriceInput.getTokens()
                         );
-                        oHelpValueDialog.open();
+                        oValueHelpDialog.open();
                     }.bind(this)
                 );
             },
@@ -258,7 +258,7 @@ sap.ui.define(
                 );
 
                 this._oPriceInput.setTokens(aTokens);
-                this._oPriceHelpValueDialog.close();
+                this._oPriceValueHelpDialog.close();
                 this._updateLabelsAndTable();
             }
         };
