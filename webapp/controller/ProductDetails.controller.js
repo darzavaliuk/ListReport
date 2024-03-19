@@ -12,8 +12,8 @@ sap.ui.define([
     "sap/m/Input",
     "sap/m/ComboBox"
 ], function (coreLibrary, JSONModel, Fragment, Messaging,
-    BaseController, Message, formatter, Element,
-    isBehindOtherElement, MessageBox, Input, ComboBox) {
+             BaseController, Message, formatter, Element,
+             isBehindOtherElement, MessageBox, Input, ComboBox) {
     "use strict";
 
     const ValueState = coreLibrary.ValueState;
@@ -42,12 +42,21 @@ sap.ui.define([
             const oRouter = this.getOwnerComponent().getRouter();
             this._formFragments = {};
 
-            Messaging.registerObject(this.getView(), true);
+            this._registerMessaging();
             this._setupModels();
 
             oRouter.getRoute("ProductDetailsUpdate").attachPatternMatched(this._onPatternMatchedProductUpdate, this);
             oRouter.getRoute("ProductDetails").attachPatternMatched(this._onPatternMatchedProduct, this);
             oRouter.getRoute("ProductDetailsCreate").attachPatternMatched(this._onPatternMatchedProductCreate, this);
+        },
+
+        /**
+         * Registers an object for messaging.
+         *
+         * @private
+         */
+        _registerMessaging: function () {
+            Messaging.registerObject(this.getView(), true);
         },
 
         /**
@@ -59,11 +68,12 @@ sap.ui.define([
          */
         _setupModels: function () {
             this.getView().setModel(new JSONModel({
-                "state": {
-                    "isEditPage": false
-                },
-                "product": {}
-            }
+                    "state": {
+                        "isEditPage": false,
+                        "isCreatePage": false
+                    },
+                    "product": {}
+                }
             ), "appView");
             this.getView().setModel(Messaging.getMessageModel(), "messages");
         },
@@ -96,6 +106,16 @@ sap.ui.define([
          */
         _toggleEditPage: function (bIsEdit) {
             this.getView().getModel("appView").setProperty("/state/isEditPage", bIsEdit);
+        },
+
+        /**
+         * Toggles the create mode for the page.
+         * @param {boolean} bIsEdit - Indicates whether the page is in create mode or not.
+         *
+         * @private
+         */
+        _toggleCreatePage: function (bIsEdit) {
+            this.getView().getModel("appView").setProperty("/state/isCreatePage", bIsEdit);
         },
 
         /**
@@ -137,16 +157,15 @@ sap.ui.define([
         _onPressOkMessageBoxError: function () {
             this._toggleEditPage(false);
 
-            if (this.getView().getModel().getProperty("/ID")) {
-                this.getOwnerComponent()
-                    .getRouter()
-                    .navTo("ProductDetails", { id: this.getView().getModel().getProperty("/ID") }, true);
+            if (this.getView().getModel("appView").getProperty("/state/isCreatePage")) {
+                this.getOwnerComponent().getRouter()
+                    .navTo("ProductsOverview", {}, true);
+                this._toggleCreatePage(false);
                 return;
             }
 
-            this.getOwnerComponent()
-                .getRouter()
-                .navTo("ProductsOverview", {}, true);
+            this.getOwnerComponent().getRouter()
+                .navTo("ProductDetails", {id: this.getView().getModel("appView").getProperty("/product/ID")}, true);
         },
 
         /**
@@ -216,19 +235,34 @@ sap.ui.define([
         },
 
         /**
+         * Extracts the product ID from the binding context path.
+         * @returns {string} The extracted product ID if found, otherwise undefined.
+         *
+         * @private
+         */
+        _getProductID: function (oEvent) {
+            const sPath = oEvent.getSource().getBindingContext().getPath();
+            const reProductID = /\/Products\((\d+)\)/;
+            const oMatch = sPath.match(reProductID);
+
+            if (oMatch) {
+                return oMatch[1];
+            }
+        },
+
+        /**
          * Event handler for the edit product button press.
          * Sets the 'isEditPage' property of the 'state' model to false, retrieves the ID of the product from the 'product' model,
          * and navigates to the ProductDetailsUpdate page with the product ID and edit flag.
          *
          * @public
          */
-        onPressEditProduct: function () {
+        onPressEditProduct: function (oEvent) {
             this._toggleEditPage(false);
-            const oProductViewModel = this._getProductModel();
+            const sProductID = this._getProductID(oEvent);
 
-            this.getOwnerComponent()
-                .getRouter()
-                .navTo("ProductDetailsUpdate", { id: oProductViewModel.ID, edit: true }, true);
+            this.getOwnerComponent().getRouter()
+                .navTo("ProductDetailsUpdate", {id: sProductID, edit: true}, true);
         },
 
         /**
@@ -238,7 +272,7 @@ sap.ui.define([
          */
         _updateProductDetails: function (sID) {
             this._toggleEditPage(true);
-            this.getOwnerComponent().getRouter().navTo("ProductDetails", { id: sID }, true);
+            this.getOwnerComponent().getRouter().navTo("ProductDetails", {id: sID}, true);
         },
 
         /**
@@ -287,43 +321,106 @@ sap.ui.define([
         },
 
         /**
+         * Saves product as new in the model.
+         *
+         * @private
+         */
+        _createProduct: function () {
+            const oThat = this;
+            const oODataModel = this.getView().getModel();
+            const oAppViewModel = this.getView().getModel("appView");
+            const oProductModel = JSON.parse(JSON.stringify(oAppViewModel.getProperty("/product")));
+            delete oProductModel.Category;
+            delete oProductModel.Supplier;
+
+            oODataModel.create("/Products", {...oProductModel},
+                {
+                    headers: {
+                        "Content-ID": Number(Date.now().toString().slice(-4))
+                    },
+                    success: function () {
+                        Promise.all([oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Supplier`, {
+                            uri: `/Suppliers(${Number(oAppViewModel.getProperty("/product/Supplier/ID"))})`
+                        }, {
+                            headers: {
+                                "Content-ID": Number(Date.now().toString().slice(-4)) + 1
+                            }
+                        }),
+
+                            oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Category`, {
+                                uri: `/Categories(${Number(oAppViewModel.getProperty("/product/Category/ID"))})`
+                            }, {
+                                headers: {
+                                    "Content-ID": Number(Date.now().toString().slice(-4)) + 2
+                                }
+                            }),
+
+                            oODataModel.refresh()
+                        ]).then(() => {
+                            oThat._toggleEditPage(false);
+                            oThat._updateProductDetails.call(oThat, oThat.getView().getModel("appView").getProperty("/product/ID"));
+                        });
+                    }
+                }
+            );
+
+            this._toggleCreatePage(false);
+        },
+
+        /**
+         * Update product in the model.
+         *
+         * @private
+         */
+        _updateProduct: function () {
+            const oThat = this;
+            const oODataModel = this.getView().getModel();
+            const oAppViewModel = this.getView().getModel("appView");
+
+            const oProductModel = JSON.parse(JSON.stringify(oAppViewModel.getProperty("/product")));
+            delete oProductModel.Category;
+            delete oProductModel.Supplier;
+
+            oODataModel.update(`/Products(${oProductModel.ID})`, {...oProductModel},
+                {
+                    headers: {
+                        "Content-ID": Number(Date.now().toString().slice(-4))
+                    },
+                    success: function () {
+                        Promise.all([
+                            oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Supplier`, {
+                                uri: `/Suppliers(${Number(oAppViewModel.getProperty("/product/Supplier/ID"))})`
+                            }, {
+                                headers: {
+                                    "Content-ID": Number(Date.now().toString().slice(-4)) + 1
+                                }
+                            }),
+
+                            oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Category`, {
+                                uri: `/Categories(${Number(oAppViewModel.getProperty("/product/Category/ID"))})`
+                            }, {
+                                headers: {
+                                    "Content-ID": Number(Date.now().toString().slice(-4)) + 2
+                                }
+                            }),
+
+                            oODataModel.refresh()
+                        ]).then(() => {
+                            oThat._toggleEditPage(false);
+                            oThat._updateProductDetails.call(oThat, oThat.getView().getModel("appView").getProperty("/product/ID"));
+                        });
+                    }
+                }
+            );
+        },
+
+        /**
          * Saves product in model
          *
          * @private
          */
         _saveProductInModel: function () {
-            const oODataModel = this.getView().getModel();
-            const oAppViewModel = this.getView().getModel("appView");
-
-            oODataModel.createEntry("/Products", {
-                headers: {
-                    "Content-ID": oAppViewModel.getProperty("/product/ID")
-                },
-                properties: {
-                    ...oAppViewModel.getProperty("/product")
-                }
-            });
-
-            oODataModel.submitChanges({
-                success: function () {
-                    oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Supplier`, {
-                        uri: `/Suppliers(${Number(oAppViewModel.getProperty("/product/Supplier/ID"))})`
-                    }, {
-                        headers: {
-                            "Content-ID": oAppViewModel.getProperty("/product/ID") + 1
-                        }
-                    });
-
-                    oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Category`, {
-                        uri: `/Categories(${Number(oAppViewModel.getProperty("/product/Category/ID"))})`
-                    }, {
-                        headers: {
-                            "Content-ID": oAppViewModel.getProperty("/product/ID") + 2
-                        }
-                    });
-                }
-            }
-            );
+            this.getView().getModel("appView").getProperty("/state/isCreatePage") ? this._createProduct() : this._updateProduct();
         },
 
         /**
@@ -356,8 +453,6 @@ sap.ui.define([
 
             if (!this.getView().getModel("messages").getProperty("/").length) {
                 this._saveProductInModel();
-                this._toggleEditPage(false);
-                this._updateProductDetails.call(this, this.getView().getModel("appView").getProperty("/product/ID"));
             } else {
                 this._showErrorDialog.call(this);
             }
@@ -410,8 +505,7 @@ sap.ui.define([
                 }
             });
 
-            this.getOwnerComponent()
-                .getRouter()
+            this.getOwnerComponent().getRouter()
                 .navTo("ProductsOverview");
         },
 
@@ -423,9 +517,34 @@ sap.ui.define([
          */
         _onPatternMatchedProduct: function (oEvent) {
             this._toggleEditPage(false);
+            this._toggleCreatePage(false);
             this._toggleButtonsAndView(false);
             this._setProductModel(oEvent);
             this._clearAllMessagesFromMessaging();
+        },
+
+        /**
+         * Reads product data from the OData service.
+         * @param {Object} mRouteArguments - The route arguments containing the product ID.
+         *
+         * @private
+         */
+        _readProductFromModel: function (mRouteArguments) {
+            const oODataModel = this.getView().getModel();
+            const pThis = this;
+            const sProductID = mRouteArguments.id;
+
+            oODataModel.read(`/Products(${sProductID})`, {
+                urlParameters: {
+                    "$expand": "Supplier,Category"
+                },
+                success: function (oData) {
+                    pThis.getView().getModel("appView").setProperty("/product", oData);
+                },
+                error: function () {
+                    this._getTextFromI18n("messageForErrorWhileReading");
+                }
+            });
         },
 
         /**
@@ -435,8 +554,11 @@ sap.ui.define([
          * @private
          */
         _onPatternMatchedProductUpdate: function (oEvent) {
+            const mRouteArguments = oEvent.getParameter("arguments");
+
             this._toggleEditPage(true);
             this._toggleButtonsAndView(true);
+            this._readProductFromModel(mRouteArguments);
             this._setProductModel(oEvent);
             this._clearAllMessagesFromMessaging();
         },
@@ -451,8 +573,11 @@ sap.ui.define([
         _onPatternMatchedProductCreate: function () {
             this._toggleEditPage(true);
             this._toggleButtonsAndView(true);
+
             const oModel = this._getDefaultProductModel(Date.now().toString().slice(-4));
             this.getView().getModel("appView").setProperty("/product", oModel);
+
+            this._toggleCreatePage(true);
             this._clearAllMessagesFromMessaging();
         },
 
@@ -469,7 +594,7 @@ sap.ui.define([
             const oODataModel = this.getView().getModel();
 
             oODataModel.metadataLoaded().then(function () {
-                const sKey = oODataModel.createKey("/Products", { ID: sProductID });
+                const sKey = oODataModel.createKey("/Products", {ID: sProductID});
 
                 pThis.getView().bindObject({
                     path: sKey,
