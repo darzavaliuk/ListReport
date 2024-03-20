@@ -339,16 +339,16 @@ sap.ui.define([
                         "Content-ID": Number(Date.now().toString().slice(-4))
                     },
                     success: function () {
-                        Promise.all([oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Supplier`, {
-                            uri: `/Suppliers(${Number(oAppViewModel.getProperty("/product/Supplier/ID"))})`
+                        Promise.all([oODataModel.update(`/Products(${oAppViewModel.getProperty("/product/ID")})/$links/Supplier`, {
+                            uri: `/Suppliers(${oAppViewModel.getProperty("/product/Supplier/ID")})`
                         }, {
                             headers: {
                                 "Content-ID": Number(Date.now().toString().slice(-4)) + 1
                             }
                         }),
 
-                            oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Category`, {
-                                uri: `/Categories(${Number(oAppViewModel.getProperty("/product/Category/ID"))})`
+                            oODataModel.update(`/Products(${oAppViewModel.getProperty("/product/ID")})/$links/Category`, {
+                                uri: `/Categories(${oAppViewModel.getProperty("/product/Category/ID")})`
                             }, {
                                 headers: {
                                     "Content-ID": Number(Date.now().toString().slice(-4)) + 2
@@ -388,16 +388,16 @@ sap.ui.define([
                     },
                     success: function () {
                         Promise.all([
-                            oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Supplier`, {
-                                uri: `/Suppliers(${Number(oAppViewModel.getProperty("/product/Supplier/ID"))})`
+                            oODataModel.update(`/Products(${oAppViewModel.getProperty("/product/ID")})/$links/Supplier`, {
+                                uri: `/Suppliers(${oAppViewModel.getProperty("/product/Supplier/ID")})`
                             }, {
                                 headers: {
                                     "Content-ID": Number(Date.now().toString().slice(-4)) + 1
                                 }
                             }),
 
-                            oODataModel.update(`/Products(${Number(oAppViewModel.getProperty("/product/ID"))})/$links/Category`, {
-                                uri: `/Categories(${Number(oAppViewModel.getProperty("/product/Category/ID"))})`
+                            oODataModel.update(`/Products(${oAppViewModel.getProperty("/product/ID")})/$links/Category`, {
+                                uri: `/Categories(${oAppViewModel.getProperty("/product/Category/ID")})`
                             }, {
                                 headers: {
                                     "Content-ID": Number(Date.now().toString().slice(-4)) + 2
