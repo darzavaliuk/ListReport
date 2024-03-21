@@ -12,8 +12,8 @@ sap.ui.define([
     "sap/m/Input",
     "sap/m/ComboBox"
 ], function (coreLibrary, JSONModel, Fragment, Messaging,
-             BaseController, Message, formatter, Element,
-             isBehindOtherElement, MessageBox, Input, ComboBox) {
+    BaseController, Message, formatter, Element,
+    isBehindOtherElement, MessageBox, Input, ComboBox) {
     "use strict";
 
     const ValueState = coreLibrary.ValueState;
@@ -68,12 +68,12 @@ sap.ui.define([
          */
         _setupModels: function () {
             this.getView().setModel(new JSONModel({
-                    "state": {
-                        "isEditPage": false,
-                        "isCreatePage": false
-                    },
-                    "product": {}
-                }
+                "state": {
+                    "isEditPage": false,
+                    "isCreatePage": false
+                },
+                "product": {}
+            }
             ), "appView");
             this.getView().setModel(Messaging.getMessageModel(), "messages");
         },
@@ -165,7 +165,7 @@ sap.ui.define([
             }
 
             this.getOwnerComponent().getRouter()
-                .navTo("ProductDetails", {id: this.getView().getModel("appView").getProperty("/product/ID")}, true);
+                .navTo("ProductDetails", { id: this.getView().getModel("appView").getProperty("/product/ID") }, true);
         },
 
         /**
@@ -262,7 +262,7 @@ sap.ui.define([
             const sProductID = this._getProductID(oEvent);
 
             this.getOwnerComponent().getRouter()
-                .navTo("ProductDetailsUpdate", {id: sProductID, edit: true}, true);
+                .navTo("ProductDetailsUpdate", { id: sProductID, edit: true }, true);
         },
 
         /**
@@ -272,7 +272,7 @@ sap.ui.define([
          */
         _updateProductDetails: function (sID) {
             this._toggleEditPage(true);
-            this.getOwnerComponent().getRouter().navTo("ProductDetails", {id: sID}, true);
+            this.getOwnerComponent().getRouter().navTo("ProductDetails", { id: sID }, true);
         },
 
         /**
@@ -333,7 +333,7 @@ sap.ui.define([
             delete oProductModel.Category;
             delete oProductModel.Supplier;
 
-            oODataModel.create("/Products", {...oProductModel},
+            oODataModel.create("/Products", { ...oProductModel },
                 {
                     headers: {
                         "Content-ID": Number(Date.now().toString().slice(-4))
@@ -347,18 +347,18 @@ sap.ui.define([
                             }
                         }),
 
-                            oODataModel.update(`/Products(${oAppViewModel.getProperty("/product/ID")})/$links/Category`, {
-                                uri: `/Categories(${oAppViewModel.getProperty("/product/Category/ID")})`
-                            }, {
-                                headers: {
-                                    "Content-ID": Number(Date.now().toString().slice(-4)) + 2
-                                }
-                            }),
+                        oODataModel.update(`/Products(${oAppViewModel.getProperty("/product/ID")})/$links/Category`, {
+                            uri: `/Categories(${oAppViewModel.getProperty("/product/Category/ID")})`
+                        }, {
+                            headers: {
+                                "Content-ID": Number(Date.now().toString().slice(-4)) + 2
+                            }
+                        }),
 
-                            oODataModel.refresh()
+                        oODataModel.refresh()
                         ]).then(() => {
                             oThat._toggleEditPage(false);
-                            oThat._updateProductDetails.call(oThat, oThat.getView().getModel("appView").getProperty("/product/ID"));
+                            oThat._updateProductDetails(oThat.getView().getModel("appView").getProperty("/product/ID"));
                         });
                     }
                 }
@@ -381,7 +381,7 @@ sap.ui.define([
             delete oProductModel.Category;
             delete oProductModel.Supplier;
 
-            oODataModel.update(`/Products(${oProductModel.ID})`, {...oProductModel},
+            oODataModel.update(`/Products(${oProductModel.ID})`, { ...oProductModel },
                 {
                     headers: {
                         "Content-ID": Number(Date.now().toString().slice(-4))
@@ -407,7 +407,7 @@ sap.ui.define([
                             oODataModel.refresh()
                         ]).then(() => {
                             oThat._toggleEditPage(false);
-                            oThat._updateProductDetails.call(oThat, oThat.getView().getModel("appView").getProperty("/product/ID"));
+                            oThat._updateProductDetails(oThat.getView().getModel("appView").getProperty("/product/ID"));
                         });
                     }
                 }
@@ -498,7 +498,7 @@ sap.ui.define([
 
             oODataModel.remove(sKey, {
                 headers: {
-                    "Content-ID": oBindingContext.getProperty("ID")
+                    "Content-ID": Number(Date.now().toString().slice(-4))
                 },
                 error: function () {
                     this._getTextFromI18n("messageForErrorWhileDeleting");
@@ -594,7 +594,7 @@ sap.ui.define([
             const oODataModel = this.getView().getModel();
 
             oODataModel.metadataLoaded().then(function () {
-                const sKey = oODataModel.createKey("/Products", {ID: sProductID});
+                const sKey = oODataModel.createKey("/Products", { ID: sProductID });
 
                 pThis.getView().bindObject({
                     path: sKey,
