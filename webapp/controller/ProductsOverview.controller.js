@@ -313,7 +313,7 @@ sap.ui.define(
 
                         oBinding.remove(sKey, {
                             headers: {
-                                "Content-ID": iSelectedIndex.getProperty("ID")
+                                "Content-ID": Number(Date.now().toString().slice(-4))
                             },
                             error: function () {
                                 this._getTextFromI18n("messageForErrorWhileDeleting");
